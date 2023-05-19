@@ -1,9 +1,16 @@
 @import 'https://js.arcgis.com/4.25/@arcgis/core/assets/esri/themes/light/main.css';
 html,
 body,
-#viewDiv {
+#map {
   padding: 0;
   margin: 0;
   height: 100%;
   width: 100%;
+}
+#info {
+  position: absolute;
+  left: 15px;
+  bottom: 5px;
+  color: #000;
+  z-index: 50;
 }
