@@ -1,21 +1,20 @@
 import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
 import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
-
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
-//// DEFAULTS
-
+/* DEFAULTS */
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
-
-/// Get location from hash
-
+/* Get location from hash */
 if (window.location.hash !== ''){
     // try to restore center, zoom-level and rotation from the URL
     const hash = window.location.hash.replace('#map=', '');
     const parts = hash.split('/');
+    // Parse URL Hash
     if (parts.length === 3) {
       zoom = parseFloat(parts[0]);
       center = [parseFloat(parts[1]), parseFloat(parts[2])];
@@ -25,14 +24,19 @@ if (window.location.hash !== ''){
 
 
 
-
+/* Add Layers */
 const tileBaseLayer = new VectorTileLayer({
   url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer'
-})
+});
 
+const buildingAcc100k = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info_5_100k/FeatureServer',
+});
+
+const layers = [tileBaseLayer, buildingAcc100k];
 const map = new Map({
   basemap: "streets-vector",
-  layers: tileBaseLayer
+  layers: layers
 
 });
 
@@ -48,23 +52,30 @@ const view = new MapView({
   
 });
 
+/*  Set location hash */
+const updateURLHash = () => {
 
-/// Set location hash
-
-const updateURLHash = function(){
-  const center = view.get(center);
+  const center = [view.center.longitude, view.center.latitude];
+  const zoom = view.zoom;
   const hash = 
   '#map=' +
-  view.get(zoom) +
+  zoom +
   '/' +
   center[0]
   + 
   '/' +
   center[1]
 
-  return hash;
+  const state = {
+    zoom: zoom,
+    center: center,
+  };
+  window.history.pushState(state,'map', hash)
+  console.log()
 }
 
+view.on('pointer-up',updateURLHash);
+view.watch('zoom', updateURLHash);
 
 
 
