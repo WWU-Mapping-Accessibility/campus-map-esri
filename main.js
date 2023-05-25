@@ -57,6 +57,8 @@ const updateURLHash = () => {
 
   const center = [view.center.longitude, view.center.latitude];
   const zoom = view.zoom;
+
+  // Sets the map hash string
   const hash = 
   '#map=' +
   zoom +
@@ -70,12 +72,26 @@ const updateURLHash = () => {
     zoom: zoom,
     center: center,
   };
+
+  // pushes the map string onto the history stack (the url)
   window.history.pushState(state,'map', hash)
-  console.log()
 }
 
-view.on('pointer-up',updateURLHash);
-view.watch('zoom', updateURLHash);
+/* Must use this debounce function to limit the number of times the updateURLHash function gets called */
+const debounce = (func, delay) => {
+  let debounceTimer
+  return function() {
+      const context = this
+      const args = arguments
+          clearTimeout(debounceTimer)
+              debounceTimer
+          = setTimeout(() => func.apply(context, args), delay)
+  }
+}
+
+view.watch('extent', debounce(updateURLHash, 100));
+
+
 
 
 
