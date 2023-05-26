@@ -12,26 +12,54 @@ let center = [-122.48614277687422, 48.732800397930795];
 
 /* Places Bookmark Dictionary in form Place : [zoom, lon, lat] */
 const places = {
-  "AH" : [19.111539498890036,-122.48556385637906,48.73383634321389]
+  "AH" : {
+    name: 'Arntzen Hall',
+    location: [-122.48556385637906,48.73383634321389]},
+  "AI" : {
+    name: 'Academic Instructional Center',
+    location: [-122.48548611151818, 48.733395850845554]},
+  "AW" : {
+    name: 'Academic Instructional Center (West)',
+    location: [-122.48658015134504, 48.73196340056818]},
+  "CF" : {
+    name: 'Communications Facility',
+    location: [-122.48556385637906,48.73383634321389]},
+  "AI" : {
+    name: 'Academic Instructional Center',
+    location: [-122.48548611151818, 48.733395850845554]},
+  "AI" : {
+    name: 'Academic Instructional Center',
+    location: [-122.48548611151818, 48.733395850845554]},
+  "AH" : {
+    name: 'Arntzen Hall',
+    location: [-122.48556385637906,48.73383634321389]},
+  "AI" : {
+    name: 'Academic Instructional Center',
+    location: [-122.48548611151818, 48.733395850845554]},
+  "AI" : {
+    name: 'Academic Instructional Center',
+    location: [-122.48548611151818, 48.733395850845554]},
 };
-
 
 /* Get location from hash */
 if (window.location.hash !== ''){
     // try to restore center, zoom-level and rotation from the URL
     const hash = window.location.hash.replace('#wwu=', '');
-    const parts = hash.split('/');
+    const parts = hash.split('&');
     
     // Parse URL Hash
     if (parts.length === 1) {
-      const ident = parts[0]
+      // Accesses location's info
+      const location = places[parts[0]].location;
+
+      // Checks to see if shorthand identifier is in dictionary
       if (parts[0] in places){
-        zoom = places[ident][0];
-        center = [ places[ident][1], places[ident][2] ]
+        zoom = 18.5;
+        center = [ location[0], location[1] ]
         
-      }
-    }
-}
+      };
+    };
+};
   
 
 
@@ -116,5 +144,5 @@ view.on('pointer-move', (evt) => {
 });
 
 view.on('click', (evt) => {
-  console.log()
+  console.log([view.center.longitude, view.center.latitude])
 });
