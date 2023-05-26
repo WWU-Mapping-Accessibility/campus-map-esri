@@ -9,15 +9,27 @@ import "./style.css";
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
+
+/* Places Bookmark Dictionary in form Place : [zoom, lon, lat] */
+const places = {
+  "AH" : [19.111539498890036,-122.48556385637906,48.73383634321389]
+};
+
+
 /* Get location from hash */
 if (window.location.hash !== ''){
     // try to restore center, zoom-level and rotation from the URL
-    const hash = window.location.hash.replace('#map=', '');
+    const hash = window.location.hash.replace('#wwu=', '');
     const parts = hash.split('/');
+    
     // Parse URL Hash
-    if (parts.length === 3) {
-      zoom = parseFloat(parts[0]);
-      center = [parseFloat(parts[1]), parseFloat(parts[2])];
+    if (parts.length === 1) {
+      const ident = parts[0]
+      if (parts[0] in places){
+        zoom = places[ident][0];
+        center = [ places[ident][1], places[ident][2] ]
+        
+      }
     }
 }
   
@@ -53,43 +65,43 @@ const view = new MapView({
 });
 
 /*  Set location hash */
-const updateURLHash = () => {
+// const updateURLHash = () => {
 
-  const center = [view.center.longitude, view.center.latitude];
-  const zoom = view.zoom;
+//   const center = [view.center.longitude, view.center.latitude];
+//   const zoom = view.zoom;
 
-  // Sets the map hash string
-  const hash = 
-  '#map=' +
-  zoom +
-  '/' +
-  center[0]
-  + 
-  '/' +
-  center[1]
+//   // Sets the map hash string
+//   const hash = 
+//   '#map=' +
+//   zoom +
+//   '/' +
+//   center[0]
+//   + 
+//   '/' +
+//   center[1]
 
-  const state = {
-    zoom: zoom,
-    center: center,
-  };
+//   const state = {
+//     zoom: zoom,
+//     center: center,
+//   };
 
-  // pushes the map string onto the history stack (the url)
-  window.history.pushState(state,'map', hash)
-}
+//   // pushes the map string onto the history stack (the url)
+//   window.history.pushState(state,'map', hash)
+// }
 
-/* Must use this debounce function to limit the number of times the updateURLHash function gets called */
-const debounce = (func, delay) => {
-  let debounceTimer
-  return function() {
-      const context = this
-      const args = arguments
-          clearTimeout(debounceTimer)
-              debounceTimer
-          = setTimeout(() => func.apply(context, args), delay)
-  }
-}
+// /* Must use this debounce function to limit the number of times the updateURLHash function gets called */
+// const debounce = (func, delay) => {
+//   let debounceTimer
+//   return function() {
+//       const context = this
+//       const args = arguments
+//           clearTimeout(debounceTimer)
+//               debounceTimer
+//           = setTimeout(() => func.apply(context, args), delay)
+//   }
+// }
 
-view.watch('extent', debounce(updateURLHash, 100));
+// view.watch('extent', debounce(updateURLHash, 100));
 
 
 
