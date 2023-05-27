@@ -2,6 +2,8 @@ import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
 import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import Locate from '@arcgis/core/widgets/Locate';
+import Graphic from '@arcgis/core/Graphic';
 import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
@@ -10,29 +12,41 @@ let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
 
-/* Places Bookmark Dictionary in form Place : [zoom, lon, lat] */
-const places = {
-  "AH" : [19.111539498890036,-122.48556385637906,48.73383634321389]
+
+/* Set location from hash function*/
+const setLocationFromHash = function(extPlaces, view) {
+  // try to restore center, zoom-level and rotation from the URL
+  const hash = window.location.hash.replace('#wwu=', '');
+  const parts = hash.split('&');
+  // Parse URL Hash
+  const places = extPlaces;
+  if (parts.length === 1) {
+    const ident = parts[0]
+    if (parts[0] in places){
+      view.goTo({
+        zoom: 18.5,
+        center: [places[ident][0], places[ident][1]]
+      });
+    };
+  };
 };
 
 
-/* Get location from hash */
-if (window.location.hash !== ''){
-    // try to restore center, zoom-level and rotation from the URL
-    const hash = window.location.hash.replace('#wwu=', '');
-    const parts = hash.split('/');
-    
-    // Parse URL Hash
-    if (parts.length === 1) {
-      const ident = parts[0]
-      if (parts[0] in places){
-        zoom = places[ident][0];
-        center = [ places[ident][1], places[ident][2] ]
-        
-      }
+/* Queries the building info layer and places every location into the places dictionary*/
+const getPlaces = function(buildings){
+  // Creates a new Promise that will resolve with dictionary
+  return new Promise((resolve, reject) => {
+    buildings.queryFeatures().then(result => {
+      const featuresProc = (result.features).reduce((acc, feature) => {
+        acc[feature.attributes.abv] = [feature.geometry.longitude,feature.geometry.latitude];
+        return acc;
+          }, {});
+            resolve(featuresProc);
+      }).catch(error => {reject(error);})
     }
-}
-  
+  );
+};
+
 
 
 
@@ -41,11 +55,18 @@ const tileBaseLayer = new VectorTileLayer({
   url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer'
 });
 
-const buildingAcc100k = new FeatureLayer({
+const buildingInfo100k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info_5_100k/FeatureServer',
 });
 
-const layers = [tileBaseLayer, buildingAcc100k];
+const buildingInfo5k = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2'
+})
+
+
+
+
+const layers = [tileBaseLayer, buildingInfo100k, buildingInfo5k];
 const map = new Map({
   basemap: "streets-vector",
   layers: layers
@@ -64,46 +85,23 @@ const view = new MapView({
   
 });
 
-/*  Set location hash */
-// const updateURLHash = () => {
+const locate = new Locate({
+  view: view,
+  graphic: new Graphic({
+    symbol: {type: 'simple-marker'}
+  })
+})
 
-//   const center = [view.center.longitude, view.center.latitude];
-//   const zoom = view.zoom;
-
-//   // Sets the map hash string
-//   const hash = 
-//   '#map=' +
-//   zoom +
-//   '/' +
-//   center[0]
-//   + 
-//   '/' +
-//   center[1]
-
-//   const state = {
-//     zoom: zoom,
-//     center: center,
-//   };
-
-//   // pushes the map string onto the history stack (the url)
-//   window.history.pushState(state,'map', hash)
-// }
-
-// /* Must use this debounce function to limit the number of times the updateURLHash function gets called */
-// const debounce = (func, delay) => {
-//   let debounceTimer
-//   return function() {
-//       const context = this
-//       const args = arguments
-//           clearTimeout(debounceTimer)
-//               debounceTimer
-//           = setTimeout(() => func.apply(context, args), delay)
-//   }
-// }
-
-// view.watch('extent', debounce(updateURLHash, 100));
-
-
+view.ui.add(locate, 'top-right');
+if (window.location.hash !== ''){
+  try{
+    getPlaces(buildingInfo5k).then(result => 
+      {setLocationFromHash(result, view); 
+        console.log(result);})
+  } catch(error) {
+    console.error(error);
+  };
+};
 
 
 
