@@ -4,6 +4,7 @@ import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Locate from '@arcgis/core/widgets/Locate';
 import Graphic from '@arcgis/core/Graphic';
+import Legend from '@arcgis/core/widgets/Legend'
 import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
@@ -14,16 +15,15 @@ let center = [-122.48614277687422, 48.732800397930795];
 
 
 /* Set location from hash function*/
-const setLocationFromHash = function(extPlaces, view) {
+const getLocationFromHash = function(places) {
   // try to restore center, zoom-level and rotation from the URL
   const hash = window.location.hash.replace('#wwu=', '');
   const parts = hash.split('&');
   // Parse URL Hash
-  const places = extPlaces;
   if (parts.length === 1) {
     const ident = parts[0]
     if (parts[0] in places){
-      view.goTo({
+      return({
         zoom: 18.5,
         center: [places[ident][0], places[ident][1]]
       });
@@ -37,6 +37,7 @@ const getPlaces = function(buildings){
   // Creates a new Promise that will resolve with dictionary
   return new Promise((resolve, reject) => {
     buildings.queryFeatures().then(result => {
+      // Reduces query to just the abv and coordinates
       const featuresProc = (result.features).reduce((acc, feature) => {
         acc[feature.attributes.abv] = [feature.geometry.longitude,feature.geometry.latitude];
         return acc;
@@ -47,15 +48,29 @@ const getPlaces = function(buildings){
   );
 };
 
+// Calls the getPlaces, getLocation functions to set the center based on the map
+const setLocationFromHash = function(view){
+  if (window.location.hash !== ''){
+    try{
+      // This will execute async to the map loading, so it may take a sec to snap to the new location.
+      // Query speed dependent
+      getPlaces(buildingInfo5k).then(result => 
+        getLocationFromHash(result)).then(result => 
+          view.goTo(result));
+    } catch(error) {
+      console.error(error);
+    };
+  };
+};
 
 
 
-/* Add Layers */
+/* Create Layers */
 const tileBaseLayer = new VectorTileLayer({
   url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer'
 });
 
-const buildingInfo100k = new FeatureLayer({
+const buildingAccInfo100k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info_5_100k/FeatureServer',
 });
 
@@ -64,9 +79,10 @@ const buildingInfo5k = new FeatureLayer({
 })
 
 
+/* Layers to Add */
+const layers = [tileBaseLayer, buildingAccInfo100k, buildingInfo5k];
 
-
-const layers = [tileBaseLayer, buildingInfo100k, buildingInfo5k];
+/* Creates the Map and View */
 const map = new Map({
   basemap: "streets-vector",
   layers: layers
@@ -85,23 +101,24 @@ const view = new MapView({
   
 });
 
+
+/* Widgets!! */
+
+/* Locate widget using a simple marker as the symbol (Prob change) */
 const locate = new Locate({
   view: view,
   graphic: new Graphic({
     symbol: {type: 'simple-marker'}
-  })
+  }),
+  container: locateWidget
 })
 
-view.ui.add(locate, 'top-right');
-if (window.location.hash !== ''){
-  try{
-    getPlaces(buildingInfo5k).then(result => 
-      {setLocationFromHash(result, view); 
-        console.log(result);})
-  } catch(error) {
-    console.error(error);
-  };
-};
+/* Legend Widget */
+
+setLocationFromHash(view);
+
+view.ui.add(locate, 'top-left');
+
 
 
 
@@ -110,9 +127,8 @@ const pointerCoord = document.getElementById('info');
 view.on('pointer-move', (evt) => {
   var pt = view.toMap({x: evt.x, y: evt.y});
   
-  pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude
+  pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude;
 });
 
 view.on('click', (evt) => {
-  console.log()
 });
