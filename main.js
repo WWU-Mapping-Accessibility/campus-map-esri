@@ -4,15 +4,19 @@ import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Locate from '@arcgis/core/widgets/Locate';
 import Graphic from '@arcgis/core/Graphic';
-import Legend from '@arcgis/core/widgets/Legend'
+import Legend from '@arcgis/core/widgets/Legend';
+import Expand from '@arcgis/core/widgets/Expand';
 import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
-/* DEFAULTS */
+/* DEFAULTS & CONFIGS */
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
+// Format: "ABV": [Lon, Lat]
+const customPlaces = {
 
+}
 
 /* Set location from hash function*/
 const getLocationFromHash = function(places) {
@@ -22,7 +26,7 @@ const getLocationFromHash = function(places) {
   // Parse URL Hash
   if (parts.length === 1) {
     const ident = parts[0]
-    if (parts[0] in places){
+    if (parts[0] in Object.assign({},places,customPlaces)){
       return({
         zoom: 18.5,
         center: [places[ident][0], places[ident][1]]
@@ -78,9 +82,13 @@ const buildingInfo5k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2'
 })
 
+const dummyBasemap = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/DummyBasemapForLegend/FeatureServer',
+  title: '',
+})
 
 /* Layers to Add */
-const layers = [tileBaseLayer, buildingAccInfo100k, buildingInfo5k];
+const layers = [dummyBasemap, tileBaseLayer, buildingAccInfo100k, buildingInfo5k];
 
 /* Creates the Map and View */
 const map = new Map({
@@ -96,9 +104,8 @@ const view = new MapView({
   center: center,
   constraints: {
     snapToZoom: false,
-
+    minZoom: 15,
   },
-  
 });
 
 
@@ -115,13 +122,25 @@ const locate = new Locate({
 
 /* Legend Widget */
 
+const legend = new Legend({
+  view: view,
+  basemapLegendVisible: true,
+})
+
+
+/* Expand Widget */
+
+const expand = new Expand({
+  content: legend,
+})
 setLocationFromHash(view);
 
 view.ui.add(locate, 'top-left');
+view.ui.add(expand, 'top-right');
 
 
 
-
+/* This part is for extras */
 const pointerCoord = document.getElementById('info');
 
 view.on('pointer-move', (evt) => {
