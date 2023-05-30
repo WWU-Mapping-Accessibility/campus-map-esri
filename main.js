@@ -132,8 +132,11 @@ const legend = new Legend({
 
 const expand = new Expand({
   content: legend,
-})
-setLocationFromHash(view);
+});
+
+
+
+view.watch('ready', () => setLocationFromHash(view))
 
 view.ui.add(locate, 'top-left');
 view.ui.add(expand, 'top-right');
