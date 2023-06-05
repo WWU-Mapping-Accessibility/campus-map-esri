@@ -2,10 +2,12 @@ import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
 import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import Locate from '@arcgis/core/widgets/Locate';
 import Graphic from '@arcgis/core/Graphic';
+/* Import Widgets */
 import Legend from '@arcgis/core/widgets/Legend';
 import Expand from '@arcgis/core/widgets/Expand';
+import Locate from '@arcgis/core/widgets/Locate';
+import Search from '@arcgis/core/widgets/Search'
 import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
@@ -127,6 +129,7 @@ const view = new MapView({
 });
 
 hashActions();
+
 /* Widgets!! */
 
 /* Locate widget using a simple marker as the symbol (Prob change) */
@@ -139,7 +142,6 @@ const locate = new Locate({
 });
 
 /* Legend Widget */
-
 const legend = new Legend({
   view: view,
   basemapLegendVisible: true,
@@ -147,16 +149,28 @@ const legend = new Legend({
 
 
 /* Expand Widget */
-
 const expand = new Expand({
   content: legend,
 });
 
-
+const search = new Search({
+  view: view,
+  locationEnabled: false,
+  includeDefaultSources: false,
+  sources: [{
+    layer: searchPoints,
+    searchFields: ['Name', 'Abv', 
+      'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
+      'Keyword6', 'Keyword7', 'Keyword8',],
+    name: 'WWU Search Points',
+    zoomScale: 1000
+  }]
+});
 
 
 
 view.ui.add(locate, 'top-left');
+view.ui.add(search, 'top-right');
 view.ui.add(expand, 'top-right');
 
 

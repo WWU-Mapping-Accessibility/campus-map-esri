@@ -14,8 +14,3 @@ body,
   color: #000;
   z-index: 50;
 }
-#locateWidget {
-  position: relative;
-  left: 0;
-  scale: 150%;
-}
