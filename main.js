@@ -71,7 +71,7 @@ const setLocationFromHash = function(view){
 
 /* Create Layers */
 const tileBaseLayer = new VectorTileLayer({
-  url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer'
+  url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer',
 });
 
 const buildingAccInfo100k = new FeatureLayer({
@@ -79,13 +79,13 @@ const buildingAccInfo100k = new FeatureLayer({
 });
 
 const buildingInfo5k = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2'
-})
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
+});
 
 const dummyBasemap = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/DummyBasemapForLegend/FeatureServer',
   title: '',
-})
+});
 
 /* Layers to Add */
 const layers = [dummyBasemap, tileBaseLayer, buildingAccInfo100k, buildingInfo5k];
@@ -118,14 +118,14 @@ const locate = new Locate({
     symbol: {type: 'simple-marker'}
   }),
   container: locateWidget
-})
+});
 
 /* Legend Widget */
 
 const legend = new Legend({
   view: view,
   basemapLegendVisible: true,
-})
+});
 
 
 /* Expand Widget */
@@ -135,8 +135,8 @@ const expand = new Expand({
 });
 
 
-
-view.watch('ready', () => setLocationFromHash(view))
+/* Only triggers the setLocation function once the view is ready -- otherwise view may reset the center to defaults */
+view.watch('ready', () => setLocationFromHash(view));
 
 view.ui.add(locate, 'top-left');
 view.ui.add(expand, 'top-right');
