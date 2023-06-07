@@ -14,8 +14,8 @@ import "./style.css";
 /* DEFAULTS & CONFIGS */
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
-const windowHash = window.location.hash.replace('#wwu=', '').split('&');
-console.log(windowHash);
+
+const windowHash = window.location.hash.replace('#', '').toLowerCase();
 
 /* Create Layers */
 const tileBaseLayer = new VectorTileLayer({
@@ -51,30 +51,30 @@ const customPlaces = {
 
 const hashActions = function(hash=windowHash) {
 
-  if (hash.length >= 1){
-    /* Only triggers the setLocation function once the view is ready -- otherwise view may reset the center to defaults */
-    view.watch('ready', () => setLocationFromHash(view));
-  };
+  const hashSplit = hash.split('&');
 
-  // Sets active layers to the ones in the URL
-  if (hash.length >= 2){
-    const enabledLayersString = hash[1].split('/');
-    // eval will use strings as variables
-    map.addMany(enabledLayersString.map(i => eval(i)));
-  } else {
-    map.addMany(defaultLayers);
-  };
+  hashSplit.forEach(param => {
+    if (param.includes('wwu=')){
+      view.watch('ready', () => setLocationFromHash(view, param.replace('wwu=', '')))
+    };
+
+    if (param.includes('layers=')){
+      const enabledLayersString = param.replace('layers=','').split('/');
+      map.removeAll();
+      // eval will use strings as variables
+      map.addMany(enabledLayersString.map(i => eval(i)));
+    };
+  });
 
 };
 
 /* Gets the location definined in the hash*/
-const getLocationFromHash = function(places, hash=windowHash) {
-
-  const ident = hash[0]
-  if (ident in Object.assign({}, places, customPlaces)){
+const getLocationFromHash = function(places, loc) {
+ 
+  if (loc in Object.assign({}, places, customPlaces)){
     return({
       zoom: 18.5,
-      center: [places[ident][0], places[ident][1]]
+      center: [places[loc][0], places[loc][1]]
     });
   };
 };
@@ -96,13 +96,13 @@ const getPlaces = function(layer){
 };
 
 // Uses the getPlaces, getLocation functions to set the center based on the map
-const setLocationFromHash = function(view){
+const setLocationFromHash = function(view, loc){
   if (window.location.hash !== ''){
     try{
       // This will execute async to the map loading, so it may take a sec to snap to the new location.
       // Query speed dependent
       getPlaces(searchPoints).then(result => 
-        getLocationFromHash(result)).then(result => 
+        getLocationFromHash(result, loc)).then(result => 
           view.goTo(result));
     } catch(error) {
       console.error(error);
@@ -114,6 +114,7 @@ const setLocationFromHash = function(view){
 /* Creates the Map and View */
 const map = new Map({
   basemap: "streets-vector",
+  layers: defaultLayers,
 
 });
 
