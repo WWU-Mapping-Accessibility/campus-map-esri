@@ -10,6 +10,7 @@ import Locate from '@arcgis/core/widgets/Locate';
 import Search from '@arcgis/core/widgets/Search'
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
+import LayerList from '@arcgis/core/widgets/LayerList';
 
 import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
 import esriConfig from'@arcgis/core/config';
@@ -32,6 +33,7 @@ const buildingAccInfo100k = new FeatureLayer({
 
 const buildingInfo5k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
+  title: 'Building Info',
 });
 
 const genderNeutralRestrooms = new FeatureLayer({
@@ -60,8 +62,11 @@ const dummyBasemap = new FeatureLayer({
 });
 
 
-
-const defaultLayers = [dummyBasemap, tileBaseLayer, buildingAccInfo100k, buildingInfo5k, parkingLots, computerLabBuildings, sustainableBuildings, genderNeutralRestrooms];
+/* Layers to load  */
+const defaultLayers = 
+[dummyBasemap, tileBaseLayer, buildingAccInfo100k, 
+  buildingInfo5k, parkingLots, computerLabBuildings, 
+  sustainableBuildings, genderNeutralRestrooms];
 
 // Format: "ABV": [Lon, Lat]
 const customPlaces = {
@@ -153,7 +158,7 @@ const view = new MapView({
 
 hashActions();
 
-/* Widgets!! */
+///* Widgets!! *///
 
 /* Locate widget using a simple marker as the symbol (Prob change) */
 const locate = new Locate({
@@ -165,17 +170,11 @@ const locate = new Locate({
 });
 
 /* Legend Widget */
-const legend = new Legend({
+const legend = new LayerList({
   view: view,
-  basemapLegendVisible: true,
 });
 
-
-/* Expand Widget */
-const legendExpand = new Expand({
-  content: legend,
-});
-
+/* Search Widget */
 const search = new Search({
   view: view,
   locationEnabled: false,
@@ -249,12 +248,61 @@ const buildingBookmarks = new Bookmarks({
   ]
 });
 
-const bookmarkExpand = new Expand({
-  content: buildingBookmarks,
-  expandIconClass: 'esri-icon-urban-model',
-  group: 'top right'
+const poiBookmarks = new Bookmarks({
+  view: view,
+  bookmarks: [
+  new Bookmark({name: "Birnam Wood (Residences)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4815013, ymin:48.72941423, xmax:-122.4750125, ymax:48.73296892 }  }  }),
+  new Bookmark({name: "Bookstore", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4876661, ymin:48.73774008, xmax:-122.4844218, ymax:48.73951716 }  }  }),
+  new Bookmark({name: "Canyon Creek Community Forest", viewpoint: {targetGeometry: {type: "extent",xmin:-122.0828454, ymin:48.81144319, xmax:-122.0224137, ymax:48.84448513 }  }  }),
+  new Bookmark({name: "College of the Environment", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4871919, ymin:48.73279303, xmax:-122.4839475, ymax:48.73423802 }  }  }),
+  new Bookmark({name: "COVID-19 Student Test Site", viewpoint: {targetGeometry: {type: "extent",xmin:-122.488872, ymin:48.73647689, xmax:-122.4856276, ymax:48.73792177 }  }  }),
+  new Bookmark({name: "Everett Community College (Everett)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.214467, ymin:47.99910888, xmax:-122.1897142, ymax:48.01286347 }  }  }),
+  new Bookmark({name: "Fairhaven College", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4874022, ymin:48.7295774, xmax:-122.4841578, ymax:48.73102248 }  }  }),
+  new Bookmark({name: "Fairhaven (Residences)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4875288, ymin:48.72866588, xmax:-122.4842844, ymax:48.73011099 }  }  }),
+  new Bookmark({name: "Harrington Field", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4902046, ymin:48.72781522, xmax:-122.4869602, ymax:48.72926035 }  }  }),
+  new Bookmark({name: "Haskell Plaza", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4879043, ymin:48.73340443, xmax:-122.4846599, ymax:48.73484941 }  }  }),
+  new Bookmark({name: "Lakewood", viewpoint: {targetGeometry: {type: "extent",xmin:-122.3440808, ymin:48.72770015, xmax:-122.337592, ymax:48.73059037 }  }  }),
+  new Bookmark({name: "Lincoln Creek (Park & Ride)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73322895, xmax:-122.46238, ymax:48.73661648 }  }  }),
+  new Bookmark({name: "Old Main", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4856985, ymin:48.7370491, xmax:-122.4824542, ymax:48.73882622 }  }  }),
+  new Bookmark({name: "Olympic College (Poulsbo)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.6699521, ymin:47.76003746, xmax:-122.6541103, ymax:47.76888154 }  }  }),
+  new Bookmark({name: "Outback Farm", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4881683, ymin:48.72748826, xmax:-122.4849238, ymax:48.7289334 }  }  }),
+  new Bookmark({name: "Outdoor Center", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4881511, ymin:48.73831235, xmax:-122.4849067, ymax:48.73975718 }  }  }),
+  new Bookmark({name: "PAC (Performing Arts Center)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4888652, ymin:48.73711235, xmax:-122.4856207, ymax:48.73888945 }  }  }),
+  new Bookmark({name: "Parking / Transportation (Old Main)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4852839, ymin:48.73705304, xmax:-122.4832074, ymax:48.7381904 }  }  }),
+  new Bookmark({name: "Peninsula College (Pt. Angles)", viewpoint: {targetGeometry: {type: "extent",xmin:-123.4167342, ymin:48.09944828, xmax:-123.4102454, ymax:48.1030473 }  }  }),
+  new Bookmark({name: "Planetarium", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4879794, ymin:48.73667785, xmax:-122.484735, ymax:48.73812272 }  }  }),
+  new Bookmark({name: "Red Square", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4871447, ymin:48.7361896, xmax:-122.4839003, ymax:48.73763449 }  }  }),
+  new Bookmark({name: "Ridgeway (Residences)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4928181, ymin:48.7324385, xmax:-122.4863293, ymax:48.73532846 }  }  }),
+  new Bookmark({name: "SEA Discovery Center (Poulsbo)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.6467294, ymin:47.7320836, xmax:-122.6440715, ymax:47.73356829 }  }  }),
+  new Bookmark({name: "Sehome Hill Arboretum", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4952772, ymin:48.72934315, xmax:-122.469322, ymax:48.74090268 }  }  }),
+  new Bookmark({name: "Shannon Pt. Marine Center", viewpoint: {targetGeometry: {type: "extent",xmin:-122.687355, ymin:48.50674713, xmax:-122.6808662, ymax:48.50965003 }  }  }),
+  new Bookmark({name: "Student Health Center", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4915529, ymin:48.72677561, xmax:-122.4883086, ymax:48.72822077 }  }  }),
+  new Bookmark({name: "Viking Union", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4877315, ymin:48.73781605, xmax:-122.4844871, ymax:48.73959313 }  }  }),
+  new Bookmark({name: "Viking Union Gallery", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4881005, ymin:48.73826073, xmax:-122.484856, ymax:48.73970556 }  }  }),
+  new Bookmark({name: "Viqueen Lodge (Sinclair Island)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.7009019, ymin:48.61598908, xmax:-122.6906451, ymax:48.6216205 }  }  }),
+  new Bookmark({name: "Wash. State Archives", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4872448, ymin:48.72521989, xmax:-122.4841528, ymax:48.72691395 }  }  }),
+  new Bookmark({name: "Western Gallery", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4869975, ymin:48.73461097, xmax:-122.4837531, ymax:48.7360559 }  }  }),
+  ],
 });
 
+/* Expand Widgets */
+const buildingBookmarkExpand = new Expand({
+  view: view,
+  content: buildingBookmarks,
+  expandIconClass: 'esri-icon-urban-model',
+  group: 'top-right'
+});
+
+const poiBookmarkExpand = new Expand({
+  view: view,
+  content: poiBookmarks,
+  expandIconClass: 'esri-icon-map-pin',
+  group: 'top-right'
+});
+
+const legendExpand = new Expand({
+  content: legend,
+});
 
 
 /* Add UI elements */
@@ -262,8 +310,7 @@ const bookmarkExpand = new Expand({
 view.ui.add(locate, 'top-left');
 view.ui.add(search, 'top-right');
 view.ui.add(legendExpand, 'top-right');
-view.ui.add(bookmarkExpand, 'top-right');
-
+view.ui.add([buildingBookmarkExpand, poiBookmarkExpand], 'top-right');
 
 
 
