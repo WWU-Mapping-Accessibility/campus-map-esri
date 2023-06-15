@@ -22,6 +22,7 @@ let center = [-122.48614277687422, 48.732800397930795];
 
 const windowHash = window.location.hash.replace('#', '');
 
+
 /* Create Layers */
 const tileBaseLayer = new VectorTileLayer({
   url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer',
@@ -62,6 +63,19 @@ const dummyBasemap = new FeatureLayer({
 });
 
 
+/* A dictionary that is used to tie URL layer names to internal variables */
+const layersDict = {
+  "buildinginfo5k": buildingInfo5k,
+  "buildingaccinfo100k": buildingAccInfo100k,
+  "parkinglots": parkingLots,
+  "computerlabbuildings": computerLabBuildings,
+  "sustainablebuildings": sustainableBuildings,
+  "gendernuetralrestrooms": genderNeutralRestrooms,
+  "searchpoints": searchPoints,
+  "dummybasemap": dummyBasemap,
+  "tilebaselayer": tileBaseLayer
+};
+
 /* Layers to load  */
 const defaultLayers = 
 [dummyBasemap, tileBaseLayer, buildingAccInfo100k, 
@@ -87,8 +101,7 @@ const hashActions = function(hash=windowHash) {
     if (param.includes('layers=')){
       const enabledLayersString = param.replace('layers=','').split('/');
       map.removeAll();
-      // eval will use strings as variables
-      map.addMany(enabledLayersString.map(i => eval(i)));
+      map.addMany(enabledLayersString.map(i => layersDict[i]));
     };
   });
 
@@ -337,15 +350,17 @@ const parkingBookmarks = new Bookmarks({
 const buildingBookmarkExpand = new Expand({
   view: view,
   content: buildingBookmarks,
-  expandIcon: "urban-model",
-  group: 'top-right'
+  expandIcon: 'urban-model',
+  group: 'top-right',
+  expandTooltip: 'Buildings',
 });
 
 const poiBookmarkExpand = new Expand({
   view: view,
   content: poiBookmarks,
   expandIcon: 'map-pin',
-  group: 'top-right'
+  group: 'top-right',
+  expandTooltip: 'Points of Interest',
 });
 
 const parkingBookmarksExpand = new Expand({
@@ -353,12 +368,14 @@ const parkingBookmarksExpand = new Expand({
   content: parkingBookmarks,
   expandIcon: 'car',
   group: 'top-right',
+  expandTooltip: 'Parking',
 });
 
 const selectorExpand = new Expand({
   view: view,
   content: selector,
   group: 'top-right',
+  expandTooltip: 'Layer Selector',
 });
 
 const legendExpand = new Expand({
