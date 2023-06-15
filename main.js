@@ -337,21 +337,21 @@ const parkingBookmarks = new Bookmarks({
 const buildingBookmarkExpand = new Expand({
   view: view,
   content: buildingBookmarks,
-  expandIconClass: 'esri-icon-urban-model',
+  expandIcon: "urban-model",
   group: 'top-right'
 });
 
 const poiBookmarkExpand = new Expand({
   view: view,
   content: poiBookmarks,
-  expandIconClass: 'esri-icon-map-pin',
+  expandIcon: 'map-pin',
   group: 'top-right'
 });
 
 const parkingBookmarksExpand = new Expand({
   view: view,
   content: parkingBookmarks,
-  expandIconClass: 'esri-icon-car',
+  expandIcon: 'car',
   group: 'top-right',
 });
 
