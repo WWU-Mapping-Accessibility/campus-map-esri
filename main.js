@@ -12,8 +12,6 @@ import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
-import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
-import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
 /* DEFAULTS & CONFIGS */
