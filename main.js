@@ -169,10 +169,16 @@ const locate = new Locate({
   container: locateWidget
 });
 
-/* Legend Widget */
-const legend = new LayerList({
+/* Layer Selector Widget */
+const selector = new LayerList({
   view: view,
 });
+
+/* Legend Widget */
+
+const legend = new Legend({
+  view: view,
+}); 
 
 /* Search Widget */
 const search = new Search({
@@ -189,7 +195,7 @@ const search = new Search({
   }]
 });
 
-
+/* Bookmarks */
 const buildingBookmarks = new Bookmarks({
   view: view,
   bookmarks: [
@@ -285,6 +291,48 @@ const poiBookmarks = new Bookmarks({
   ],
 });
 
+const parkingBookmarks = new Bookmarks({
+  view: view,
+  bookmarks: [
+    new Bookmark({name: "Lincoln Creek Park & Ride", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73322895, xmax:-122.46238, ymax:48.73661648 }  }  }),
+    new Bookmark({name: "Parking Lot 1-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4875838, ymin:48.72618268, xmax:-122.4844918, ymax:48.72762785 }  }  }),
+    new Bookmark({name: "Parking Lot 3-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4826829, ymin:48.7397057, xmax:-122.4795909, ymax:48.74115049 }  }  }),
+    new Bookmark({name: "Parking Lot 4-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4857771, ymin:48.73974108, xmax:-122.482685, ymax:48.74118587 }  }  }),
+    new Bookmark({name: "Parking Lot 5-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4846269, ymin:48.73916901, xmax:-122.4815348, ymax:48.74061382 }  }  }),
+    new Bookmark({name: "Parking Lot 6-V", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4873653, ymin:48.73876565, xmax:-122.4842732, ymax:48.74021046 }  }  }),
+    new Bookmark({name: "Parking Lot 7-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4835036, ymin:48.73971949, xmax:-122.4804116, ymax:48.74116428 }  }  }),
+    new Bookmark({name: "Parking Lot 8-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.485441, ymin:48.73717739, xmax:-122.482349, ymax:48.73862225 }  }  }),
+    new Bookmark({name: "Parking Lot 9-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4891983, ymin:48.73374409, xmax:-122.4861062, ymax:48.73518905 }  }  }),
+    new Bookmark({name: "Parking Lot 10-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4876458, ymin:48.73483595, xmax:-122.4814617, ymax:48.73772577 }  }  }),
+    new Bookmark({name: "Parking Lot 11-CP (Carpool)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.488695, ymin:48.73733205, xmax:-122.4874285, ymax:48.73802577 }  }  }),
+    new Bookmark({name: "Parking Lot 11-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4894364, ymin:48.73683068, xmax:-122.4863444, ymax:48.73827555 }  }  }),
+    new Bookmark({name: "Parking Lot 12-A", viewpoint: {targetGeometry: {type: "extent",xmin:-122.48848, ymin:48.72954268, xmax:-122.4853879, ymax:48.73098776 }  }  }),
+    new Bookmark({name: "Parking Lot 13-A", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4856741, ymin:48.72387787, xmax:-122.482582, ymax:48.72532311 }  }  }),
+    new Bookmark({name: "Parking Lot 15-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4908071, ymin:48.73445218, xmax:-122.487715, ymax:48.73589712 }  }  }),
+    new Bookmark({name: "Parking Lot 17-CP (Carpool)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4857962, ymin:48.7339307, xmax:-122.4838173, ymax:48.73501472 }  }  }),
+    new Bookmark({name: "Parking Lot 17-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4880491, ymin:48.73210872, xmax:-122.4818651, ymax:48.7349987 }  }  }),
+    new Bookmark({name: "Parking Lot 19-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4886533, ymin:48.73188298, xmax:-122.4855612, ymax:48.733328 }  }  }),
+    new Bookmark({name: "Parking Lot 20-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.492646, ymin:48.73119843, xmax:-122.4895539, ymax:48.73264347 }  }  }),
+    new Bookmark({name: "Parking Lot 22-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4864667, ymin:48.72660501, xmax:-122.4833747, ymax:48.72805017 }  }  }),
+    new Bookmark({name: "Parking Lot 23-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4915654, ymin:48.72730185, xmax:-122.4884734, ymax:48.728747 }  }  }),
+    new Bookmark({name: "Parking Lot 24-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4849414, ymin:48.72380134, xmax:-122.4818494, ymax:48.72524659 }  }  }),
+    new Bookmark({name: "Parking Lot 25-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.489115, ymin:48.73744247, xmax:-122.4860229, ymax:48.73888733 }  }  }),
+    new Bookmark({name: "Parking Lot 26-CP (Carpool)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4878682, ymin:48.73024569, xmax:-122.4858893, ymax:48.73132979 }  }  }),
+    new Bookmark({name: "Parking Lot 27-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4815428, ymin:48.72979936, xmax:-122.4753587, ymax:48.73268946 }  }  }),
+    new Bookmark({name: "Parking Lot 29-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4870443, ymin:48.72988638, xmax:-122.4839523, ymax:48.73133146 }  }  }),
+    new Bookmark({name: "Parking Lot 30-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4833627, ymin:48.74037777, xmax:-122.4818167, ymax:48.74110016 }  }  }),
+    new Bookmark({name: "Parking Lot 32-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4753207, ymin:48.73050959, xmax:-122.4722287, ymax:48.73195464 }  }  }),
+    new Bookmark({name: "Parking Lot 33-G", viewpoint: {targetGeometry: {type: "extent",xmin:-122.486526, ymin:48.72542256, xmax:-122.483434, ymax:48.72686776 }  }  }),
+    new Bookmark({name: "Parking Lot 18-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4889017, ymin:48.72818935, xmax:-122.4858096, ymax:48.72963447 }  }  }),
+    new Bookmark({name: "Parking Lot AIC", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4858305, ymin:48.73172883, xmax:-122.4842845, ymax:48.73245134 }  }  }),
+    new Bookmark({name: "Parking Lot C", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4924214, ymin:48.7283076, xmax:-122.4862373, ymax:48.73119779 }  }  }),
+    new Bookmark({name: "Parking Lot CBS", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4882264, ymin:48.73429114, xmax:-122.4862474, ymax:48.73537514 }  }  }),
+    new Bookmark({name: "Parking Lot ET", viewpoint: {targetGeometry: {type: "extent",xmin:-122.485699, ymin:48.73417214, xmax:-122.4844325, ymax:48.73486591 }  }  }),
+    new Bookmark({name: "Parking Lot LC (Lincoln Creek)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73347777, xmax:-122.46238, ymax:48.73636767 }  }  }),
+    new Bookmark({name: "Parking Office (Old Main)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4852839, ymin:48.73705304, xmax:-122.4832074, ymax:48.7381904 }  }  }),
+  ],
+});
+
 /* Expand Widgets */
 const buildingBookmarkExpand = new Expand({
   view: view,
@@ -300,18 +348,35 @@ const poiBookmarkExpand = new Expand({
   group: 'top-right'
 });
 
-const legendExpand = new Expand({
-  content: legend,
+const parkingBookmarksExpand = new Expand({
+  view: view,
+  content: parkingBookmarks,
+  expandIconClass: 'esri-icon-car',
+  group: 'top-right',
 });
 
+const selectorExpand = new Expand({
+  view: view,
+  content: selector,
+  group: 'top-right',
+});
+
+const legendExpand = new Expand({
+  view: view,
+  content: legend,
+  mode: "floating",
+  expandTooltip: "Legend",
+  container: "legend",
+  expanded: true,
+});
 
 /* Add UI elements */
 
 view.ui.add(locate, 'top-left');
 view.ui.add(search, 'top-right');
-view.ui.add(legendExpand, 'top-right');
-view.ui.add([buildingBookmarkExpand, poiBookmarkExpand], 'top-right');
-
+view.ui.add(selectorExpand, 'top-right');
+view.ui.add([buildingBookmarkExpand, poiBookmarkExpand, parkingBookmarksExpand], 'top-right');
+view.ui.add(legendExpand, 'bottom-left');
 
 
 /* This part is for extras */

@@ -35,6 +35,44 @@ h1 {
   color: #000;
   z-index: 3;
 }
-.esri-legend__symbol{
+#legend {
   
+  width: 62px;
+  height: 32px;
+  .esri-expand__content{
+    transition: none;
+  }
+  .esri-expand__content--expanded {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    animation: expand-upwards .2s;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    }
+  .esri-widget--button{
+    width: 62px;
+    height: 32px;
+    }
+  .esri-collapse__icon {
+    display: none;
+    }
+  .esri-icon-font-fallback-text {
+    width: auto;
+    height: 13px;
+    clip: auto;
+    font-size: 12px;
+    font-family: arial !important;
+    font-weight: bold;
+    user-select: none;
+    }
+
+}
+@keyframes expand-upwards {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
 }
