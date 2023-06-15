@@ -11,7 +11,7 @@ import Search from '@arcgis/core/widgets/Search'
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
-
+import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
 import esriConfig from'@arcgis/core/config';
 import "./style.css";
@@ -24,63 +24,128 @@ const windowHash = window.location.hash.replace('#', '');
 
 
 /* Create Layers */
-const tileBaseLayer = new VectorTileLayer({
-  url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer',
-});
+
 
 const buildingAccInfo100k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info_5_100k/FeatureServer',
+  visible: false,
 });
-
 const buildingInfo5k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
   title: 'Building Info',
+  visible: false, 
 });
-
 const genderNeutralRestrooms = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer'
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
+  visible : false,
 });
 
-const sustainableBuildings = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sustainable_Features_Buildings/FeatureServer'
-});
 
+
+/* Building Features */
 const computerLabBuildings = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Computer_Labs_ATUS_ResTek/FeatureServer'
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Computer_Labs_ATUS_ResTek/FeatureServer',
+  title: 'Computer Labs (ATUS & ResTek)',
+  visible: true,
+});
+const sustainableBuildings = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sustainable_Features_Buildings/FeatureServer',
+  title: 'Sustainable Buildings',
+  visible: true,
 });
 
+const buildingFeaturesGroup = new GroupLayer({
+  title: 'Building Features',
+  layers: [computerLabBuildings, sustainableBuildings],
+  visible: false,
+});
+
+/* Search Layers */
 const searchPoints = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts/FeatureServer',
+  visible: false,
 });
 
-const parkingLots = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer'
+/* Parking */
+const summerZoneParkingLots = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
+  title: 'Summer Zone Parking Lots',
+  visible: true,
+});
+const visitorParkingLots = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer/2',
+  title: 'Visitor Parking Lots',
+  visible: true,
+});
+const eveningWeekendParkingLots = new FeatureLayer({
+  url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Evening_Weekend_Visitor_Parking_Lots/FeatureServer/3',
+  title: 'Evening & Weekend Parking Lots',
+  visible: true,
+});
+const parkingPointFeatures = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Point_Features/FeatureServer',
+  title: 'Parking Point Features',
+  visible: true,
+});
+const parkingPermitAcademic = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer/1',
+  title: 'Permit Parking Lots (Academic Year)',
+  visible: true,
+});
+const accessibleParking = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
+  title: 'Accessible Parking',
+  visible: true,
 });
 
+const parkingGroup = new GroupLayer({
+  title: 'Parking',
+  layers: [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPointFeatures, parkingPermitAcademic, accessibleParking],
+  visible: false,
+});
+
+/* Baselayer */
 const dummyBasemap = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/DummyBasemapForLegend/FeatureServer',
-  title: '',
+  title: 'Basemap Features',
+  legendEnabled: true,
+  listMode: 'hide',
+});
+const tileBaseLayer = new VectorTileLayer({
+  url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer',
+  title: 'WWU Basemap',
+  visible: true,
 });
 
+/* Bus Layers */
+const busRoutes = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Routes/FeatureServer/1',
+  title: 'WTA Bus Routes',
+});
+const busStops = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Stops/FeatureServer/0',
+  title: 'WTA Bus Stops',
+});
 
 /* A dictionary that is used to tie URL layer names to internal variables */
 const layersDict = {
-  "buildinginfo5k": buildingInfo5k,
-  "buildingaccinfo100k": buildingAccInfo100k,
-  "parkinglots": parkingLots,
-  "computerlabbuildings": computerLabBuildings,
-  "sustainablebuildings": sustainableBuildings,
-  "gendernuetralrestrooms": genderNeutralRestrooms,
-  "searchpoints": searchPoints,
-  "dummybasemap": dummyBasemap,
-  "tilebaselayer": tileBaseLayer
+  "buildinginfo5k": [buildingInfo5k],
+  "buildingaccinfo100k": [buildingAccInfo100k],
+  "parkinglots": [parkingGroup],
+  "buildingfeatures": [buildingFeaturesGroup],
+  "gendernuetralrestrooms": [genderNeutralRestrooms],
+  "searchpoints": [searchPoints],
+  "dummybasemap": [dummyBasemap],
+  "tilebaselayer": [tileBaseLayer]
 };
 
+/* A table for the layers that should always be on */
+
+const alwaysOnLayers = [dummyBasemap, tileBaseLayer]
+
 /* Layers to load  */
-const defaultLayers = 
-[dummyBasemap, tileBaseLayer, buildingAccInfo100k, 
-  buildingInfo5k, parkingLots, computerLabBuildings, 
-  sustainableBuildings, genderNeutralRestrooms];
+const allLayers = [buildingInfo5k, buildingAccInfo100k, parkingGroup, 
+  buildingFeaturesGroup, genderNeutralRestrooms,];
 
 // Format: "ABV": [Lon, Lat]
 const customPlaces = {
@@ -100,8 +165,7 @@ const hashActions = function(hash=windowHash) {
 
     if (param.includes('layers=')){
       const enabledLayersString = param.replace('layers=','').split('/');
-      map.removeAll();
-      map.addMany(enabledLayersString.map(i => layersDict[i]));
+      enabledLayersString.forEach(group => {(layersDict[group]).forEach(layer => {layer.visible = true})});
     };
   });
 
@@ -154,7 +218,7 @@ const setLocationFromHash = function(view, loc){
 /* Creates the Map and View */
 const map = new Map({
   basemap: "streets-vector",
-  layers: defaultLayers,
+  layers: alwaysOnLayers.concat(allLayers),
 
 });
 
