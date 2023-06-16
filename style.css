@@ -74,6 +74,13 @@ h1 {
 }
 
 
+@media only screen and (min-width : 630px)  {    
+  .esri-search { width:338px; }
+}
+
+@media only screen and (max-width : 525px)  {    
+  #header { top: 45px; }
+}
 
 @keyframes expand-upwards {
   0% {

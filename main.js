@@ -12,6 +12,8 @@ import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
+import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
+import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
 /* DEFAULTS & CONFIGS */
@@ -20,6 +22,9 @@ let center = [-122.48614277687422, 48.732800397930795];
 
 const windowHash = window.location.hash.replace('#', '');
 
+
+
+//Checks if user is using mobile device
 
 /* Create Layers */
 
@@ -51,7 +56,6 @@ const sustainableBuildings = new FeatureLayer({
   title: 'Sustainable Buildings',
   visible: true,
 });
-
 const buildingFeaturesGroup = new GroupLayer({
   title: 'Building Features',
   layers: [computerLabBuildings, sustainableBuildings],
@@ -95,7 +99,6 @@ const accessibleParking = new FeatureLayer({
   title: 'Accessible Parking',
   visible: true,
 });
-
 const parkingGroup = new GroupLayer({
   title: 'Parking',
   layers: [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPointFeatures, parkingPermitAcademic, accessibleParking],
@@ -126,6 +129,7 @@ const busStops = new FeatureLayer({
 });
 
 /* A dictionary that is used to tie URL layer names to internal variables */
+/* Add here to create custom URLs for certain layers eg "parkinglotsandbuildinginfo":[parkingGroup, buildingInfo5k], */
 const layersDict = {
   "buildinginfo5k": [buildingInfo5k],
   "buildingaccinfo100k": [buildingAccInfo100k],
@@ -143,7 +147,7 @@ const alwaysOnLayers = [dummyBasemap, tileBaseLayer]
 
 /* Layers to load  */
 const allLayers = [buildingInfo5k, buildingAccInfo100k, parkingGroup, 
-  buildingFeaturesGroup, genderNeutralRestrooms,];
+  buildingFeaturesGroup, genderNeutralRestrooms,searchPoints];
 
 // Format: "ABV": [Lon, Lat]
 const customPlaces = {
@@ -225,12 +229,17 @@ const view = new MapView({
   map: map,
   zoom: zoom,
   center: center,
+  popupEnabled: true,
+  popup: {
+    defaultPopupTemplateEnabled: true,
+  },
   constraints: {
     snapToZoom: false,
     minZoom: 15,
   },
 });
 
+// Sets the location based on the hash and adds layers
 hashActions();
 
 ///* Widgets!! *///
@@ -328,7 +337,6 @@ const buildingBookmarks = new Bookmarks({
   new Bookmark({name: "Wilson Library", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4874494, ymin:48.73710098, xmax:-122.484205, ymax:48.73854585 }  }  }),
   ]
 });
-
 const poiBookmarks = new Bookmarks({
   view: view,
   bookmarks: [
@@ -365,7 +373,6 @@ const poiBookmarks = new Bookmarks({
   new Bookmark({name: "Western Gallery", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4869975, ymin:48.73461097, xmax:-122.4837531, ymax:48.7360559 }  }  }),
   ],
 });
-
 const parkingBookmarks = new Bookmarks({
   view: view,
   bookmarks: [
@@ -416,7 +423,6 @@ const buildingBookmarkExpand = new Expand({
   group: 'top-right',
   expandTooltip: 'Buildings',
 });
-
 const poiBookmarkExpand = new Expand({
   view: view,
   content: poiBookmarks,
@@ -424,7 +430,6 @@ const poiBookmarkExpand = new Expand({
   group: 'top-right',
   expandTooltip: 'Points of Interest',
 });
-
 const parkingBookmarksExpand = new Expand({
   view: view,
   content: parkingBookmarks,
@@ -432,21 +437,19 @@ const parkingBookmarksExpand = new Expand({
   group: 'top-right',
   expandTooltip: 'Parking',
 });
-
 const selectorExpand = new Expand({
   view: view,
   content: selector,
   group: 'top-right',
   expandTooltip: 'Layer Selector',
 });
-
 const legendExpand = new Expand({
   view: view,
   content: legend,
   mode: "floating",
   expandTooltip: "Legend",
   container: "legend",
-  expanded: true,
+  expanded: false,
 });
 
 /* Add UI elements */
@@ -458,7 +461,7 @@ view.ui.add([buildingBookmarkExpand, poiBookmarkExpand, parkingBookmarksExpand],
 view.ui.add(legendExpand, 'bottom-left');
 
 
-/* This part is for extras */
+/* This part is for debug extras */
 const pointerCoord = document.getElementById('info');
 
 view.on('pointer-move', (evt) => {
