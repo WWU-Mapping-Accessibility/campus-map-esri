@@ -69,20 +69,34 @@ const searchPoints = new FeatureLayer({
 });
 
 /* Parking */
+
+// This defines the template for parking popups. It uses HTML syntax to format the popup.
+const parkingPopupTemplate = {
+  title: 'Parking Lot {abv}',
+  content: '<p>{popup1} </p>\
+            <p>{popup2}</p>\
+            <p>{surface_3}</p>\
+            <p><a href="transportation.wwu.edu">Parking Info</a></p>',
+
+};
+
 const summerZoneParkingLots = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
   title: 'Summer Zone Parking Lots',
   visible: true,
+  popupTemplate: parkingPopupTemplate,
 });
 const visitorParkingLots = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer/2',
   title: 'Visitor Parking Lots',
   visible: true,
+  popupTemplate: parkingPopupTemplate,
 });
 const eveningWeekendParkingLots = new FeatureLayer({
   url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Evening_Weekend_Visitor_Parking_Lots/FeatureServer/3',
   title: 'Evening & Weekend Parking Lots',
   visible: true,
+  popupTemplate: parkingPopupTemplate,
 });
 const parkingPointFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Point_Features/FeatureServer',
@@ -93,6 +107,7 @@ const parkingPermitAcademic = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer/1',
   title: 'Permit Parking Lots (Academic Year)',
   visible: true,
+  popupTemplate: parkingPopupTemplate,
 });
 const accessibleParking = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
