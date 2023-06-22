@@ -22,23 +22,16 @@ const windowHash = window.location.hash.replace('#', '');
 
 
 
-//Checks if user is using mobile device
-
 /* Create Layers */
 
-const genderNeutralRestrooms = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
-  visible : false,
-});
+
 
 /* Building Info */
 const buildingInfoPopUpTemplate = {
   title: '{name} ({abv})',
   content: '<p><b> Accessibility Information </b></p>\
-            <ul>\
-              <li>{acc_1}</li>\
-              <li>{acc_2}</li>\
-            </ul>'
+              <p>{acc_1}</p>\
+              <p>{acc_2}</p>'
 };
 const buildingInfo5k = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
@@ -68,7 +61,6 @@ const accessibleDoors = new FeatureLayer({
     title: '{type}',
     content: '<p>{popup} </p>'}
 });
-
 const accessibleElevators = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Elevators/FeatureServer',
   title: 'Accessible Elevators',
@@ -77,7 +69,6 @@ const accessibleElevators = new FeatureLayer({
     content: '<p>{popup2} </p>\
               <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',}
 });
-
 const accessibleWalkways = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Walkways/FeatureServer',
   title: 'Accessible Walkways',
@@ -87,7 +78,6 @@ const accessibleWalkways = new FeatureLayer({
               <p>{SnowPopUp}</p>\
               <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',}
 });
-
 const accessibleParking = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
   title: 'Accessible Parking',
@@ -100,7 +90,6 @@ const accessibleParking = new FeatureLayer({
   }
 
 });
-
 const accessibleGroup = new GroupLayer({
   title: 'Accessibility',
   layers: [accessibleDoors, accessibleElevators, accessibleWalkways, accessibleParking],
@@ -119,9 +108,13 @@ const sustainableBuildings = new FeatureLayer({
   title: 'Sustainable Buildings',
   visible: true,
 });
+const genderNeutralRestrooms = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
+  visible : true,
+});
 const buildingFeaturesGroup = new GroupLayer({
   title: 'Building Features',
-  layers: [computerLabBuildings, sustainableBuildings],
+  layers: [computerLabBuildings, sustainableBuildings, genderNeutralRestrooms],
   visible: false,
 });
 
@@ -243,16 +236,17 @@ const layersDict = {
 
 /* A table for the layers that should always be on */
 
-const alwaysOnLayers = [dummyBasemap, tileBaseLayer, buildingInfoGroup]
+const alwaysOnLayers = [dummyBasemap, tileBaseLayer, buildingInfoGroup];
 
 /* Layers to load  */
 const allLayers = [parkingGroup, constructionGroup,
-  buildingFeaturesGroup, genderNeutralRestrooms,searchPoints, accessibleGroup];
+  buildingFeaturesGroup,searchPoints, accessibleGroup];
 
 // Format: "ABV": [Lon, Lat]
+// These get added to the dictionary that the hash query can use to set location from the hash
 const customPlaces = {
 
-}
+};
 
 /* Processes the hash and runs the correct functions based on hash length */
 
@@ -332,6 +326,9 @@ const view = new MapView({
   popupEnabled: true,
   popup: {
     defaultPopupTemplateEnabled: true,
+    dockOptions: {
+      position: 'bottom-right',
+    },
   },
   constraints: {
     snapToZoom: false,
