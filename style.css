@@ -73,9 +73,13 @@ h1 {
   user-select: none;
 }
 
+.esri-search {
+  z-index: 10;
+}
+
 
 @media only screen and (min-width : 630px)  {    
-  .esri-search { width:338px; }
+  .esri-search { width:339px; }
 }
 
 @media only screen and (max-width : 525px)  {    

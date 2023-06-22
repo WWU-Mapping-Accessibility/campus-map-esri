@@ -12,8 +12,6 @@ import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
-import TextSymbol from "@arcgis/core/symbols/TextSymbol.js";
-import esriConfig from'@arcgis/core/config';
 import "./style.css";
 
 /* DEFAULTS & CONFIGS */
@@ -28,19 +26,36 @@ const windowHash = window.location.hash.replace('#', '');
 
 /* Create Layers */
 
-
-const buildingAccInfo100k = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info_5_100k/FeatureServer',
-  visible: false,
-});
-const buildingInfo5k = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
-  title: 'Building Info',
-  visible: false, 
-});
 const genderNeutralRestrooms = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
   visible : false,
+});
+
+/* Building Info */
+const buildingInfoPopUpTemplate = {
+  title: '{name} ({abv})',
+  content: '<p><b> Accessibility Information </b></p>\
+            <ul>\
+              <li>{acc_1}</li>\
+              <li>{acc_2}</li>\
+            </ul>'
+};
+const buildingInfo5k = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
+  title: 'Building Info',
+  visible: true, 
+  popupTemplate: buildingInfoPopUpTemplate,
+});
+const buildingInfo100k = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info_5_100k/FeatureServer',
+  visible: true,
+  popupTemplate: buildingInfoPopUpTemplate,
+});
+const buildingInfoGroup = new GroupLayer({
+  title: 'Building Info',
+  layers: [buildingInfo5k, buildingInfo100k],
+  visible: true,
+  listMode: 'hide',
 });
 
 
@@ -114,6 +129,9 @@ const buildingFeaturesGroup = new GroupLayer({
 const searchPoints = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts/FeatureServer',
   visible: false,
+  listMode: 'hide',
+  popupTemplate: {
+    title: '{name} ({abv})',}
 });
 
 /* Parking */
@@ -127,7 +145,6 @@ const parkingPopupTemplate = {
             <p><a href="transportation.wwu.edu">Parking Info</a></p>',
 
 };
-
 const summerZoneParkingLots = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
   title: 'Summer Zone Parking Lots',
@@ -174,7 +191,6 @@ const constuctionPoints = new FeatureLayer({
     content: '<p>Area may be closed for construction.</p>\
               <p><a href="cpd.wwu.edu/construction-projects">See here for construction info</a></p>',}
 });
-
 const miscLabelPolys = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_popup_polys/FeatureServer',
   title: 'Miscellaneous Label Polygons',
@@ -183,7 +199,6 @@ const miscLabelPolys = new FeatureLayer({
   popupTemplate: {
     title: '{Name} {popup1}',}
 });
-
 const constructionGroup = new GroupLayer({
   title: 'Construction',
   layers: [constuctionPoints, miscLabelPolys],
@@ -201,6 +216,7 @@ const tileBaseLayer = new VectorTileLayer({
   url: 'https://tiles.arcgis.com/tiles/qboYD3ru0louQq4F/arcgis/rest/services/WWUbasemap/VectorTileServer',
   title: 'WWU Basemap',
   visible: true,
+  listMode: 'hide',
 });
 
 /* Bus Layers */
@@ -217,7 +233,6 @@ const busStops = new FeatureLayer({
 /* Add here to create custom URLs for certain layers eg "parkinglotsandbuildinginfo":[parkingGroup, buildingInfo5k], */
 const layersDict = {
   "buildinginfo5k": [buildingInfo5k],
-  "buildingaccinfo100k": [buildingAccInfo100k],
   "parkinglots": [parkingGroup],
   "buildingfeatures": [buildingFeaturesGroup],
   "gendernuetralrestrooms": [genderNeutralRestrooms],
@@ -228,10 +243,10 @@ const layersDict = {
 
 /* A table for the layers that should always be on */
 
-const alwaysOnLayers = [dummyBasemap, tileBaseLayer]
+const alwaysOnLayers = [dummyBasemap, tileBaseLayer, buildingInfoGroup]
 
 /* Layers to load  */
-const allLayers = [buildingInfo5k, buildingAccInfo100k, parkingGroup, constructionGroup,
+const allLayers = [parkingGroup, constructionGroup,
   buildingFeaturesGroup, genderNeutralRestrooms,searchPoints, accessibleGroup];
 
 // Format: "ABV": [Lon, Lat]
