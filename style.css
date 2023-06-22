@@ -79,7 +79,7 @@ h1 {
 }
 
 @media only screen and (max-width : 525px)  {    
-  #header { top: 45px; }
+  h1 { display: none; }
 }
 
 @keyframes expand-upwards {

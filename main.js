@@ -44,6 +44,54 @@ const genderNeutralRestrooms = new FeatureLayer({
 });
 
 
+/* Accessibility */
+
+const accessibleDoors = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Doors/FeatureServer',
+  title: 'Accessible Doors',
+  popupTemplate: {
+    title: '{type}',
+    content: '<p>{popup} </p>'}
+});
+
+const accessibleElevators = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Elevators/FeatureServer',
+  title: 'Accessible Elevators',
+  popupTemplate: {
+    title: '{popup} Elevator',
+    content: '<p>{popup2} </p>\
+              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',}
+});
+
+const accessibleWalkways = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Walkways/FeatureServer',
+  title: 'Accessible Walkways',
+  popupTemplate: {
+    title: 'ADA Accessible Route',
+    content: '<p>{AccPopUp} </p>\
+              <p>{SnowPopUp}</p>\
+              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',}
+});
+
+const accessibleParking = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
+  title: 'Accessible Parking',
+  popupTemplate: {
+    title: '{type} Parking',
+    content: '<p>{location}</p>\
+              <p>{spaces} spaces</p>\
+              <p>A valid state issued disability permit and a valid on-campus WWU purchased parking or permit are both required to park in a posted accessible parking space.</p>\
+              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',
+  }
+
+});
+
+const accessibleGroup = new GroupLayer({
+  title: 'Accessibility',
+  layers: [accessibleDoors, accessibleElevators, accessibleWalkways, accessibleParking],
+  visible: false,
+});
+
 
 /* Building Features */
 const computerLabBuildings = new FeatureLayer({
@@ -109,14 +157,10 @@ const parkingPermitAcademic = new FeatureLayer({
   visible: true,
   popupTemplate: parkingPopupTemplate,
 });
-const accessibleParking = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
-  title: 'Accessible Parking',
-  visible: true,
-});
+
 const parkingGroup = new GroupLayer({
   title: 'Parking',
-  layers: [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPointFeatures, parkingPermitAcademic, accessibleParking],
+  layers: [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPointFeatures, parkingPermitAcademic],
   visible: false,
 });
 
@@ -162,7 +206,7 @@ const alwaysOnLayers = [dummyBasemap, tileBaseLayer]
 
 /* Layers to load  */
 const allLayers = [buildingInfo5k, buildingAccInfo100k, parkingGroup, 
-  buildingFeaturesGroup, genderNeutralRestrooms,searchPoints];
+  buildingFeaturesGroup, genderNeutralRestrooms,searchPoints, accessibleGroup];
 
 // Format: "ABV": [Lon, Lat]
 const customPlaces = {
