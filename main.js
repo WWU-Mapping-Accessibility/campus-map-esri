@@ -34,12 +34,14 @@ const buildingInfoPopUpTemplate = {
               <p>{acc_2}</p>'
 };
 const buildingInfo5k = new FeatureLayer({
+  title: 'Building Info',
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
   title: 'Building Info',
   visible: true, 
   popupTemplate: buildingInfoPopUpTemplate,
 });
 const buildingInfo100k = new FeatureLayer({
+  title: 'Building Info',
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info_5_100k/FeatureServer',
   visible: true,
   popupTemplate: buildingInfoPopUpTemplate,
@@ -49,6 +51,7 @@ const buildingInfoGroup = new GroupLayer({
   layers: [buildingInfo5k, buildingInfo100k],
   visible: true,
   listMode: 'hide',
+  legendEnabled: false,
 });
 
 
@@ -201,7 +204,7 @@ const constructionGroup = new GroupLayer({
 /* Baselayer */
 const dummyBasemap = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/DummyBasemapForLegend/FeatureServer',
-  title: 'Basemap Features',
+  title: '',
   legendEnabled: true,
   listMode: 'hide',
 });
@@ -211,6 +214,14 @@ const tileBaseLayer = new VectorTileLayer({
   visible: true,
   listMode: 'hide',
 });
+
+const basemapGroup = new GroupLayer({
+  title: '',
+  layers: [tileBaseLayer, dummyBasemap],
+  visible: true,
+  listMode: 'hide',
+});
+
 
 /* Bus Layers */
 const busRoutes = new FeatureLayer({
@@ -231,12 +242,14 @@ const layersDict = {
   "gendernuetralrestrooms": [genderNeutralRestrooms],
   "searchpoints": [searchPoints],
   "dummybasemap": [dummyBasemap],
-  "tilebaselayer": [tileBaseLayer]
+  "tilebaselayer": [tileBaseLayer],
+  "baselayer": [basemapGroup],
+
 };
 
 /* A table for the layers that should always be on */
 
-const alwaysOnLayers = [dummyBasemap, tileBaseLayer, buildingInfoGroup];
+const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 
 /* Layers to load  */
 const allLayers = [parkingGroup, constructionGroup,
