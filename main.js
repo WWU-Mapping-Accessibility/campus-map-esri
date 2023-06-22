@@ -164,6 +164,32 @@ const parkingGroup = new GroupLayer({
   visible: false,
 });
 
+/* Construction */
+const constuctionPoints = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Construction_pts/FeatureServer',
+  title: 'Construction Locations',
+  visible: true,
+  popupTemplate: {
+    title: '{Name}',
+    content: '<p>Area may be closed for construction.</p>\
+              <p><a href="cpd.wwu.edu/construction-projects">See here for construction info</a></p>',}
+});
+
+const miscLabelPolys = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_popup_polys/FeatureServer',
+  title: 'Miscellaneous Label Polygons',
+  legendEnabled: false,
+  visible: true,
+  popupTemplate: {
+    title: '{Name} {popup1}',}
+});
+
+const constructionGroup = new GroupLayer({
+  title: 'Construction',
+  layers: [constuctionPoints, miscLabelPolys],
+  visible: false,
+});
+
 /* Baselayer */
 const dummyBasemap = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/DummyBasemapForLegend/FeatureServer',
@@ -205,7 +231,7 @@ const layersDict = {
 const alwaysOnLayers = [dummyBasemap, tileBaseLayer]
 
 /* Layers to load  */
-const allLayers = [buildingInfo5k, buildingAccInfo100k, parkingGroup, 
+const allLayers = [buildingInfo5k, buildingAccInfo100k, parkingGroup, constructionGroup,
   buildingFeaturesGroup, genderNeutralRestrooms,searchPoints, accessibleGroup];
 
 // Format: "ABV": [Lon, Lat]
