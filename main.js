@@ -115,9 +115,17 @@ const genderNeutralRestrooms = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
   visible : true,
 });
+const familyFeatures = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Family_Changing_Lactation__25k/FeatureServer',
+  title: 'Family (Changing & Lactation)',
+});
+const food = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Food/FeatureServer',
+  title: 'Food',
+});
 const buildingFeaturesGroup = new GroupLayer({
   title: 'Building Features',
-  layers: [computerLabBuildings, sustainableBuildings, genderNeutralRestrooms],
+  layers: [computerLabBuildings, sustainableBuildings, genderNeutralRestrooms, familyFeatures, food],
   visible: false,
 });
 
@@ -170,7 +178,6 @@ const parkingPermitAcademic = new FeatureLayer({
   visible: true,
   popupTemplate: parkingPopupTemplate,
 });
-
 const parkingGroup = new GroupLayer({
   title: 'Parking',
   layers: [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPointFeatures, parkingPermitAcademic],
@@ -201,6 +208,86 @@ const constructionGroup = new GroupLayer({
   visible: false,
 });
 
+/* Safety */
+const emergencyPhones = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Emergency_Phones/FeatureServer/1',
+  title: 'Emergency Phones',
+});
+const snowRemoval = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Snow_Removal_Routes/FeatureServer/4',
+  title: 'Snow Removal Routes',
+});
+const AED = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/AEDs/FeatureServer/3',
+  title: 'AEDs',
+});
+const disasterAssemblyAreas = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Major_Disaster_Assembly_Areas/FeatureServer/0',
+  title: 'Major Disaster Assembly Areas',
+});
+const safetyGroup = new GroupLayer({
+  title: 'Safety',
+  layers: [emergencyPhones, snowRemoval, AED, disasterAssemblyAreas],
+  visible: false,
+});
+
+/* Art */
+const artGalleries = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Art_Galleries/FeatureServer/1',
+  title: 'Art Galleries',
+});
+const scupltures = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sculpture/FeatureServer/2',
+  title: 'Sculptures',
+});
+const scultpureTour = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sculpture_Tour/FeatureServer/3',
+  title: 'Sculpture Tour',
+});
+const artGroup = new GroupLayer({
+  title: 'Art',
+  layers: [artGalleries, scupltures, scultpureTour],
+  visible: false,
+});
+
+/* Bus Layers */
+const busRoutes = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Routes/FeatureServer/1',
+  title: 'WTA Bus Routes',
+});
+const busStops = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Stops/FeatureServer/0',
+  title: 'WTA Bus Stops',
+});
+const busGroup = new GroupLayer({
+  title: 'Bus Info',
+  layers: [busRoutes, busStops],
+  visible: false,
+});
+
+/* Bicycle Group */
+const bikeRacks = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Racks/FeatureServer/173',
+  title: 'Bicycle Racks',
+});
+const thruBikeRoutes = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Thru_Campus_Bike_Routes/FeatureServer/0',
+  title: 'Through Campus Bike Routes',
+});
+const bikeDesignations = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Designations/FeatureServer/185',
+  title: 'Bicycle Designations',
+});
+const bellinghamBikeRoutes = new FeatureLayer({
+  url: 'https://maps.cob.org/arcgis4/rest/services/Maps/Grp_Transportation/MapServer/14',
+  title: 'Bellingham Bike Routes',
+});
+const bikeGroup = new GroupLayer({
+  title: 'Bicycle Info',
+  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, bellinghamBikeRoutes],
+  visible: false,
+});
+
 /* Baselayer */
 const dummyBasemap = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/DummyBasemapForLegend/FeatureServer',
@@ -214,23 +301,11 @@ const tileBaseLayer = new VectorTileLayer({
   visible: true,
   listMode: 'hide',
 });
-
 const basemapGroup = new GroupLayer({
   title: '',
   layers: [tileBaseLayer, dummyBasemap],
   visible: true,
   listMode: 'hide',
-});
-
-
-/* Bus Layers */
-const busRoutes = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Routes/FeatureServer/1',
-  title: 'WTA Bus Routes',
-});
-const busStops = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Stops/FeatureServer/0',
-  title: 'WTA Bus Stops',
 });
 
 /* A dictionary that is used to tie URL layer names to internal variables */
@@ -253,7 +328,8 @@ const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 
 /* Layers to load  */
 const allLayers = [parkingGroup, constructionGroup,
-  buildingFeaturesGroup,searchPoints, accessibleGroup];
+  searchPoints, accessibleGroup, artGroup, 
+  busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -345,7 +421,7 @@ const view = new MapView({
   },
   constraints: {
     snapToZoom: false,
-    minZoom: 15,
+    minZoom: 13,
   },
 });
 
