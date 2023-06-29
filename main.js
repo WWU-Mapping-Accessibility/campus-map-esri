@@ -7,7 +7,8 @@ import Graphic from '@arcgis/core/Graphic';
 import Legend from '@arcgis/core/widgets/Legend';
 import Expand from '@arcgis/core/widgets/Expand';
 import Locate from '@arcgis/core/widgets/Locate';
-import Search from '@arcgis/core/widgets/Search'
+import Search from '@arcgis/core/widgets/Search';
+import Compass from '@arcgis/core/widgets/Compass';
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
@@ -235,14 +236,27 @@ const safetyGroup = new GroupLayer({
 const artGalleries = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Art_Galleries/FeatureServer/1',
   title: 'Art Galleries',
+  popupTemplate: {
+    title: '{name}',
+    content: '<p>{note_1}</p>\
+              <p><img src="{image}" alt="{name}" width="200"></p>'
+  }
 });
 const scupltures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sculpture/FeatureServer/2',
   title: 'Sculptures',
+  popupTemplate: {
+    title: '{name} by {artist}',
+    content: '<img src="{image}" alt="{name}" width="200">'
+  }
 });
 const scultpureTour = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sculpture_Tour/FeatureServer/3',
   title: 'Sculpture Tour',
+  popupTemplate: {
+    title: 'Campus Scultpure Tour',
+    content: '{acc_1}'
+  }
 });
 const artGroup = new GroupLayer({
   title: 'Art',
@@ -645,6 +659,7 @@ view.ui.add(search, 'top-right');
 view.ui.add(selectorExpand, 'top-right');
 view.ui.add([buildingBookmarkExpand, poiBookmarkExpand, parkingBookmarksExpand], 'top-right');
 view.ui.add(legendExpand, 'bottom-left');
+view.ui.add(new Compass({view: view}), 'bottom-left');
 
 
 /* This part is for debug extras */
