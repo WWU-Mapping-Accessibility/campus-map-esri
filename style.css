@@ -73,14 +73,18 @@ h1 {
   user-select: none;
 }
 
-@media only screen and (min-width : 630px)  {    
-  .esri-search { 
-    width:339px;
-    z-index: 10; }
+#searchWidget-input::placeholder{
+  content: 'Hello';
 }
 
 @media only screen and (max-width : 525px)  {    
   h1 { display: none; }
+}
+
+@media only screen and (min-width : 630px)  {    
+  .esri-search { 
+    width:339px;
+    z-index: 10; }
 }
 
 @keyframes expand-upwards {

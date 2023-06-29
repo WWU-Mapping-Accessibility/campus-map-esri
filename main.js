@@ -100,33 +100,43 @@ const accessibleGroup = new GroupLayer({
   visible: false,
 });
 
+/* Food */
+const food = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Food/FeatureServer',
+  title: 'Food',
+  visible: false,
+  popupTemplate: {
+    title: '{name}',
+    content: '<p>Building: <b>{building}</b></p>\
+              <p>{goods}</p>',}
+});
 
 /* Building Features */
 const computerLabBuildings = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Computer_Labs_ATUS_ResTek/FeatureServer',
   title: 'Computer Labs (ATUS & ResTek)',
   visible: true,
+  popupEnabled: false,
 });
 const sustainableBuildings = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sustainable_Features_Buildings/FeatureServer',
   title: 'Sustainable Buildings',
   visible: true,
+  popupEnabled: false,
 });
 const genderNeutralRestrooms = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
   visible : true,
+  popupEnabled: false,
 });
 const familyFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Family_Changing_Lactation__25k/FeatureServer',
   title: 'Family (Changing & Lactation)',
-});
-const food = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Food/FeatureServer',
-  title: 'Food',
+  popupEnabled: false,
 });
 const buildingFeaturesGroup = new GroupLayer({
   title: 'Building Features',
-  layers: [computerLabBuildings, sustainableBuildings, genderNeutralRestrooms, familyFeatures, food],
+  layers: [computerLabBuildings, sustainableBuildings, genderNeutralRestrooms, familyFeatures],
   visible: false,
 });
 
@@ -213,18 +223,31 @@ const constructionGroup = new GroupLayer({
 const emergencyPhones = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Emergency_Phones/FeatureServer/1',
   title: 'Emergency Phones',
+  popupTemplate: {
+    title: 'Emergency Phone',
+    content: '<p>{note}</p>',}
 });
 const snowRemoval = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Snow_Removal_Routes/FeatureServer/4',
   title: 'Snow Removal Routes',
+  popupsEnabled: false,
 });
 const AED = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/AEDs/FeatureServer/3',
   title: 'AEDs',
+  popupTemplate: {
+    title: 'AED',
+    content: '<p>Building: <b>{building}</b></p>\
+              <p>Location: <b>{location}</b></p>'
+  }
 });
 const disasterAssemblyAreas = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Major_Disaster_Assembly_Areas/FeatureServer/0',
   title: 'Major Disaster Assembly Areas',
+  popupTemplate: {
+    title: 'Major Disaster Assembly Area',
+    content: '<p>{location}</p>'
+  }
 });
 const safetyGroup = new GroupLayer({
   title: 'Safety',
@@ -268,10 +291,18 @@ const artGroup = new GroupLayer({
 const busRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Routes/FeatureServer/1',
   title: 'WTA Bus Routes',
+  popupTemplate: {title: 'WTA Bus Route',
+                  content: '<p>Route: <b>{route}</b></p>'
+  }
 });
 const busStops = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Stops/FeatureServer/0',
   title: 'WTA Bus Stops',
+  popupTemplate: {
+    title: 'WTA Bus Stop at {point_name}',
+    content: '<p>This stop <b>{seating}</b> seating.</p>\
+              <p>Shelter: <b>{shelter}</b></p>'
+  }
 });
 const busGroup = new GroupLayer({
   title: 'Bus Info',
@@ -283,18 +314,22 @@ const busGroup = new GroupLayer({
 const bikeRacks = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Racks/FeatureServer/173',
   title: 'Bicycle Racks',
+  popupEnabled: false,
 });
 const thruBikeRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Thru_Campus_Bike_Routes/FeatureServer/0',
   title: 'Through Campus Bike Routes',
+  popupEnabled: false,
 });
 const bikeDesignations = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Designations/FeatureServer/185',
   title: 'Bicycle Designations',
+  popupEnabled: false,
 });
 const bellinghamBikeRoutes = new FeatureLayer({
   url: 'https://maps.cob.org/arcgis4/rest/services/Maps/Grp_Transportation/MapServer/14',
   title: 'Bellingham Bike Routes',
+  popupEnabled: false,
 });
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
@@ -343,7 +378,7 @@ const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 /* Layers to load  */
 const allLayers = [parkingGroup, constructionGroup,
   searchPoints, accessibleGroup, artGroup, 
-  busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup];
+  busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup, food];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -469,7 +504,9 @@ const search = new Search({
   view: view,
   locationEnabled: false,
   includeDefaultSources: false,
+  container: 'searchWidget',
   sources: [{
+    placeholder: 'Search for buildings, parking lots, and more...',
     layer: searchPoints,
     searchFields: ['Name', 'Abv', 
       'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
@@ -618,6 +655,7 @@ const parkingBookmarks = new Bookmarks({
 /* Expand Widgets */
 const buildingBookmarkExpand = new Expand({
   view: view,
+  autoCollapse: true,
   content: buildingBookmarks,
   expandIcon: 'urban-model',
   group: 'top-right',
@@ -625,6 +663,7 @@ const buildingBookmarkExpand = new Expand({
 });
 const poiBookmarkExpand = new Expand({
   view: view,
+  autoCollapse: true,
   content: poiBookmarks,
   expandIcon: 'map-pin',
   group: 'top-right',
@@ -632,6 +671,7 @@ const poiBookmarkExpand = new Expand({
 });
 const parkingBookmarksExpand = new Expand({
   view: view,
+  autoCollapse: true,
   content: parkingBookmarks,
   expandIcon: 'car',
   group: 'top-right',
@@ -656,7 +696,7 @@ const legendExpand = new Expand({
 
 view.ui.add(locate, 'top-left');
 view.ui.add(search, 'top-right');
-view.ui.add(selectorExpand, 'top-right');
+view.ui.add(selectorExpand, 'top-left');
 view.ui.add([buildingBookmarkExpand, poiBookmarkExpand, parkingBookmarksExpand], 'top-right');
 view.ui.add(legendExpand, 'bottom-left');
 view.ui.add(new Compass({view: view}), 'bottom-left');
