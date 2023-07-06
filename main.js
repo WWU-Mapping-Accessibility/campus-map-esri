@@ -51,12 +51,15 @@ const buildingInfo5k = new FeatureLayer({
   title: 'Building Info',
   visible: true, 
   popupTemplate: buildingInfoPopUpTemplate,
+  effect: 'drop-shadow(3px, 3px, 4px)',
 });
 const buildingInfo100k = new FeatureLayer({
   title: 'Building Info',
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info_5_100k/FeatureServer',
   visible: true,
   popupTemplate: buildingInfoPopUpTemplate,
+  minScale: 13000,
+  effect: 'drop-shadow(3px, 3px, 5px) ',
 });
 const buildingInfoGroup = new GroupLayer({
   title: 'Building Info',
@@ -784,6 +787,9 @@ view.ui.add(new ScaleBar({view: view, unit: 'dual'}), 'bottom-right');
 basemapToggle.watch('activeBasemap', () => {
   if(basemapToggle.activeBasemap.title === "Imagery"){
     tileBaseLayer.set('opacity', 0.55);
+  }
+  else{
+    tileBaseLayer.set('opacity', 1);
   }
 });
 
