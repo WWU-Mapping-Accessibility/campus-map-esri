@@ -3,12 +3,16 @@ import MapView from "@arcgis/core/views/MapView";
 import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Graphic from '@arcgis/core/Graphic';
+import Point from '@arcgis/core/geometry/Point';
 /* Import Widgets */
 import Legend from '@arcgis/core/widgets/Legend';
 import Expand from '@arcgis/core/widgets/Expand';
 import Locate from '@arcgis/core/widgets/Locate';
 import Search from '@arcgis/core/widgets/Search';
-import Compass from '@arcgis/core/widgets/Compass';
+import ScaleBar from '@arcgis/core/widgets/ScaleBar';
+import Home from '@arcgis/core/widgets/Home';
+import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
+//import Measurement from '@arcgis/core/widgets/Measurement';
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
@@ -30,7 +34,13 @@ const windowHash = window.location.hash.replace('#', '');
 /* Building Info */
 const buildingInfoPopUpTemplate = {
   title: '{name} ({abv})',
-  content: '<p><b> Accessibility Information </b></p>\
+  content: '<p><b> Building Information </b></p>\
+              <p><a href={url}>More Info</a></p>\
+              <p><b>Type:</b> {type}</p>\
+              <p><b>Computer Labs:</b> {comp_loc_n}</p>\
+              <p><b>Sustainability:</b> {sust_type}</p>\
+              <p><b>-- Accessibility Information --</b></p>\
+              <p><b>{acc_bldg}</b></p>\
               <p>{acc_1}</p>\
               <p>{acc_2}</p>'
 };
@@ -308,6 +318,7 @@ const busGroup = new GroupLayer({
   title: 'Bus Info',
   layers: [busRoutes, busStops],
   visible: false,
+  listMode: "hide-children",
 });
 
 /* Bicycle Group */
@@ -376,9 +387,9 @@ const layersDict = {
 const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 
 /* Layers to load  */
-const allLayers = [parkingGroup, constructionGroup,
+const allLayers = [basemapGroup,parkingGroup, constructionGroup,
   searchPoints, accessibleGroup, artGroup, 
-  busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup, food];
+  busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup, food, buildingInfoGroup];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -452,7 +463,7 @@ const setLocationFromHash = function(view, loc){
 /* Creates the Map and View */
 const map = new Map({
   basemap: "streets-vector",
-  layers: alwaysOnLayers.concat(allLayers),
+  layers: allLayers,
 
 });
 
@@ -514,6 +525,25 @@ const search = new Search({
     name: 'WWU Search Points',
     zoomScale: 1000
   }]
+});
+
+/* Home Button Widget */
+const home = new Home({
+  view: view,
+  viewpoint: {
+    targetGeometry: new Point({
+      x: center[0],
+      y: center[1],
+      spatialReference: {wkid: 4326}
+    }),
+    scale: 15000
+  }
+});
+
+/* Basemap Toggle Widget */
+const basemapToggle = new BasemapToggle({
+  view: view,
+  nextBasemap: 'satellite'
 });
 
 /* Bookmarks */
@@ -691,25 +721,58 @@ const legendExpand = new Expand({
   container: "legend",
   expanded: false,
 });
+const searchExpand = new Expand({
+  view: view,
+  content: search,
+  expandIcon: 'search',
+  expandTooltip: 'Search',
+});
 
 /* Add UI elements */
 
-view.ui.add(locate, 'top-left');
-view.ui.add(search, 'top-right');
+// Top Left
+view.ui.add(home, 'top-left');
 view.ui.add(selectorExpand, 'top-left');
-view.ui.add([buildingBookmarkExpand, poiBookmarkExpand, parkingBookmarksExpand], 'top-right');
-view.ui.add(legendExpand, 'bottom-left');
-view.ui.add(new Compass({view: view}), 'bottom-left');
+view.ui.add(legendExpand, 'top-left');
 
+// Top Right
+view.ui.add(searchExpand, 'top-right');
+view.ui.add(locate, 'top-right');
+view.ui.add([poiBookmarkExpand, buildingBookmarkExpand, parkingBookmarksExpand], 'top-right');
+
+// Bottom Left
+view.ui.add(basemapToggle, 'bottom-left');
+
+// Bottom Right
+view.ui.add(new ScaleBar({view: view}), 'bottom-right');
+
+
+/* Event Listeners */
+
+// Change opacity of imagery basemap when toggled
+basemapToggle.watch('activeBasemap', () => {
+  if(basemapToggle.activeBasemap.title === "Imagery"){
+    tileBaseLayer.set('opacity', 0.55);
+  }
+});
+
+// view.watch(basemapToggle.activeBasemap, () => {
+//   console.log(basemapToggle.activeBasemap);
+//   });
+
+
+
+//Future implement meausrement tool
+//view.ui.add(new Measurement({view: view, activeTool: 'distance'}), 'top-right');
 
 /* This part is for debug extras */
-const pointerCoord = document.getElementById('info');
+// const pointerCoord = document.getElementById('info');
 
-view.on('pointer-move', (evt) => {
-  var pt = view.toMap({x: evt.x, y: evt.y});
+// view.on('pointer-move', (evt) => {
+//   var pt = view.toMap({x: evt.x, y: evt.y});
   
-  pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude;
-});
+//   pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude;
+// });
 
-view.on('click', (evt) => {
-});
+// view.on('click', (evt) => {
+// });
