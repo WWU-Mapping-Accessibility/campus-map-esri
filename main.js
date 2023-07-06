@@ -11,6 +11,7 @@ import Locate from '@arcgis/core/widgets/Locate';
 import Search from '@arcgis/core/widgets/Search';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Home from '@arcgis/core/widgets/Home';
+import Slider from '@arcgis/core/widgets/Slider';
 import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
 //import Measurement from '@arcgis/core/widgets/Measurement';
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
@@ -482,6 +483,7 @@ const view = new MapView({
   constraints: {
     snapToZoom: false,
     minZoom: 13,
+    maxZoom: 20,
   },
 });
 
@@ -682,6 +684,26 @@ const parkingBookmarks = new Bookmarks({
   ],
 });
 
+/* Zoom Slider */
+const zoomSlider = new Slider({
+  min: 13,
+  max: 20,
+  layout: 'vertical',
+  steps: [13, 14, 16, 18, 20],
+  values: [ zoom ],
+  tickConfigs: [{
+    mode: "position",
+    values: [13, 14, 16, 18, 20],
+    labelsVisible: true,
+    labelFormatFunction: function(value, type) {
+
+      return (value === 14) ? "Home" : "";
+    }
+  }],
+  labelsVisible: true,
+
+});
+
 /* Expand Widgets */
 const buildingBookmarkExpand = new Expand({
   view: view,
@@ -710,7 +732,7 @@ const parkingBookmarksExpand = new Expand({
 const selectorExpand = new Expand({
   view: view,
   content: selector,
-  group: 'top-right',
+  group: 'top-left',
   expandTooltip: 'Layer Selector',
 });
 const legendExpand = new Expand({
@@ -720,6 +742,7 @@ const legendExpand = new Expand({
   expandTooltip: "Legend",
   container: "legend",
   expanded: false,
+  group:  'top-left',
 });
 const searchExpand = new Expand({
   view: view,
@@ -728,9 +751,16 @@ const searchExpand = new Expand({
   expandTooltip: 'Search',
 });
 
+const zoomExpand = new Expand({
+  view: view,
+  content: zoomSlider,
+  expandIcon: 'zoom-in-fixed',
+});
+
 /* Add UI elements */
 
 // Top Left
+view.ui.add(zoomExpand, 'top-left')
 view.ui.add(home, 'top-left');
 view.ui.add(selectorExpand, 'top-left');
 view.ui.add(legendExpand, 'top-left');
@@ -744,7 +774,7 @@ view.ui.add([poiBookmarkExpand, buildingBookmarkExpand, parkingBookmarksExpand],
 view.ui.add(basemapToggle, 'bottom-left');
 
 // Bottom Right
-view.ui.add(new ScaleBar({view: view}), 'bottom-right');
+view.ui.add(new ScaleBar({view: view, unit: 'dual'}), 'bottom-right');
 
 
 /* Event Listeners */
@@ -753,6 +783,19 @@ view.ui.add(new ScaleBar({view: view}), 'bottom-right');
 basemapToggle.watch('activeBasemap', () => {
   if(basemapToggle.activeBasemap.title === "Imagery"){
     tileBaseLayer.set('opacity', 0.55);
+  }
+});
+
+// Change zoom slider to match current zoom level and vice versa
+
+view.watch('zoom', () => {
+  zoomSlider.values = [view.zoom];
+});
+
+
+zoomSlider.watch('values', () => {
+  if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
+    view.zoom = zoomSlider.values[0];
   }
 });
 

@@ -73,6 +73,13 @@ h1 {
   user-select: none;
 }
 
+.esri-slider {
+  height: 100px;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+}
+
 
 @media only screen and (max-width : 567px)  {    
   h1 { display: none; }
@@ -86,7 +93,7 @@ h1 {
 
 @media only screen and (min-width : 666px)  {    
   .esri-search { 
-    width:300px;
+    width:300 px;
     z-index: 10; }
 }
 
