@@ -538,7 +538,7 @@ const home = new Home({
       y: center[1],
       spatialReference: {wkid: 4326}
     }),
-    scale: 15000
+    scale: 13000
   }
 });
 
@@ -689,15 +689,15 @@ const zoomSlider = new Slider({
   min: 13,
   max: 20,
   layout: 'vertical',
-  steps: [13, 14, 16, 18, 20],
+  steps: [13, 14.56, 16, 18, 20],
   values: [ zoom ],
   tickConfigs: [{
     mode: "position",
-    values: [13, 14, 16, 18, 20],
+    values: [13, 14.56, 16, 18, 20],
     labelsVisible: true,
     labelFormatFunction: function(value, type) {
 
-      return (value === 14) ? "Home" : "";
+      return (value === 14.56) ? "Home" : "";
     }
   }],
   labelsVisible: true,
@@ -754,7 +754,8 @@ const searchExpand = new Expand({
 const zoomExpand = new Expand({
   view: view,
   content: zoomSlider,
-  expandIcon: 'zoom-in-fixed',
+  expandIcon: 'caret-double-vertical',
+  mode: 'floating',
 });
 
 /* Add UI elements */
@@ -797,6 +798,7 @@ zoomSlider.watch('values', () => {
   if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
     view.zoom = zoomSlider.values[0];
   }
+  console.log(view.zoom);
 });
 
 // view.watch(basemapToggle.activeBasemap, () => {

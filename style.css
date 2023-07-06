@@ -80,6 +80,13 @@ h1 {
   z-index: 3;
 }
 
+.esri-slider__tick-label{
+  font-size: 12px;
+  font-family: arial !important;
+  font-weight: bold;
+  user-select: none;
+}
+
 
 @media only screen and (max-width : 567px)  {    
   h1 { display: none; }
