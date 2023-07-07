@@ -34,7 +34,6 @@ body {
 #headertext {
   font-size: 20px;
 }
-
 #zoomSlider_controls_content {
   position: absolute;
   left: 40px;
@@ -86,6 +85,9 @@ body {
   user-select: none;
 }
 
+.esri-scale-bar__bar-container {
+  z-index: 0;
+}
 
 .esri-slider {
   height: 100px;
