@@ -463,7 +463,6 @@ const setLocationFromHash = function(view, loc){
   };
 };
 
-
 /* Creates the Map and View */
 const map = new Map({
   basemap: "streets-vector",
