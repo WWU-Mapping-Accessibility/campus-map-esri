@@ -15,7 +15,8 @@ body {
   margin: 0;
   position: relative;
   height: calc(100% - 40px);
-  width: 100%
+  width: 100%;
+  z-index: 50;
 }
 #logo {
   width: 40px;
@@ -52,6 +53,7 @@ body {
   width: 62px;
   height: 32px;
 }
+
 /* #legend .esri-expand__content {
   transition: none;
 } */
@@ -83,6 +85,7 @@ body {
   font-weight: bold;
   user-select: none;
 }
+
 
 .esri-slider {
   height: 100px;
