@@ -391,7 +391,7 @@ const layersDict = {
 const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 
 /* Layers to load  */
-const allLayers = [basemapGroup,parkingGroup, constructionGroup,
+const allLayers = [basemapGroup, parkingGroup, constructionGroup,
   searchPoints, accessibleGroup, artGroup, 
   busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup, food, buildingInfoGroup];
 
