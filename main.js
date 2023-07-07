@@ -795,18 +795,18 @@ basemapToggle.watch('activeBasemap', () => {
   }
 });
 
-// Change zoom slider to match current zoom level and vice versa
 
+// Change zoom slider to match current zoom level and vice versa
 view.watch('zoom', () => {
-  zoomSlider.values = [view.zoom];
+  zoomSlider.values = [(map.basemap.title === "Streets") ? view.zoom : view.zoom - 1]; // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
 });
 
 
 zoomSlider.watch('values', () => {
   if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
-    view.zoom = zoomSlider.values[0];
+    view.zoom = ((map.basemap.title === "Streets") ? zoomSlider.values[0] : zoomSlider.values[0] + 1); // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
   }
-  console.log(view.zoom);
+  //console.log(view.zoom);
 });
 
 // view.watch(basemapToggle.activeBasemap, () => {
