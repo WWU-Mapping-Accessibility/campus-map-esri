@@ -7,12 +7,15 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
   </head>
   <body>
-    <div class = "internals" id="header">
-      <img id="logo" src="WWU.png" alt="WWU Logo">
-      <h1>WWU Campus Map</h1>
+    <div class="internals" id="headerbar">
+      <div id="headerinternals">
+        <img id="logo" src="WWU.png" alt="WWU Logo">
+        <h1 id="headertext">WWU Campus Map</h1>
+      </div>
     </div>
-    <div id = "legend"></div>
     <div class = "internals" id="map"></div>
+    <div id = "zoomSlider"></div>
+    <div id = "legend"></div>
     <div id="locateWidget"></div>
     <span id="info"></span>
     <script type="module" src="/main.js"></script>

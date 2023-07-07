@@ -703,7 +703,7 @@ const zoomSlider = new Slider({
     }
   }],
   labelsVisible: true,
-
+  expandTooltip: 'Zoom Slider',
 });
 
 /* Expand Widgets */
@@ -751,19 +751,22 @@ const searchExpand = new Expand({
   content: search,
   expandIcon: 'search',
   expandTooltip: 'Search',
+  mode: 'floating',
 });
-
 const zoomExpand = new Expand({
+  container: "zoomSlider",
   view: view,
   content: zoomSlider,
   expandIcon: 'caret-double-vertical',
   mode: 'floating',
+  expandTooltip: 'Expand Zoom Slider',
 });
 
 /* Add UI elements */
 
 // Top Left
 view.ui.add(zoomExpand, 'top-left')
+view.ui.move(["zoom"], 'top-left') // Moves the default zoom buttons below the zoom slider
 view.ui.add(home, 'top-left');
 view.ui.add(selectorExpand, 'top-left');
 view.ui.add(legendExpand, 'top-left');
