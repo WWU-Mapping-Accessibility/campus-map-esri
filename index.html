@@ -11,8 +11,17 @@
       <div id="headerinternals">
         <img id="logo" src="WWU.png" alt="WWU Logo">
         <h1 id="headertext">WWU Campus Map</h1>
+        <button onclick="mapinfoDialog.showModal()" id="mapinfo" class="button">Map Instructions</button>
       </div>
     </div>
+    <dialog id="mapinfoDialog">
+      <h1>Map Instructions</h1>
+      <p>
+        This map is a work in progress. It is not yet complete, and may contain
+        errors.
+      </p>
+      <button onclick="mapinfoDialog.close()" class="button">Close</button>
+    </dialog>
     <div class = "internals" id="map"></div>
     <div id = "zoomSlider"></div>
     <div id = "legend"></div>

@@ -27,10 +27,7 @@ let center = [-122.48614277687422, 48.732800397930795];
 const windowHash = window.location.hash.replace('#', '');
 
 
-
 /* Create Layers */
-
-
 
 /* Building Info */
 const buildingInfoPopUpTemplate = {
@@ -171,7 +168,7 @@ const parkingPopupTemplate = {
   content: '<p>{popup1} </p>\
             <p>{popup2}</p>\
             <p>{surface_3}</p>\
-            <p><a href="transportation.wwu.edu">Parking Info</a></p>',
+            <p><a href="https://transportation.wwu.edu">Parking Info</a></p>',
 
 };
 const summerZoneParkingLots = new FeatureLayer({
@@ -385,6 +382,7 @@ const layersDict = {
   "baselayer": [basemapGroup],
 
 };
+
 
 /* A table for the layers that should always be on */
 
@@ -755,6 +753,7 @@ const searchExpand = new Expand({
 });
 const zoomExpand = new Expand({
   container: "zoomSlider",
+  expanded: true,
   view: view,
   content: zoomSlider,
   expandIcon: 'caret-double-vertical',

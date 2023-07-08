@@ -9,6 +9,7 @@ body {
   position: relative; 
   height: 40px;
   z-index: 2;
+  background-color: #a5d9f9;
 }
 #map {
   padding: 0;
@@ -34,6 +35,25 @@ body {
 #headertext {
   font-size: 20px;
 }
+
+#mapinfo {
+  position: relative;
+  left: 10px;
+  height: calc(100% - 10px);
+}
+
+.button {
+  transition-duration: 0.4s;
+  border: none;
+  background-color: aliceblue;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #4b80c0;
+  color: white;
+}
+
 #zoomSlider_controls_content {
   position: absolute;
   left: 40px;
