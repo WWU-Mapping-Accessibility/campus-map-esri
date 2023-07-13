@@ -821,13 +821,15 @@ const zoomExpand = new Expand({
   mode: 'floating',
   expandTooltip: 'Expand Zoom Slider',
 });
+
+/* Disabled in CSS when on mobile */
 const measureExpand = new Expand({
   view: view,
   content: measure,
   expandIcon: 'measure',
   expandTooltip: 'Measure',
   mode: 'floating',
-
+  container: 'measureWidget',
 });
 
 /* Add UI elements */
