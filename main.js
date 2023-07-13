@@ -761,7 +761,7 @@ const zoomSlider = new Slider({
 const measure = new Measurement({
   view: view,
   container: document.createElement("div"),
-  activeTool: "null",
+  activeTool: "null", // starts measure as inactive
 });
 
 

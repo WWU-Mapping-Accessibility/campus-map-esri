@@ -60,6 +60,10 @@ body {
   color: white;
 }
 
+.esri-distance-measurement-2d__hint-text::after{
+  content: ". Double click/tap to finish measurement.";
+}
+
 #zoomSlider_controls_content {
   position: absolute;
   left: 40px;
