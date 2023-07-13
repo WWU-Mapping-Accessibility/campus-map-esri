@@ -42,6 +42,10 @@ body {
   height: calc(100% - 10px);
 }
 
+#measureWidget {
+  visibility: hidden;
+}
+
 .button {
   transition-duration: 0.4s;
   border: none;
@@ -142,15 +146,16 @@ body {
   #header{
     left: 11px;
   }
-  #measureWidget{
-    display: none;
-  }
+
 }
 
 @media only screen and (min-width : 666px)  {    
   .esri-search { 
     width:300 px;
     z-index: 10; }
+  #measureWidget{
+    visibility: visible;
+  }
 }
 
 /* @keyframes expand-upwards {
