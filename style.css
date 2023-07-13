@@ -49,6 +49,12 @@ body {
   cursor: pointer;
 }
 
+.esri-widget--button{
+  background-color: #c6e5f9;
+  border: none;
+  cursor: pointer;
+}
+
 .button:hover {
   background-color: #4b80c0;
   color: white;

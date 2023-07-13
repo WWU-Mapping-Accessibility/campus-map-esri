@@ -13,6 +13,8 @@ import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Home from '@arcgis/core/widgets/Home';
 import Slider from '@arcgis/core/widgets/Slider';
 import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
+import Measurement from '@arcgis/core/widgets/Measurement';
+import Print from '@arcgis/core/widgets/Print';
 //import Measurement from '@arcgis/core/widgets/Measurement';
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
@@ -69,6 +71,35 @@ const buildingInfoGroup = new GroupLayer({
 
 /* Accessibility */
 
+const accessibleBuildings100 = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info_5_100k/FeatureServer/5',
+  title: '',
+  popupEnabled: false,
+});
+
+const accessibleBuildings5k = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Acc_Building_Info__5k/FeatureServer/4',
+  title: '',
+  popupEnabled: false,
+});
+
+const accessibleBuildingsGroup = new GroupLayer({
+  title: 'Accessible Buildings',
+  layers: [accessibleBuildings5k, accessibleBuildings100],
+  visible: true,
+  listMode: 'hide',
+});
+
+const accStairs = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/BasemapSurface/FeatureServer/139',
+  title: 'Accessible Stairs',
+  legendEnabled: true,
+  listMode: 'hide',
+  popupEnabled: false,
+  visible: true,
+});
+
+
 const accessibleDoors = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Doors/FeatureServer',
   title: 'Accessible Doors',
@@ -107,14 +138,14 @@ const accessibleParking = new FeatureLayer({
 });
 const accessibleGroup = new GroupLayer({
   title: 'Accessibility',
-  layers: [accessibleDoors, accessibleElevators, accessibleWalkways, accessibleParking],
+  layers: [accessibleParking, accessibleWalkways, accessibleElevators, accessibleDoors, accessibleBuildingsGroup, accStairs],
   visible: false,
 });
 
 /* Food */
 const food = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Food/FeatureServer',
-  title: 'Food',
+  title: 'Food (Retail / Residential)',
   visible: false,
   popupTemplate: {
     title: '{name}',
@@ -126,28 +157,26 @@ const food = new FeatureLayer({
 const computerLabBuildings = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Computer_Labs_ATUS_ResTek/FeatureServer',
   title: 'Computer Labs (ATUS & ResTek)',
-  visible: true,
+  visible: false,
   popupEnabled: false,
 });
 const sustainableBuildings = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sustainable_Features_Buildings/FeatureServer',
-  title: 'Sustainable Buildings',
-  visible: true,
+  title: 'Sustainable Features & Buildings',
+  visible: false,
   popupEnabled: false,
 });
 const genderNeutralRestrooms = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
   visible : true,
   popupEnabled: false,
+  title: 'Gender Neutral Restrooms',
+  visible: false,
 });
 const familyFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Family_Changing_Lactation__25k/FeatureServer',
   title: 'Family (Changing & Lactation)',
   popupEnabled: false,
-});
-const buildingFeaturesGroup = new GroupLayer({
-  title: 'Building Features',
-  layers: [computerLabBuildings, sustainableBuildings, genderNeutralRestrooms, familyFeatures],
   visible: false,
 });
 
@@ -185,13 +214,13 @@ const visitorParkingLots = new FeatureLayer({
 });
 const eveningWeekendParkingLots = new FeatureLayer({
   url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Evening_Weekend_Visitor_Parking_Lots/FeatureServer/3',
-  title: 'Evening & Weekend Parking Lots',
+  title: 'Evening & Weekend Visitor Parking Lots',
   visible: true,
   popupTemplate: parkingPopupTemplate,
 });
 const parkingPointFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Point_Features/FeatureServer',
-  title: 'Parking Point Features',
+  title: 'Parking Misc.',
   visible: true,
 });
 const parkingPermitAcademic = new FeatureLayer({
@@ -201,8 +230,8 @@ const parkingPermitAcademic = new FeatureLayer({
   popupTemplate: parkingPopupTemplate,
 });
 const parkingGroup = new GroupLayer({
-  title: 'Parking',
-  layers: [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPointFeatures, parkingPermitAcademic],
+  title: 'Parking (expand for options)',
+  layers: [accessibleParking, summerZoneParkingLots, parkingPermitAcademic, eveningWeekendParkingLots, visitorParkingLots, parkingPointFeatures],
   visible: false,
 });
 
@@ -227,7 +256,7 @@ const miscLabelPolys = new FeatureLayer({
 const constructionGroup = new GroupLayer({
   title: 'Construction',
   layers: [constuctionPoints, miscLabelPolys],
-  visible: false,
+  visible: true,
 });
 
 /* Safety */
@@ -242,6 +271,7 @@ const snowRemoval = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Snow_Removal_Routes/FeatureServer/4',
   title: 'Snow Removal Routes',
   popupsEnabled: false,
+  visible: (new Date().getMonth() > 11 || new Date().getMonth() < 4), //only visible during winter months
 });
 const AED = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/AEDs/FeatureServer/3',
@@ -258,11 +288,12 @@ const disasterAssemblyAreas = new FeatureLayer({
   popupTemplate: {
     title: 'Major Disaster Assembly Area',
     content: '<p>{location}</p>'
-  }
+  },
+  visible: false,
 });
 const safetyGroup = new GroupLayer({
-  title: 'Safety',
-  layers: [emergencyPhones, snowRemoval, AED, disasterAssemblyAreas],
+  title: 'Safety (expand for options)',
+  layers: [disasterAssemblyAreas, AED, emergencyPhones, snowRemoval],
   visible: false,
 });
 
@@ -294,8 +325,20 @@ const scultpureTour = new FeatureLayer({
 });
 const artGroup = new GroupLayer({
   title: 'Art',
-  layers: [artGalleries, scupltures, scultpureTour],
+  layers: [scultpureTour, artGalleries, scupltures],
   visible: false,
+});
+
+/* Trees */
+const trees = new FeatureLayer({
+  url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/tree_pts/FeatureServer',
+  title: 'Trees',
+  popupTemplate: {
+    title: '{tree_species_other}',
+    content: [{type: 'attachments'}]
+  },
+  visible: false
+
 });
 
 /* Bus Layers */
@@ -316,7 +359,7 @@ const busStops = new FeatureLayer({
   }
 });
 const busGroup = new GroupLayer({
-  title: 'Bus Info',
+  title: 'Bus Info (WTA near WWU)',
   layers: [busRoutes, busStops],
   visible: false,
   listMode: "hide-children",
@@ -342,10 +385,20 @@ const bellinghamBikeRoutes = new FeatureLayer({
   url: 'https://maps.cob.org/arcgis4/rest/services/Maps/Grp_Transportation/MapServer/14',
   title: 'Bellingham Bike Routes',
   popupEnabled: false,
+  visible: false,
 });
+
+const sehomeNotAllowed = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_popup_polys/FeatureServer/145',
+  title: 'Sehome Hill (Bikes Prohibited)',
+  visible: true,
+  popupEnabled: false,
+  listMode: 'hide',
+});
+
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
-  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, bellinghamBikeRoutes],
+  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, bellinghamBikeRoutes, sehomeNotAllowed],
   visible: false,
 });
 
@@ -374,7 +427,6 @@ const basemapGroup = new GroupLayer({
 const layersDict = {
   "buildinginfo5k": [buildingInfo5k],
   "parkinglots": [parkingGroup],
-  "buildingfeatures": [buildingFeaturesGroup],
   "gendernuetralrestrooms": [genderNeutralRestrooms],
   "searchpoints": [searchPoints],
   "dummybasemap": [dummyBasemap],
@@ -389,9 +441,10 @@ const layersDict = {
 const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 
 /* Layers to load  */
-const allLayers = [basemapGroup, parkingGroup, constructionGroup,
-  searchPoints, accessibleGroup, artGroup, 
-  busGroup, bikeGroup, safetyGroup, buildingFeaturesGroup, food, buildingInfoGroup];
+const allLayers = [basemapGroup, constructionGroup, //basemap must be first
+  searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup, food, familyFeatures, 
+  genderNeutralRestrooms, computerLabBuildings, 
+  bikeGroup, busGroup, buildingInfoGroup, accessibleGroup, artGroup,];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -704,6 +757,14 @@ const zoomSlider = new Slider({
   expandTooltip: 'Zoom Slider',
 });
 
+/* Measure Widget */
+const measure = new Measurement({
+  view: view,
+  container: document.createElement("div"),
+  activeTool: "null",
+});
+
+
 /* Expand Widgets */
 const buildingBookmarkExpand = new Expand({
   view: view,
@@ -760,6 +821,14 @@ const zoomExpand = new Expand({
   mode: 'floating',
   expandTooltip: 'Expand Zoom Slider',
 });
+const measureExpand = new Expand({
+  view: view,
+  content: measure,
+  expandIcon: 'measure',
+  expandTooltip: 'Measure',
+  mode: 'floating',
+
+});
 
 /* Add UI elements */
 
@@ -774,6 +843,7 @@ view.ui.add(legendExpand, 'top-left');
 view.ui.add(searchExpand, 'top-right');
 view.ui.add(locate, 'top-right');
 view.ui.add([poiBookmarkExpand, buildingBookmarkExpand, parkingBookmarksExpand], 'top-right');
+view.ui.add(measureExpand, 'top-right')
 
 // Bottom Left
 view.ui.add(basemapToggle, 'bottom-left');
@@ -799,13 +869,21 @@ basemapToggle.watch('activeBasemap', () => {
 view.watch('zoom', () => {
   zoomSlider.values = [(map.basemap.title === "Streets") ? view.zoom : view.zoom - 1]; // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
 });
-
-
 zoomSlider.watch('values', () => {
   if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
     view.zoom = ((map.basemap.title === "Streets") ? zoomSlider.values[0] : zoomSlider.values[0] + 1); // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
   }
   //console.log(view.zoom);
+});
+
+// Watches the measureExpand to start and stop the measure tool
+measureExpand.watch('expanded', () => {
+  if (measureExpand.expanded) {
+    measure.activeTool = 'distance';
+  }
+  else {
+    measure.activeTool = null;
+  }
 });
 
 // view.watch(basemapToggle.activeBasemap, () => {
