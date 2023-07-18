@@ -49,12 +49,12 @@ body {
 .button {
   transition-duration: 0.4s;
   border: none;
-  background-color: #c1e7ff;
+  background-color: #83cfff;
   cursor: pointer;
 }
 
 .esri-widget--button{
-  background-color: #c1e7ff;
+  background-color: #cce1d9;
   border: none;
   cursor: pointer;
 }
