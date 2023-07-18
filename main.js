@@ -850,11 +850,12 @@ view.ui.add([poiBookmarkExpand, buildingBookmarkExpand, parkingBookmarksExpand],
 
 // Bottom Left
 view.ui.add(basemapToggle, 'bottom-left');
-view.ui.add(measureExpand, 'bottom-left')
+
 
 
 // Bottom Right
 view.ui.add(new ScaleBar({view: view, unit: 'dual'}), 'bottom-right');
+view.ui.add(measureExpand, 'bottom-right');
 
 
 /* Event Listeners */

@@ -9,7 +9,7 @@ body {
   position: relative; 
   height: 40px;
   z-index: 2;
-  background-color: #339cde;
+  background-color: #003f87;
 }
 #map {
   padding: 0;
@@ -20,7 +20,6 @@ body {
   z-index: 50;
 }
 #logo {
-  width: 40px;
   height: 40px;
 }
 #headerinternals {
@@ -34,7 +33,7 @@ body {
 
 #headertext {
   font-size: 20px;
-  color: #003F87
+  color: #ffffff;
 }
 
 #mapinfo {
@@ -50,12 +49,12 @@ body {
 .button {
   transition-duration: 0.4s;
   border: none;
-  background-color: #339cde;
+  background-color: #c1e7ff;
   cursor: pointer;
 }
 
 .esri-widget--button{
-  background-color: #339cde;
+  background-color: #c1e7ff;
   border: none;
   cursor: pointer;
 }
