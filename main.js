@@ -398,7 +398,7 @@ const sehomeNotAllowed = new FeatureLayer({
 
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
-  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, bellinghamBikeRoutes, sehomeNotAllowed],
+  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, sehomeNotAllowed, bellinghamBikeRoutes],
   visible: false,
 });
 
@@ -460,7 +460,7 @@ const hashActions = function(hash=windowHash) {
 
   hashSplit.forEach(param => {
     if (param.includes('wwu=')){
-      view.watch('ready', () => setLocationFromHash(view, param.replace('wwu=', '')))
+      view.watch('ready', () => setLocationFromHash(view, param.replace('wwu=', '').toUpperCase()))
     };
 
     if (param.includes('layers=')){
@@ -859,10 +859,10 @@ view.ui.add(new ScaleBar({view: view, unit: 'dual'}), 'bottom-right');
 // Change opacity of imagery basemap when toggled
 basemapToggle.watch('activeBasemap', () => {
   if(basemapToggle.activeBasemap.title === "Imagery"){
-    tileBaseLayer.set('opacity', 0.55);
+    tileBaseLayer.set('visible', false);
   }
   else{
-    tileBaseLayer.set('opacity', 1);
+    tileBaseLayer.set('visible', true);
   }
 });
 

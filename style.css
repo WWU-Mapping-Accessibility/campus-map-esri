@@ -9,7 +9,7 @@ body {
   position: relative; 
   height: 40px;
   z-index: 2;
-  background-color: #a5d9f9;
+  background-color: #339cde;
 }
 #map {
   padding: 0;
@@ -34,6 +34,7 @@ body {
 
 #headertext {
   font-size: 20px;
+  color: #003F87
 }
 
 #mapinfo {
@@ -49,12 +50,12 @@ body {
 .button {
   transition-duration: 0.4s;
   border: none;
-  background-color: aliceblue;
+  background-color: #339cde;
   cursor: pointer;
 }
 
 .esri-widget--button{
-  background-color: #c6e5f9;
+  background-color: #339cde;
   border: none;
   cursor: pointer;
 }
@@ -82,10 +83,7 @@ body {
   z-index: 3;
 }
 
-#legend {
-  width: 62px;
-  height: 32px;
-}
+
 
 /* #legend .esri-expand__content {
   transition: none;
@@ -100,24 +98,7 @@ body {
   margin-bottom: 10px;
 } */
 
-#legend .esri-widget--button {
-  width: 62px;
-  height: 32px;
-}
 
-#legend .esri-collapse__icon {
-  display: none;
-}
-
-#legend .esri-icon-font-fallback-text {
-  width: auto;
-  height: 13px;
-  clip: auto;
-  font-size: 12px;
-  font-family: arial !important;
-  font-weight: bold;
-  user-select: none;
-}
 
 .esri-scale-bar__bar-container {
   z-index: 0;
@@ -138,8 +119,12 @@ body {
 }
 
 
-@media only screen and (max-width : 350px)  {    
-  #headertext { display: none; }
+@media only screen and (max-width : 350px)  {
+  /* Hack to get rid of the text in the header and replace it*/ 
+  #headertext { font-size: 0; }
+  #headertext::after { content: "WWU Map";
+    font-size: 1rem;
+  }
   .esri-ui-top-left{
     top: 40px;
   }
