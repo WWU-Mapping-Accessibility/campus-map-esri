@@ -662,6 +662,7 @@ const buildingBookmarks = new Bookmarks({
 const poiBookmarks = new Bookmarks({
   view: view,
   bookmarks: [
+  new Bookmark({name: 'WWU Main Campus', viewpoint: {targetGeometry: new Point({x: center[0], y: center[1], spatialReference: {wkid: 4326}}),scale: 13000}}),
   new Bookmark({name: "Birnam Wood (Residences)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4815013, ymin:48.72941423, xmax:-122.4750125, ymax:48.73296892 }  }  }),
   new Bookmark({name: "Bookstore", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4876661, ymin:48.73774008, xmax:-122.4844218, ymax:48.73951716 }  }  }),
   new Bookmark({name: "Canyon Creek Community Forest", viewpoint: {targetGeometry: {type: "extent",xmin:-122.0828454, ymin:48.81144319, xmax:-122.0224137, ymax:48.84448513 }  }  }),
@@ -693,6 +694,7 @@ const poiBookmarks = new Bookmarks({
   new Bookmark({name: "Viqueen Lodge (Sinclair Island)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.7009019, ymin:48.61598908, xmax:-122.6906451, ymax:48.6216205 }  }  }),
   new Bookmark({name: "Wash. State Archives", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4872448, ymin:48.72521989, xmax:-122.4841528, ymax:48.72691395 }  }  }),
   new Bookmark({name: "Western Gallery", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4869975, ymin:48.73461097, xmax:-122.4837531, ymax:48.7360559 }  }  }),
+  new Bookmark({name: 'WWU Main Campus', viewpoint: {targetGeometry: new Point({x: center[0], y: center[1], spatialReference: {wkid: 4326}}),scale: 13000}}),
   ],
 });
 const parkingBookmarks = new Bookmarks({
@@ -845,10 +847,11 @@ view.ui.add(legendExpand, 'top-left');
 view.ui.add(searchExpand, 'top-right');
 view.ui.add(locate, 'top-right');
 view.ui.add([poiBookmarkExpand, buildingBookmarkExpand, parkingBookmarksExpand], 'top-right');
-view.ui.add(measureExpand, 'top-right')
 
 // Bottom Left
 view.ui.add(basemapToggle, 'bottom-left');
+view.ui.add(measureExpand, 'bottom-left')
+
 
 // Bottom Right
 view.ui.add(new ScaleBar({view: view, unit: 'dual'}), 'bottom-right');
