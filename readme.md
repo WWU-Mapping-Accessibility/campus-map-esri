@@ -27,3 +27,5 @@ Vite also has the ability to run a test server on your local machine which will 
 2. Run the command `npm run start`
     - This will start a development server on `localhost:XXXXX` which you can navigate to in a browser.
     - Press q in the terminal to quit the server
+
+## MISC ##
