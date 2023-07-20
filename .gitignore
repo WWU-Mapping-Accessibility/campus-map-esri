@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 
+pushtoserv.sh
 
 # Editor directories and files
 .vscode/*
