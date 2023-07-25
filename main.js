@@ -46,7 +46,7 @@ const buildingInfoPopUpTemplate = {
 };
 const buildingInfo5k = new FeatureLayer({
   title: 'Building Info',
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer/2',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info__5k/FeatureServer',
   title: 'Building Info',
   visible: true, 
   popupTemplate: buildingInfoPopUpTemplate,
@@ -54,15 +54,23 @@ const buildingInfo5k = new FeatureLayer({
 });
 const buildingInfo100k = new FeatureLayer({
   title: 'Building Info',
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Building_Info_5_100k/FeatureServer',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/ArcGIS/rest/services/Building_Info_5_100k/FeatureServer/3',
   visible: true,
   popupTemplate: buildingInfoPopUpTemplate,
   minScale: 13000,
   effect: 'drop-shadow(3px, 3px, 5px) ',
 });
+
+const miscPoints = new FeatureLayer({
+  title: 'Miscellaneous Points',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/misc_points_popups/FeatureServer',
+  title: 'Miscellaneous Points',
+  visible: true,
+});
+
 const buildingInfoGroup = new GroupLayer({
   title: 'Building Info',
-  layers: [buildingInfo5k, buildingInfo100k],
+  layers: [buildingInfo5k, buildingInfo100k, miscPoints],
   visible: true,
   listMode: 'hide',
   legendEnabled: false,
@@ -91,7 +99,7 @@ const accessibleBuildingsGroup = new GroupLayer({
 });
 
 const accStairs = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/BasemapSurface/FeatureServer/139',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Stairs/FeatureServer',
   title: 'Accessible Stairs',
   legendEnabled: true,
   listMode: 'hide',
@@ -375,6 +383,15 @@ const thruBikeRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Thru_Campus_Bike_Routes/FeatureServer/0',
   title: 'Through Campus Bike Routes',
   popupEnabled: false,
+  renderer: {
+    type: 'simple',
+    symbol: {
+      type: 'simple-line',
+      color: '#000000',
+      width: 4,
+      style: 'dash',
+    }
+  },
 });
 const bikeDesignations = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Designations/FeatureServer/185',
@@ -388,8 +405,16 @@ const bellinghamBikeRoutes = new FeatureLayer({
   visible: false,
 });
 
+const accStairsBikes = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Stairs/FeatureServer',
+  title: 'Accessible Stairs',
+  legendEnabled: true,
+  listMode: 'hide',
+  popupEnabled: false,
+  visible: true,
+});
 const sehomeNotAllowed = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_popup_polys/FeatureServer/145',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sehome_Hill/FeatureServer',
   title: 'Sehome Hill (Bikes Prohibited)',
   visible: true,
   popupEnabled: false,
@@ -398,7 +423,7 @@ const sehomeNotAllowed = new FeatureLayer({
 
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
-  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, sehomeNotAllowed, bellinghamBikeRoutes],
+  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, sehomeNotAllowed, bellinghamBikeRoutes, accStairsBikes],
   visible: false,
 });
 
@@ -444,7 +469,7 @@ const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 const allLayers = [basemapGroup, constructionGroup, //basemap must be first
   searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup, food, familyFeatures, 
   genderNeutralRestrooms, computerLabBuildings, 
-  bikeGroup, busGroup, buildingInfoGroup, accessibleGroup, artGroup,];
+  bikeGroup, busGroup, accessibleGroup, artGroup, buildingInfoGroup,];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
