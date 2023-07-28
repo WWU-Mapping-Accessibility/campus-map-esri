@@ -12,15 +12,25 @@
       <div id="headerinternals">
         <img id="logo" src="WWU.svg" alt="WWU Logo">
         <h1 id="headertext">WWU Campus Map</h1>
-        <button onclick="mapinfoDialog.showModal()" id="mapinfo" class="button"> <b>About</b></button>
+        <button onclick="mapinfoDialog.showModal()" id="mapinfo" class="button"><b>About</b></button>
+        
       </div>
     </div>
+    <dialog id="voiceinteractionDialog">
+      <h1>Voice Interaction</h1>
+      <p>
+        This is a place to describe what voice commands do what.
+      </p>
+      
+      <button onclick="voiceinteractionDialog.close()" class="button">Close</button>
+    </dialog>
     <dialog id="mapinfoDialog">
       <h1>About</h1>
       <p>
         This map is a work in progress. It is not yet complete, and may contain
         errors.
       </p>
+      <button onclick="voiceinteractionDialog.showModal()" id="voiceinteraction" class="button"><b>Voice Interaction</b></button>
       <button onclick="mapinfoDialog.close()" class="button">Close</button>
     </dialog>
     <div class = "internals" id="map"></div>

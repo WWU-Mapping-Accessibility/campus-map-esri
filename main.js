@@ -448,16 +448,18 @@ const basemapGroup = new GroupLayer({
 });
 
 /* A dictionary that is used to tie URL layer names to internal variables */
-/* Add here to create custom URLs for certain layers eg "parkinglotsandbuildinginfo":[parkingGroup, buildingInfo5k], */
+/* Add here to create custom URLs for each of the layer groups */
 const layersDict = {
-  "buildinginfo5k": [buildingInfo5k],
-  "parkinglots": [parkingGroup],
-  "gendernuetralrestrooms": [genderNeutralRestrooms],
-  "searchpoints": [searchPoints],
-  "dummybasemap": [dummyBasemap],
-  "tilebaselayer": [tileBaseLayer],
-  "baselayer": [basemapGroup],
-
+  'basemap': [basemapGroup],
+  'construction': [constructionGroup],
+  'search': [searchPoints],
+  'trees': [trees],
+  'sustainable': [sustainableBuildings],
+  'safety': [safetyGroup],
+  'parking': [parkingGroup],
+  'food': [food],
+  'family': [familyFeatures],
+  'accessibility': [accessibleGroup],
 };
 
 
@@ -484,12 +486,13 @@ const hashActions = function(hash=windowHash) {
   const hashSplit = hash.split('&');
 
   hashSplit.forEach(param => {
+    // This part sets the location based on the hash
     if (param.includes('wwu=')){
       view.watch('ready', () => setLocationFromHash(view, param.replace('wwu=', '').toUpperCase()))
     };
-
+    // This part sets the visible layers based on the hash
     if (param.includes('layers=')){
-      const enabledLayersString = param.replace('layers=','').split('/');
+      const enabledLayersString = param.replace('layers=','').toLowerCase().split('/');
       enabledLayersString.forEach(group => {(layersDict[group]).forEach(layer => {layer.visible = true})});
     };
   });

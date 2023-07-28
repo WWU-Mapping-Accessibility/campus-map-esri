@@ -29,6 +29,7 @@ body {
   font-size: 20px;
   left: 12px;
   position: absolute;
+  gap: 10px;
 } 
 
 #headertext {
@@ -36,21 +37,17 @@ body {
   color: #ffffff;
 }
 
-#mapinfo {
-  position: relative;
-  left: 10px;
-  height: calc(100% - 10px);
-}
-
 #measureWidget {
   visibility: hidden;
 }
 
 .button {
+  position: relative;
   transition-duration: 0.4s;
   border: none;
   background-color: #83cfff;
   cursor: pointer;
+  height: calc(100% - 10px);
 }
 
 .esri-widget--button{
