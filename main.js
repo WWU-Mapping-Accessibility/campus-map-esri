@@ -389,7 +389,7 @@ const thruBikeRoutes = new FeatureLayer({
       type: 'simple-line',
       color: '#000000',
       width: 4,
-      style: 'dash',
+      style: 'dot',
     }
   },
 });
@@ -423,7 +423,7 @@ const sehomeNotAllowed = new FeatureLayer({
 
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
-  layers: [bikeRacks, thruBikeRoutes, bikeDesignations, sehomeNotAllowed, bellinghamBikeRoutes, accStairsBikes],
+  layers: [bikeDesignations, bikeRacks, thruBikeRoutes, sehomeNotAllowed, bellinghamBikeRoutes, accStairsBikes],
   visible: false,
 });
 
@@ -460,6 +460,7 @@ const layersDict = {
   'food': [food],
   'family': [familyFeatures],
   'accessibility': [accessibleGroup],
+  'bike': [bikeGroup],
 };
 
 
@@ -865,7 +866,7 @@ const measureExpand = new Expand({
 /* Add UI elements */
 
 // Top Left
-view.ui.add(zoomExpand, 'top-left')
+//view.ui.add(zoomExpand, 'top-left')
 view.ui.move(["zoom"], 'top-left') // Moves the default zoom buttons below the zoom slider
 view.ui.add(home, 'top-left');
 view.ui.add(selectorExpand, 'top-left');
