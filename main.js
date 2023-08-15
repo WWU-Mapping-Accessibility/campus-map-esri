@@ -27,7 +27,19 @@ let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
 const windowHash = window.location.hash.replace('#', '');
+function getCurrentDateString() {
+  const now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  const strTime = hours + ':' + minutes + ' ' + ampm;
+  return (now.getMonth()+1) + "/" + now.getDate() + "/" + now.getFullYear() + ", " + strTime;
+}
 
+const currentDateString = getCurrentDateString();
 
 /* Create Layers */
 
@@ -35,14 +47,14 @@ const windowHash = window.location.hash.replace('#', '');
 const buildingInfoPopUpTemplate = {
   title: '{name} ({abv})',
   content: '<p><b> Building Information </b></p>\
-              <p><a href={url}>More Info</a></p>\
-              <p><b>Type:</b> {type}</p>\
-              <p><b>Computer Labs:</b> {comp_loc_n}</p>\
-              <p><b>Sustainability:</b> {sust_type}</p>\
+              <p><img src="{image_url}"></p>\
+              <p><a href={bldg_url}>More Info</a></p>\
+              <p><b>Type:</b> {bldg_type}</p>\
+              <p><b>Computer Labs:</b> {com_pop}</p>\
+              <p><b>Sustainability Features:</b> {sus_pop1}</p>\
               <p><b>-- Accessibility Information --</b></p>\
-              <p><b>{acc_bldg}</b></p>\
-              <p>{acc_1}</p>\
-              <p>{acc_2}</p>'
+              <p><b>{acc_header}</b></p>\
+              <p>{acc_pop}</p>'
 };
 const buildingInfo5k = new FeatureLayer({
   title: 'Building Info',
@@ -50,7 +62,7 @@ const buildingInfo5k = new FeatureLayer({
   title: 'Building Info',
   visible: true, 
   popupTemplate: buildingInfoPopUpTemplate,
-  effect: 'drop-shadow(3px, 3px, 4px)',
+  popupEnabled: false,
 });
 const buildingInfo100k = new FeatureLayer({
   title: 'Building Info',
@@ -58,7 +70,7 @@ const buildingInfo100k = new FeatureLayer({
   visible: true,
   popupTemplate: buildingInfoPopUpTemplate,
   minScale: 13000,
-  effect: 'drop-shadow(3px, 3px, 5px) ',
+  popupEnabled: false,
 });
 
 const miscPoints = new FeatureLayer({
@@ -68,9 +80,18 @@ const miscPoints = new FeatureLayer({
   visible: true,
 });
 
+const buildingPopupPolys = new FeatureLayer({
+  title: 'Building Popup Polys',
+  url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/building_popups/FeatureServer',
+  visible: true,
+  legendEnabled: false,
+  listMode: 'hide',
+  popupTemplate: buildingInfoPopUpTemplate,
+});
+
 const buildingInfoGroup = new GroupLayer({
   title: 'Building Info',
-  layers: [buildingInfo5k, buildingInfo100k, miscPoints],
+  layers: [buildingInfo5k, buildingInfo100k, miscPoints, buildingPopupPolys],
   visible: true,
   listMode: 'hide',
   legendEnabled: false,
@@ -113,7 +134,8 @@ const accessibleDoors = new FeatureLayer({
   title: 'Accessible Doors',
   popupTemplate: {
     title: '{type}',
-    content: '<p>{popup} </p>'}
+    content: '<p>{popup} </p>'},
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const accessibleElevators = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Elevators/FeatureServer',
@@ -121,7 +143,8 @@ const accessibleElevators = new FeatureLayer({
   popupTemplate: {
     title: '{popup} Elevator',
     content: '<p>{popup2} </p>\
-              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',}
+              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',},
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const accessibleWalkways = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Walkways/FeatureServer',
@@ -130,7 +153,8 @@ const accessibleWalkways = new FeatureLayer({
     title: 'ADA Accessible Route',
     content: '<p>{AccPopUp} </p>\
               <p>{SnowPopUp}</p>\
-              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',}
+              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',},
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const accessibleParking = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
@@ -141,7 +165,8 @@ const accessibleParking = new FeatureLayer({
               <p>{spaces} spaces</p>\
               <p>A valid state issued disability permit and a valid on-campus WWU purchased parking or permit are both required to park in a posted accessible parking space.</p>\
               <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',
-  }
+  },
+  effect: 'drop-shadow(3px, 3px, 5px)'
 
 });
 const accessibleGroup = new GroupLayer({
@@ -173,6 +198,7 @@ const sustainableBuildings = new FeatureLayer({
   title: 'Sustainable Features & Buildings',
   visible: false,
   popupEnabled: false,
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const genderNeutralRestrooms = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Gender_Neutral_Restrooms/FeatureServer',
@@ -180,6 +206,7 @@ const genderNeutralRestrooms = new FeatureLayer({
   popupEnabled: false,
   title: 'Gender Neutral Restrooms',
   visible: false,
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const familyFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Family_Changing_Lactation__25k/FeatureServer',
@@ -251,7 +278,9 @@ const constuctionPoints = new FeatureLayer({
   popupTemplate: {
     title: '{Name}',
     content: '<p>Area may be closed for construction.</p>\
-              <p><a href="cpd.wwu.edu/construction-projects">See here for construction info</a></p>',}
+              <p><a href="cpd.wwu.edu/construction-projects">See here for construction info</a></p>',},
+  definitionExpression: `(StartDate < CURRENT_TIMESTAMP AND EndDate > CURRENT_TIMESTAMP) OR (StartDate < CURRENT_TIMESTAMP AND EndDate IS NULL)`
+
 });
 const miscLabelPolys = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_popup_polys/FeatureServer',
@@ -266,6 +295,8 @@ const constructionGroup = new GroupLayer({
   layers: [constuctionPoints, miscLabelPolys],
   visible: true,
 });
+
+console.log(constuctionPoints)
 
 /* Safety */
 const emergencyPhones = new FeatureLayer({
@@ -313,7 +344,8 @@ const artGalleries = new FeatureLayer({
     title: '{name}',
     content: '<p>{note_1}</p>\
               <p><img src="{image}" alt="{name}" width="200"></p>'
-  }
+  },
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const scupltures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sculpture/FeatureServer/2',
@@ -329,7 +361,8 @@ const scultpureTour = new FeatureLayer({
   popupTemplate: {
     title: 'Campus Scultpure Tour',
     content: '{acc_1}'
-  }
+  },
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const artGroup = new GroupLayer({
   title: 'Art',
@@ -364,7 +397,8 @@ const busStops = new FeatureLayer({
     title: 'WTA Bus Stop at {point_name}',
     content: '<p>This stop <b>{seating}</b> seating.</p>\
               <p>Shelter: <b>{shelter}</b></p>'
-  }
+  },
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const busGroup = new GroupLayer({
   title: 'Bus Info (WTA near WWU)',
@@ -378,6 +412,7 @@ const bikeRacks = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Racks/FeatureServer/173',
   title: 'Bicycle Racks',
   popupEnabled: false,
+  effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const thruBikeRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Thru_Campus_Bike_Routes/FeatureServer/0',
@@ -421,9 +456,19 @@ const sehomeNotAllowed = new FeatureLayer({
   listMode: 'hide',
 });
 
+const OCLabel = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts_labels/FeatureServer',
+  title: 'OC Label',
+  visible: true,
+  popupEnabled: false,
+  listMode: 'hide',
+  legendEnabled: false,
+});
+
+
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
-  layers: [bikeDesignations, bikeRacks, thruBikeRoutes, sehomeNotAllowed, bellinghamBikeRoutes, accStairsBikes],
+  layers: [OCLabel, bikeDesignations, bikeRacks, thruBikeRoutes, sehomeNotAllowed, bellinghamBikeRoutes, accStairsBikes],
   visible: false,
 });
 
@@ -470,9 +515,9 @@ const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
 
 /* Layers to load  */
 const allLayers = [basemapGroup, constructionGroup, //basemap must be first
-  searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup, food, familyFeatures, 
-  genderNeutralRestrooms, computerLabBuildings, 
-  bikeGroup, busGroup, accessibleGroup, artGroup, buildingInfoGroup,];
+  searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup,
+  genderNeutralRestrooms, food, familyFeatures, computerLabBuildings, 
+  busGroup, bikeGroup, artGroup, accessibleGroup, buildingInfoGroup,];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -768,25 +813,25 @@ const parkingBookmarks = new Bookmarks({
   ],
 });
 
-/* Zoom Slider */
-const zoomSlider = new Slider({
-  min: 13,
-  max: 20,
-  layout: 'vertical',
-  steps: [13, 14.56, 16, 18, 20],
-  values: [ zoom ],
-  tickConfigs: [{
-    mode: "position",
-    values: [13, 14.56, 16, 18, 20],
-    labelsVisible: true,
-    labelFormatFunction: function(value, type) {
+/* Zoom Slider -- Not Currently Used*/
+// const zoomSlider = new Slider({
+//   min: 13,
+//   max: 20,
+//   layout: 'vertical',
+//   steps: [13, 14.56, 16, 18, 20],
+//   values: [ zoom ],
+//   tickConfigs: [{
+//     mode: "position",
+//     values: [13, 14.56, 16, 18, 20],
+//     labelsVisible: true,
+//     labelFormatFunction: function(value, type) {
 
-      return (value === 14.56) ? "Home" : "";
-    }
-  }],
-  labelsVisible: true,
-  expandTooltip: 'Zoom Slider',
-});
+//       return (value === 14.56) ? "Home" : "";
+//     }
+//   }],
+//   labelsVisible: true,
+//   expandTooltip: 'Zoom Slider',
+// });
 
 /* Measure Widget */
 const measure = new Measurement({
@@ -843,16 +888,23 @@ const searchExpand = new Expand({
   expandTooltip: 'Search',
   mode: 'floating',
 });
-const zoomExpand = new Expand({
-  container: "zoomSlider",
-  expanded: true,
+// const zoomExpand = new Expand({
+//   container: "zoomSlider",
+//   expanded: true,
+//   view: view,
+//   content: zoomSlider,
+//   expandIcon: 'caret-double-vertical',
+//   mode: 'floating',
+//   expandTooltip: 'Expand Zoom Slider',
+// });
+const printExpand = new Expand({
   view: view,
-  content: zoomSlider,
-  expandIcon: 'caret-double-vertical',
+  content: new Print({view: view,}),
+  expandIcon: 'print',
+  expandTooltip: 'Print',
   mode: 'floating',
-  expandTooltip: 'Expand Zoom Slider',
+  container: 'printWidget',
 });
-
 /* Disabled in CSS when on mobile */
 const measureExpand = new Expand({
   view: view,
@@ -866,7 +918,7 @@ const measureExpand = new Expand({
 /* Add UI elements */
 
 // Top Left
-//view.ui.add(zoomExpand, 'top-left')
+// view.ui.add(zoomExpand, 'top-left') -- Zoom slider is disabled for now. It is fully functional, but the UI is not ideal.
 view.ui.move(["zoom"], 'top-left') // Moves the default zoom buttons below the zoom slider
 view.ui.add(home, 'top-left');
 view.ui.add(selectorExpand, 'top-left');
@@ -879,7 +931,7 @@ view.ui.add([poiBookmarkExpand, buildingBookmarkExpand, parkingBookmarksExpand],
 
 // Bottom Left
 view.ui.add(basemapToggle, 'bottom-left');
-
+view.ui.add(printExpand, 'bottom-left');
 
 
 // Bottom Right
@@ -901,15 +953,15 @@ basemapToggle.watch('activeBasemap', () => {
 
 
 // Change zoom slider to match current zoom level and vice versa
-view.watch('zoom', () => {
-  zoomSlider.values = [(map.basemap.title === "Streets") ? view.zoom : view.zoom - 1]; // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
-});
-zoomSlider.watch('values', () => {
-  if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
-    view.zoom = ((map.basemap.title === "Streets") ? zoomSlider.values[0] : zoomSlider.values[0] + 1); // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
-  }
-  //console.log(view.zoom);
-});
+// view.watch('zoom', () => {
+//   zoomSlider.values = [(map.basemap.title === "Streets") ? view.zoom : view.zoom - 1]; // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
+// });
+// zoomSlider.watch('values', () => {
+//   if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
+//     view.zoom = ((map.basemap.title === "Streets") ? zoomSlider.values[0] : zoomSlider.values[0] + 1); // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
+//   }
+//   //console.log(view.zoom);
+// });
 
 // Watches the measureExpand to start and stop the measure tool
 measureExpand.watch('expanded', () => {
