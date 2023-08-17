@@ -97,7 +97,32 @@ const buildingInfoGroup = new GroupLayer({
   legendEnabled: false,
 });
 
+/* MISC Always On */
 
+const labelLines =  new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_lines/FeatureServer',
+  title: 'Label Lines',
+  visible: true,
+  legendEnabled: false,
+  listMode: 'hide',
+});
+
+const parkingLabels = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts_labels/FeatureServer',
+  title: 'OC Label',
+  visible: true,
+  popupEnabled: false,
+  listMode: 'hide',
+  legendEnabled: false,
+});
+
+const miscAlwaysOnGroup = new GroupLayer({
+  title: 'Misc Always On',
+  layers: [labelLines, parkingLabels],
+  visible: true,
+  listMode: 'hide',
+  legendEnabled: false,
+});
 /* Accessibility */
 
 const accessibleBuildings100 = new FeatureLayer({
@@ -238,19 +263,19 @@ const parkingPopupTemplate = {
 const summerZoneParkingLots = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
   title: 'Summer Zone Parking Lots',
-  visible: true,
+  visible: false  ,
   popupTemplate: parkingPopupTemplate,
 });
 const visitorParkingLots = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer/2',
   title: 'Visitor Parking Lots',
-  visible: true,
+  visible: false,
   popupTemplate: parkingPopupTemplate,
 });
 const eveningWeekendParkingLots = new FeatureLayer({
   url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Evening_Weekend_Visitor_Parking_Lots/FeatureServer/3',
   title: 'Evening & Weekend Visitor Parking Lots',
-  visible: true,
+  visible: false,
   popupTemplate: parkingPopupTemplate,
 });
 const parkingPointFeatures = new FeatureLayer({
@@ -266,7 +291,7 @@ const parkingPermitAcademic = new FeatureLayer({
 });
 const parkingGroup = new GroupLayer({
   title: 'Parking (expand for options)',
-  layers: [accessibleParking, summerZoneParkingLots, parkingPermitAcademic, eveningWeekendParkingLots, visitorParkingLots, parkingPointFeatures],
+  layers: [parkingPermitAcademic, summerZoneParkingLots, eveningWeekendParkingLots, visitorParkingLots, parkingPointFeatures, accessibleParking],
   visible: false,
 });
 
@@ -296,7 +321,6 @@ const constructionGroup = new GroupLayer({
   visible: true,
 });
 
-console.log(constuctionPoints)
 
 /* Safety */
 const emergencyPhones = new FeatureLayer({
@@ -378,7 +402,17 @@ const trees = new FeatureLayer({
     title: '{tree_species_other}',
     content: [{type: 'attachments'}]
   },
-  visible: false
+  visible: false,
+  renderer: {
+    type: "simple",
+    symbol: {
+      type: "simple-marker",
+      path: "M4,17h7v4H8a1,1,0,0,0,0,2h8a1,1,0,0,0,0-2H13V17h7a1,1,0,0,0,.759-1.651L16.174,10H18a1,1,0,0,0,.759-1.651l-6-7a1.033,1.033,0,0,0-1.518,0l-6,7A1,1,0,0,0,6,10H7.826L3.241,15.349A1,1,0,0,0,4,17Zm6.759-7.349A1,1,0,0,0,10,8H8.174L12,3.537,15.826,8H14a1,1,0,0,0-.759,1.651L17.826,15H6.174Z",
+      size: 16,
+      color: 'green',
+    }
+  }
+
 
 });
 
@@ -408,16 +442,20 @@ const busGroup = new GroupLayer({
 });
 
 /* Bicycle Group */
+const bikePopupTemplate = {
+  title: '{surface_3} {surface_1}',
+  content: '<p>{night_walk}</b></p>'
+};
 const bikeRacks = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Racks/FeatureServer/173',
   title: 'Bicycle Racks',
   popupEnabled: false,
-  effect: 'drop-shadow(3px, 3px, 5px)'
+  effect: 'drop-shadow(3px, 3px, 5px)',
 });
 const thruBikeRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Thru_Campus_Bike_Routes/FeatureServer/0',
   title: 'Through Campus Bike Routes',
-  popupEnabled: false,
+  popupEnabled: true,
   renderer: {
     type: 'simple',
     symbol: {
@@ -427,22 +465,28 @@ const thruBikeRoutes = new FeatureLayer({
       style: 'dot',
     }
   },
+  popupTemplate: bikePopupTemplate,
 });
 const bikeDesignations = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Designations/FeatureServer/185',
   title: 'Bicycle Designations',
-  popupEnabled: false,
+  popupEnabled: true,
+  popupTemplate: bikePopupTemplate,
 });
 const bellinghamBikeRoutes = new FeatureLayer({
   url: 'https://maps.cob.org/arcgis4/rest/services/Maps/Grp_Transportation/MapServer/14',
   title: 'Bellingham Bike Routes',
-  popupEnabled: false,
+  popupEnabled: true,
+  popupTemplate: {
+    title: '{Name}',
+    content: '<p><b>Facility Type: {FacilityType}</b></p>'
+  },
   visible: false,
 });
 
 const accStairsBikes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Stairs/FeatureServer',
-  title: 'Accessible Stairs',
+  title: 'Stairs',
   legendEnabled: true,
   listMode: 'hide',
   popupEnabled: false,
@@ -456,19 +500,11 @@ const sehomeNotAllowed = new FeatureLayer({
   listMode: 'hide',
 });
 
-const OCLabel = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts_labels/FeatureServer',
-  title: 'OC Label',
-  visible: true,
-  popupEnabled: false,
-  listMode: 'hide',
-  legendEnabled: false,
-});
 
 
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
-  layers: [OCLabel, bikeDesignations, bikeRacks, thruBikeRoutes, sehomeNotAllowed, bellinghamBikeRoutes, accStairsBikes],
+  layers: [bellinghamBikeRoutes, bikeDesignations, bikeRacks, thruBikeRoutes, sehomeNotAllowed, accStairsBikes],
   visible: false,
 });
 
@@ -511,13 +547,13 @@ const layersDict = {
 
 /* A table for the layers that should always be on */
 
-const alwaysOnLayers = [basemapGroup, buildingInfoGroup];
+const alwaysOnLayers = [basemapGroup, buildingInfoGroup, ];
 
 /* Layers to load  */
 const allLayers = [basemapGroup, constructionGroup, //basemap must be first
   searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup,
   genderNeutralRestrooms, food, familyFeatures, computerLabBuildings, 
-  busGroup, bikeGroup, artGroup, accessibleGroup, buildingInfoGroup,];
+  busGroup, bikeGroup, artGroup, accessibleGroup, buildingInfoGroup, miscAlwaysOnGroup];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -857,6 +893,7 @@ const poiBookmarkExpand = new Expand({
   expandIcon: 'map-pin',
   group: 'top-right',
   expandTooltip: 'Points of Interest',
+
 });
 const parkingBookmarksExpand = new Expand({
   view: view,
@@ -951,6 +988,25 @@ basemapToggle.watch('activeBasemap', () => {
   }
 });
 
+// This section is for parking layer visibility radio buttons
+// Create an array of all the layers
+const parkingRadioArray = [summerZoneParkingLots, visitorParkingLots, eveningWeekendParkingLots, parkingPermitAcademic];
+
+// Function to set the visibility of layers
+function setLayerVisibility(activeLayer) {
+  parkingRadioArray.forEach(layer => {
+    layer.visible = (layer === activeLayer);
+  });
+}
+
+// Add event listeners to each layer to control visibility
+parkingRadioArray.forEach(layer => {
+  layer.watch("visible", () => {
+    if (layer.visible) {
+      setLayerVisibility(layer);
+    }
+  });
+});
 
 // Change zoom slider to match current zoom level and vice versa
 // view.watch('zoom', () => {
