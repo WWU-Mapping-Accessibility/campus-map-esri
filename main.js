@@ -44,17 +44,34 @@ const currentDateString = getCurrentDateString();
 /* Create Layers */
 
 /* Building Info */
+// This defines the template for building info popups. It uses HTML syntax to format the popup.
+// Note the use of `backticks` to format with tabindentation
+const tabIndent = 'style="margin-left: 40px"'
 const buildingInfoPopUpTemplate = {
-  title: '{name} ({abv})',
-  content: '<p><b> Building Information </b></p>\
+  title: '{name}',
+  content: `<p><b><a href={bldg_url}> Building Information</a></b></p>\
+              <p><b>{name} ({abv})</b></p>\
+              <p>{bldg_type} Building</p>\
+              <p><b>Accessibility: {acc_header}</b></p>\
+              <p ${tabIndent}> {acc_elev}</p>\
+              <p ${tabIndent}> {acc_pop}</p>\
+              <p><b>Restrooms: {rr_header}</b></p>\
+              <p ${tabIndent}> {rr_pop}</p>\
+              <p><b>Family Amenities: {fam_header}</b></p>\
+              <p ${tabIndent}> {fam_pop}</p>\
+              <p><b>Computer Labs: {com_header}</b></p>\
+              <p ${tabIndent}> {com_pop}</p>\
+              <p><a href={com_url}>{com_urltxt}</p>\
+              <p><b>Sustainability Features: {sus_header}</b></p>\
+              <p ${tabIndent}> {sus_pop1}</p>\
+              <p ${tabIndent}> {sus_pop2}</p>\
+              <p ${tabIndent}> {sus_pop3}</p>\
+              <p><b>Food: {food_header}</b></p>\
+              <p ${tabIndent}> {food_pop}</p>\
+              <p><a href={food_url}>{food_url}</a></p>\
               <p><img src="{image_url}"></p>\
-              <p><a href={bldg_url}>More Info</a></p>\
-              <p><b>Type:</b> {bldg_type}</p>\
-              <p><b>Computer Labs:</b> {com_pop}</p>\
-              <p><b>Sustainability Features:</b> {sus_pop1}</p>\
-              <p><b>-- Accessibility Information --</b></p>\
-              <p><b>{acc_header}</b></p>\
-              <p>{acc_pop}</p>'
+              <p>{name}</p>\
+              <p><b><a href={bldg_url}> Building Information</a></b></p>`,
 };
 const buildingInfo5k = new FeatureLayer({
   title: 'Building Info',
@@ -77,6 +94,12 @@ const miscPoints = new FeatureLayer({
   title: 'Miscellaneous Points',
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/misc_points_popups/FeatureServer',
   title: 'Miscellaneous Points',
+  popupEnabled: true,
+  popupTemplate: {
+    title: '{name}',
+    content: '<p>{display}</p>\
+              <p>{popup}</p>\
+              <p><a href={URL}>{URL}</a></p>',},
   visible: true,
 });
 
@@ -313,7 +336,11 @@ const miscLabelPolys = new FeatureLayer({
   legendEnabled: false,
   visible: true,
   popupTemplate: {
-    title: '{Name} {popup1}',}
+    title: '{name}',
+    content: '<p>{popup1}</p>\
+              <p>{popup2}</p>\
+              <p>{popup3}</p>\
+              <p><a href="{url}">{url_text}</a></p>',},
 });
 const constructionGroup = new GroupLayer({
   title: 'Construction',
@@ -366,8 +393,11 @@ const artGalleries = new FeatureLayer({
   title: 'Art Galleries',
   popupTemplate: {
     title: '{name}',
-    content: '<p>{note_1}</p>\
-              <p><img src="{image}" alt="{name}" width="200"></p>'
+    content: '<p><img src="{image}" alt="{name}" width="200"></p>\
+              <p>{note_1}</p>\
+              <p>{note_2}</p>\
+              <p>{loc_note}</p>\
+              <p><a href="{url}">{url_text}</a></p>'
   },
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
@@ -375,8 +405,11 @@ const scupltures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Sculpture/FeatureServer/2',
   title: 'Sculptures',
   popupTemplate: {
-    title: '{name} by {artist}',
-    content: '<img src="{image}" alt="{name}" width="200">'
+    title: '{name}',
+    content: '<img src="{image}" alt="{name}" width="200">\
+              <p>{artist}</p>\
+              <p>{year}</p>\
+              <p><a href="{url}">{url_text}</a></p>'
   }
 });
 const scultpureTour = new FeatureLayer({
@@ -384,7 +417,8 @@ const scultpureTour = new FeatureLayer({
   title: 'Sculpture Tour',
   popupTemplate: {
     title: 'Campus Scultpure Tour',
-    content: '{acc_1}'
+    content: '<p>{acc_1}</p>\
+              <p><a href="https://westerngallery.wwu.edu/sculpture-collection">Western’s Sculpture Collection</a></p>'
   },
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
@@ -442,20 +476,22 @@ const busGroup = new GroupLayer({
 });
 
 /* Bicycle Group */
-const bikePopupTemplate = {
-  title: '{surface_3} {surface_1}',
-  content: '<p>{night_walk}</b></p>'
-};
+
 const bikeRacks = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Racks/FeatureServer/173',
   title: 'Bicycle Racks',
-  popupEnabled: false,
+  popupEnabled: true,
+  popupTemplate: {
+    title: '{type}',},
   effect: 'drop-shadow(3px, 3px, 5px)',
 });
 const thruBikeRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Thru_Campus_Bike_Routes/FeatureServer/0',
   title: 'Through Campus Bike Routes',
   popupEnabled: true,
+  popupTemplate: {
+    title: 'Through Campus Bike Routes',
+    content: '<p>{note}</p>',},
   renderer: {
     type: 'simple',
     symbol: {
@@ -465,21 +501,24 @@ const thruBikeRoutes = new FeatureLayer({
       style: 'dot',
     }
   },
-  popupTemplate: bikePopupTemplate,
 });
 const bikeDesignations = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Bicycle_Designations/FeatureServer/185',
   title: 'Bicycle Designations',
   popupEnabled: true,
-  popupTemplate: bikePopupTemplate,
+  popupTemplate: {
+    title: 'Bicycle Designation: {bike}',},
 });
 const bellinghamBikeRoutes = new FeatureLayer({
   url: 'https://maps.cob.org/arcgis4/rest/services/Maps/Grp_Transportation/MapServer/14',
   title: 'Bellingham Bike Routes',
   popupEnabled: true,
   popupTemplate: {
-    title: '{Name}',
-    content: '<p><b>Facility Type: {FacilityType}</b></p>'
+    title: 'City Of Bellingham Bike Route',
+    content: '<p><b>{Name}</b></p>\
+              <p>{FacilityType}</p>\
+              <p>{MapSymbol}</p>\
+              <p><a href="https://cob.org/services/transportation/biking">Biking in Bellingham</a></p>'
   },
   visible: false,
 });
