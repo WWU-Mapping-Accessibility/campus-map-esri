@@ -40,13 +40,13 @@ function getCurrentDateString() {
 }
 
 const currentDateString = getCurrentDateString();
-
+const tabIndent = 'style="margin-left: 40px"'
 /* Create Layers */
 
 /* Building Info */
 // This defines the template for building info popups. It uses HTML syntax to format the popup.
 // Note the use of `backticks` to format with tabindentation
-const tabIndent = 'style="margin-left: 40px"'
+
 const buildingInfoPopUpTemplate = {
   title: '{name}',
   content: `<p><b><a href={bldg_url}> Building Information</a></b></p>\
@@ -182,7 +182,9 @@ const accessibleDoors = new FeatureLayer({
   title: 'Accessible Doors',
   popupTemplate: {
     title: '{type}',
-    content: '<p>{popup} </p>'},
+    content: '<p>{popup} + {type} </p>\
+              <p>{popup2}</p>\
+              <p><a href="https://disability.wwu.edu/">Disability Access Center/a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const accessibleElevators = new FeatureLayer({
@@ -190,18 +192,20 @@ const accessibleElevators = new FeatureLayer({
   title: 'Accessible Elevators',
   popupTemplate: {
     title: '{popup} Elevator',
-    content: '<p>{popup2} </p>\
-              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',},
+    content: '<p>{popup} + {type} </p>\
+              <p>{popup2}</p>\
+              <p><a href="https://disability.wwu.edu/">Disability Access Center/a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
+
 const accessibleWalkways = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Walkways/FeatureServer',
   title: 'Accessible Walkways',
   popupTemplate: {
-    title: 'ADA Accessible Route',
+    title: '{acc_type}',
     content: '<p>{AccPopUp} </p>\
               <p>{SnowPopUp}</p>\
-              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',},
+              <p><a href="https://disability.wwu.edu/">Disability Access Center</a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const accessibleParking = new FeatureLayer({
@@ -209,11 +213,15 @@ const accessibleParking = new FeatureLayer({
   title: 'Accessible Parking',
   popupTemplate: {
     title: '{type} Parking',
-    content: '<p>{location}</p>\
-              <p>{spaces} spaces</p>\
+    content: '<p><b>{location}</b></p>\
+              <p>{spaces} Spaces</p>\
+              <p>State Permit required all hours.</p>\
+              <p>WWU Permit required M-F 8:00AM - 4:30PM</p>\
               <p>A valid state issued disability permit and a valid on-campus WWU purchased parking or permit are both required to park in a posted accessible parking space.</p>\
-              <p><a href="https://disability.wwu.edu/">Accessibility Info</a></p>',
-  },
+              <p>After 4:30pm weekdays and all hours on weekends, only a valid state issued disability permit is required for parking in a posted accessible parking space.</a></p>0\
+              <p><a href="https://disability.wwu.edu/">“Disability Access Cente</a></p>\
+              <p><a href="https://transportation.wwu.edu/disability-access">Accessible Parking Information</a></p>\
+              <p><a href="https://transportation.wwu.edu/">Parking Information</a></p>'},
   effect: 'drop-shadow(3px, 3px, 5px)'
 
 });
@@ -229,9 +237,11 @@ const food = new FeatureLayer({
   title: 'Food (Retail / Residential)',
   visible: false,
   popupTemplate: {
-    title: '{name}',
-    content: '<p>Building: <b>{building}</b></p>\
-              <p>{goods}</p>',}
+    title: '{name} Food Service',
+    content: '<p>{locations}</p>\
+              <p>{building}</p>\
+              <p>{goods}</p>\
+              <p><a href="{wwu_link}">More Information</a></p>',}
 });
 
 /* Building Features */
@@ -304,6 +314,11 @@ const eveningWeekendParkingLots = new FeatureLayer({
 const parkingPointFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Point_Features/FeatureServer',
   title: 'Parking Misc.',
+  popupEnabled: true,
+  popupTemplate: {
+    title: '{type}',
+    content: '<p>{location}</p>\
+              <p><a href="https://transportation.wwu.edu">Parking Information</a></p>',},
   visible: true,
 });
 const parkingPermitAcademic = new FeatureLayer({
@@ -319,17 +334,24 @@ const parkingGroup = new GroupLayer({
 });
 
 /* Construction */
-const constuctionPoints = new FeatureLayer({
+const constructionPoints = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Construction_pts/FeatureServer',
   title: 'Construction Locations',
   visible: true,
   popupTemplate: {
-    title: '{Name}',
-    content: '<p>Area may be closed for construction.</p>\
-              <p><a href="cpd.wwu.edu/construction-projects">See here for construction info</a></p>',},
+    title: '{Name} CONSTRUCTION',
+    content: '<p>Estimated End Date: {EndDate}</p>\
+              <p><a href="cpd.wwu.edu/construction-projects"> WWU Construction Projects</a></p>',
+    fieldInfos:[{
+      fieldName: 'EndDate',
+      format: {
+        dateFormat: 'day-short-month-year'
+      }
+    }]},
   definitionExpression: `(StartDate < CURRENT_TIMESTAMP AND EndDate > CURRENT_TIMESTAMP) OR (StartDate < CURRENT_TIMESTAMP AND EndDate IS NULL)`
 
 });
+
 const miscLabelPolys = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_popup_polys/FeatureServer',
   title: 'Miscellaneous Label Polygons',
@@ -344,7 +366,7 @@ const miscLabelPolys = new FeatureLayer({
 });
 const constructionGroup = new GroupLayer({
   title: 'Construction',
-  layers: [constuctionPoints, miscLabelPolys],
+  layers: [constructionPoints, miscLabelPolys],
   visible: true,
 });
 
@@ -354,13 +376,22 @@ const emergencyPhones = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Emergency_Phones/FeatureServer/1',
   title: 'Emergency Phones',
   popupTemplate: {
-    title: 'Emergency Phone',
-    content: '<p>{note}</p>',}
+    title: 'Emergency Phone Call Box',
+    content: `<p><b>{location}</b></p>\
+              <p>Emergency Phone</p>\
+              <p>Uriversity Police:</p>\
+              <p ${tabIndent}> Emergency: 360-650-3911</p>\
+              <p ${tabIndent}> Safety Escort or Non-Emergency: 360-650-3555</p>
+              <p ${tabIndent}> <a href="https://police.wwu.edu/">University Police</a></p>`,}
 });
 const snowRemoval = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Snow_Removal_Routes/FeatureServer/4',
   title: 'Snow Removal Routes',
-  popupsEnabled: false,
+  popupsEnabled: true,
+  popupTemplate: {
+    title: 'Priority Snow Removal Route',
+    content: '<p>{snow_1}</p>\
+              <p>{acc_1}',},
   visible: (new Date().getMonth() > 11 || new Date().getMonth() < 4), //only visible during winter months
 });
 const AED = new FeatureLayer({
@@ -369,16 +400,20 @@ const AED = new FeatureLayer({
   popupTemplate: {
     title: 'AED',
     content: '<p>Building: <b>{building}</b></p>\
-              <p>Location: <b>{location}</b></p>'
-  }
+              <p>Location: <b>{location}</b></p>\
+              <p>AED (Automated External Defibrillator) Location</p>\
+              <p><a href="https://ehs.wwu.edu/automatic-external-defibrillators-aeds">Additional AED Information</a></p>',},
 });
 const disasterAssemblyAreas = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Major_Disaster_Assembly_Areas/FeatureServer/0',
   title: 'Major Disaster Assembly Areas',
   popupTemplate: {
-    title: 'Major Disaster Assembly Area',
-    content: '<p>{location}</p>'
-  },
+    title: '{type}',
+    content: `<p><b>{location}</b></p>\
+              <p>{type}</p>
+              <p>For more information:</p>\
+              <p ${tabIndent}><a href="https://emergency.wwu.edu/">Safety & Emergency Information</a></p>\
+              <p ${tabIndent}><a href=" https://emergency.wwu.edu/faq">Emergency FAQ</a></p>`,},
   visible: false,
 });
 const safetyGroup = new GroupLayer({
@@ -429,14 +464,27 @@ const artGroup = new GroupLayer({
 });
 
 /* Trees */
+
+// For this we are going to need to use a function to define the popups because of the way that they constructed the db
+// This function takes in a feature and returns a popupTemplate
+function treePopupTemplate(feature) {
+  if(feature.graphic.attributes.tree_species == 'Other') {
+    return '{tree_species_other}'}
+  else {
+    return '{tree_species}'
+  }
+};
+
+
 const trees = new FeatureLayer({
   url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/tree_pts/FeatureServer',
   title: 'Trees',
   popupTemplate: {
-    title: '{tree_species_other}',
+    title: treePopupTemplate,
     content: [{type: 'attachments'}]
   },
   visible: false,
+
   renderer: {
     type: "simple",
     symbol: {
@@ -445,17 +493,23 @@ const trees = new FeatureLayer({
       size: 16,
       color: 'green',
     }
-  }
+  },
+  // Required to make popup function work
+  outFields: ['*'],
 
 
 });
+
+
+// This function waits for the tree layer to load completely and then logs it to the console
 
 /* Bus Layers */
 const busRoutes = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/WTA_Bus_Routes/FeatureServer/1',
   title: 'WTA Bus Routes',
   popupTemplate: {title: 'WTA Bus Route',
-                  content: '<p>Route: <b>{route}</b></p>'
+                  content: '<p>Route: <b>{route}</b></p>\
+                            <p>For full route and schedule information: <a href="https://www.ridewta.com/">https://www.ridewta.com/</a></p>'
   }
 });
 const busStops = new FeatureLayer({
@@ -463,9 +517,9 @@ const busStops = new FeatureLayer({
   title: 'WTA Bus Stops',
   popupTemplate: {
     title: 'WTA Bus Stop at {point_name}',
-    content: '<p>This stop <b>{seating}</b> seating.</p>\
-              <p>Shelter: <b>{shelter}</b></p>'
-  },
+    content: '<p>WTA Bus Stop {roof} a roof.</p>\
+              <p>This bus stop {seating} seating.</p>\
+              <p>For full route and schedule information: <a href="https://www.ridewta.com/">https://www.ridewta.com/</a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const busGroup = new GroupLayer({
@@ -509,7 +563,7 @@ const bikeDesignations = new FeatureLayer({
   popupTemplate: {
     title: 'Bicycle Designation: {bike}',},
 });
-const bellinghamBikeRoutes = new FeatureLayer({
+const bellinghamBikeRoutes = new FeatureLayer({ 
   url: 'https://maps.cob.org/arcgis4/rest/services/Maps/Grp_Transportation/MapServer/14',
   title: 'Bellingham Bike Routes',
   popupEnabled: true,
