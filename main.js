@@ -128,6 +128,7 @@ const labelLines =  new FeatureLayer({
   visible: true,
   legendEnabled: false,
   listMode: 'hide',
+  popupEnabled: false,
 });
 
 const parkingLabels = new FeatureLayer({
