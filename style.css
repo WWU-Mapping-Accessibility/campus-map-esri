@@ -51,6 +51,10 @@ body {
   height: calc(100% - 10px);
 }
 
+.buttondialog {
+  height: 27px;
+}
+
 .esri-widget--button{
   background-color: #abd0df;
   border: none;

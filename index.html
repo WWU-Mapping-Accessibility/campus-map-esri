@@ -12,7 +12,7 @@
       <div id="headerinternals">
         <img id="logo" src="WWU.svg" alt="WWU Logo">
         <h1 id="headertext">WWU Campus Map</h1>
-        <button onclick="mapinfoDialog.showModal()" id="mapinfo" class="button"><b>About</b></button>
+        <button onclick="mapinfoDialog.showModal()" id="mapinfo" class="button buttondialog"><b>About</b></button>
         <div id="printWidget"></div>
       </div>
     </div>
@@ -22,7 +22,7 @@
         This is a place to describe what voice commands do what.
       </p>
       
-      <button onclick="voiceinteractionDialog.close()" class="button">Close</button>
+      <button onclick="voiceinteractionDialog.close()" class="button buttondialog">Close</button>
     </dialog>
     <dialog id="mapinfoDialog">
       <h1>About</h1>
@@ -53,8 +53,8 @@
       <p>  
         Questions or feedback about the map - contact <a href="mailto:stefan@wwu.edu">Stefan Freelan</a>
       </p>
-      <button onclick="voiceinteractionDialog.showModal()" id="voiceinteraction" class="button"><b>Voice Interaction</b></button>
-      <button onclick="mapinfoDialog.close()" class="button">Close</button>
+      <button onclick="voiceinteractionDialog.showModal()" id="voiceinteraction" class="button buttondialog"><b>Voice Interaction</b></button>
+      <button onclick="mapinfoDialog.close()" class="button buttondialog">Close</button>
     </dialog>
     <div class = "internals" id="map"></div>
     <div id = "zoomSlider"></div>
