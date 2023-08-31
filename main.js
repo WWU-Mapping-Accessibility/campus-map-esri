@@ -11,7 +11,6 @@ import Locate from '@arcgis/core/widgets/Locate';
 import Search from '@arcgis/core/widgets/Search';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Home from '@arcgis/core/widgets/Home';
-import Slider from '@arcgis/core/widgets/Slider';
 import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
 import Measurement from '@arcgis/core/widgets/Measurement';
 import Print from '@arcgis/core/widgets/Print';
@@ -638,9 +637,9 @@ const layersDict = {
 };
 
 
-/* A table for the layers that should always be on */
+/* A table for the layers that should always be on **not used** */
 
-const alwaysOnLayers = [basemapGroup, buildingInfoGroup, ];
+// const alwaysOnLayers = [basemapGroup, buildingInfoGroup, ];
 
 /* Layers to load  */
 const allLayers = [basemapGroup, constructionGroup, //basemap must be first
@@ -1127,18 +1126,3 @@ measureExpand.watch('expanded', () => {
 //   });
 
 
-
-//Future implement meausrement tool
-//view.ui.add(new Measurement({view: view, activeTool: 'distance'}), 'top-right');
-
-/* This part is for debug extras */
-// const pointerCoord = document.getElementById('info');
-
-// view.on('pointer-move', (evt) => {
-//   var pt = view.toMap({x: evt.x, y: evt.y});
-  
-//   pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude;
-// });
-
-// view.on('click', (evt) => {
-// });
