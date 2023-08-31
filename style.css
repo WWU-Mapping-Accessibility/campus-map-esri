@@ -1,9 +1,34 @@
 @import 'https://js.arcgis.com/4.25/@arcgis/core/assets/esri/themes/light/main.css';
 html,
+
 body {
   padding: 0;
   margin: 0;
   height: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+b {
+  font-weight: bold;
 }
 #headerbar {
   position: relative; 

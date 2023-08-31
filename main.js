@@ -745,63 +745,6 @@ const view = new MapView({
 // Sets the location based on the hash and adds layers
 hashActions();
 
-///* Widgets!! *///
-
-/* Locate widget using a simple marker as the symbol (Prob change) */
-const locate = new Locate({
-  view: view,
-  graphic: new Graphic({
-    symbol: {type: 'simple-marker'}
-  }),
-  container: locateWidget
-});
-
-/* Layer Selector Widget */
-const selector = new LayerList({
-  view: view,
-});
-
-/* Legend Widget */
-
-const legend = new Legend({
-  view: view,
-}); 
-
-/* Search Widget */
-const search = new Search({
-  view: view,
-  locationEnabled: false,
-  includeDefaultSources: false,
-  container: 'searchWidget',
-  sources: [{
-    placeholder: 'Search for buildings, parking lots, and more...',
-    layer: searchPoints,
-    searchFields: ['Name', 'Abv', 
-      'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
-      'Keyword6', 'Keyword7', 'Keyword8',],
-    name: 'WWU Search Points',
-    zoomScale: 1000
-  }]
-});
-
-/* Home Button Widget */
-const home = new Home({
-  view: view,
-  viewpoint: {
-    targetGeometry: new Point({
-      x: center[0],
-      y: center[1],
-      spatialReference: {wkid: 4326}
-    }),
-    scale: 13000
-  }
-});
-
-/* Basemap Toggle Widget */
-const basemapToggle = new BasemapToggle({
-  view: view,
-  nextBasemap: 'satellite'
-});
 
 /* Bookmarks */
 const buildingBookmarks = new Bookmarks({
@@ -940,6 +883,66 @@ const parkingBookmarks = new Bookmarks({
     new Bookmark({name: "Parking Office (Old Main)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4852839, ymin:48.73705304, xmax:-122.4832074, ymax:48.7381904 }  }  }),
   ],
 });
+
+///* Widgets!! *///
+
+/* Locate widget using a simple marker as the symbol (Prob change) */
+const locate = new Locate({
+  view: view,
+  graphic: new Graphic({
+    symbol: {type: 'simple-marker'}
+  }),
+  container: locateWidget
+});
+
+/* Layer Selector Widget */
+const selector = new LayerList({
+  view: view,
+});
+
+/* Legend Widget */
+
+const legend = new Legend({
+  view: view,
+}); 
+
+/* Search Widget */
+const search = new Search({
+  view: view,
+  locationEnabled: false,
+  includeDefaultSources: false,
+  container: 'searchWidget',
+  sources: [{
+    placeholder: 'Search for buildings, parking lots, and more...',
+    layer: searchPoints,
+    searchFields: ['Name', 'Abv', 
+      'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
+      'Keyword6', 'Keyword7', 'Keyword8',],
+    name: 'WWU Search Points',
+    zoomScale: 1000
+  }]
+});
+
+/* Home Button Widget */
+const home = new Home({
+  view: view,
+  viewpoint: {
+    targetGeometry: new Point({
+      x: center[0],
+      y: center[1],
+      spatialReference: {wkid: 4326}
+    }),
+    scale: 13000
+  }
+});
+
+/* Basemap Toggle Widget */
+const basemapToggle = new BasemapToggle({
+  view: view,
+  nextBasemap: 'satellite',
+  label: 'Toggle Basemap',
+});
+
 
 /* Zoom Slider -- Not Currently Used*/
 // const zoomSlider = new Slider({
