@@ -299,7 +299,7 @@ const summerZoneParkingLots = new FeatureLayer({
   popupTemplate: parkingPopupTemplate,
 });
 const visitorParkingLots = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer/2',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer',
   title: 'Visitor Parking Lots',
   visible: false,
   popupTemplate: parkingPopupTemplate,
@@ -321,7 +321,7 @@ const parkingPointFeatures = new FeatureLayer({
   visible: true,
 });
 const parkingPermitAcademic = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer/1',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
   title: 'Permit Parking Lots (Academic Year)',
   visible: true,
   popupTemplate: parkingPopupTemplate,
