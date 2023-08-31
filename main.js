@@ -11,7 +11,6 @@ import Locate from '@arcgis/core/widgets/Locate';
 import Search from '@arcgis/core/widgets/Search';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Home from '@arcgis/core/widgets/Home';
-import Slider from '@arcgis/core/widgets/Slider';
 import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
 import Measurement from '@arcgis/core/widgets/Measurement';
 import Print from '@arcgis/core/widgets/Print';
@@ -20,6 +19,9 @@ import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
+
+import Sketch from '@arcgis/core/widgets/Sketch';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import "./style.css";
 
 /* DEFAULTS & CONFIGS */
@@ -38,7 +40,6 @@ function getCurrentDateString() {
   const strTime = hours + ':' + minutes + ' ' + ampm;
   return (now.getMonth()+1) + "/" + now.getDate() + "/" + now.getFullYear() + ", " + strTime;
 }
-
 const currentDateString = getCurrentDateString();
 const tabIndent = 'style="margin-left: 40px"'
 /* Create Layers */
@@ -300,7 +301,7 @@ const summerZoneParkingLots = new FeatureLayer({
   popupTemplate: parkingPopupTemplate,
 });
 const visitorParkingLots = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer/2',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer',
   title: 'Visitor Parking Lots',
   visible: false,
   popupTemplate: parkingPopupTemplate,
@@ -640,10 +641,9 @@ const layersDict = {
 
 /* A table for the layers that should always be on */
 
-const alwaysOnLayers = [basemapGroup, buildingInfoGroup, ];
 
 /* Layers to load  */
-const allLayers = [basemapGroup, constructionGroup, //basemap must be first
+const allLayers = [basemapGroup, drawGraphics, constructionGroup, //basemap must be first
   searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup,
   genderNeutralRestrooms, food, familyFeatures, computerLabBuildings, 
   busGroup, bikeGroup, artGroup, accessibleGroup, buildingInfoGroup, miscAlwaysOnGroup];
@@ -1045,6 +1045,7 @@ const measureExpand = new Expand({
   container: 'measureWidget',
 });
 
+
 /* Add UI elements */
 
 // Top Left
@@ -1067,7 +1068,6 @@ view.ui.add(printExpand, 'bottom-left');
 // Bottom Right
 view.ui.add(new ScaleBar({view: view, unit: 'dual'}), 'bottom-right');
 view.ui.add(measureExpand, 'bottom-right');
-
 
 /* Event Listeners */
 
@@ -1128,17 +1128,16 @@ measureExpand.watch('expanded', () => {
 
 
 
-//Future implement meausrement tool
-//view.ui.add(new Measurement({view: view, activeTool: 'distance'}), 'top-right');
+//Expirimental
 
-/* This part is for debug extras */
-// const pointerCoord = document.getElementById('info');
+// Draw Widget
+const drawExpand = new Expand({
+  view: view,
+  content: new Sketch({view: view, layer: drawGraphics}),
+  expandIcon: 'draw',
+  expandTooltip: 'Draw',
+  mode: 'floating',
+});
 
-// view.on('pointer-move', (evt) => {
-//   var pt = view.toMap({x: evt.x, y: evt.y});
-  
-//   pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude;
-// });
-
-// view.on('click', (evt) => {
-// });
+view.ui.add(drawExpand, 'bottom-right');
+const drawGraphics = new GraphicsLayer();
