@@ -60,7 +60,7 @@ const buildingInfoPopUpTemplate = {
               <p ${tabIndent}> {fam_pop}</p>\
               <p><b>Computer Labs: {com_header}</b></p>\
               <p ${tabIndent}> {com_pop}</p>\
-              <p><a href={com_url}>{com_urltxt}</p>\
+              <p ${tabIndent}><a href={com_url}>{com_urltxt}</a></p>\
               <p><b>Sustainability Features: {sus_header}</b></p>\
               <p ${tabIndent}> {sus_pop1}</p>\
               <p ${tabIndent}> {sus_pop2}</p>\
@@ -293,7 +293,7 @@ const parkingPopupTemplate = {
 
 };
 const summerZoneParkingLots = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Lots_Summer_Zones/FeatureServer',
   title: 'Summer Zone Parking Lots',
   visible: false  ,
   popupTemplate: parkingPopupTemplate,
