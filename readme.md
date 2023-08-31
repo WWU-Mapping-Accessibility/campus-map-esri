@@ -11,9 +11,10 @@ Both of these tools are required.
 ### Steps ###
 
 1. Install NPM using [these instructions](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
-2. In the source directory, run the command `npm install`
+2. Download the github repository and unzip the files to the same directory. This is the source directory for the project
+3. In the source directory, run the command `npm install`
     - This will install the dependencies in the `package.json` file (ArcGIS SDK, Vite)
-3. Run the command `npm run build`
+4. Run the command `npm run build`
     - This runs the `vite build` script which will create a `dist` folder in the source directory with a production build of the website.
     - Vite will only package the files required by the import statements at the top of the `main.js` file.
 
