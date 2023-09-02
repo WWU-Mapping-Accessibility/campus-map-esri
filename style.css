@@ -77,6 +77,11 @@ b {
   height: calc(100% - 10px);
 }
 
+#mapinfo {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+}
+
 .buttondialog {
   height: 27px;
 }

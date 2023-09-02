@@ -47,25 +47,25 @@ const tabIndent = 'style="margin-left: 40px"'
 // Note the use of `backticks` to format with tabindentation
 
 const buildingInfoPopUpTemplate = {
-  title: '{name}',
-  content: `<p><b><a href={bldg_url}> Building Information</a></b></p>\
-              <p><b>{name} ({abv})</b></p>\
-              <p>{bldg_type} Building</p>\
-              <p><b>Accessibility: {acc_header}</b></p>\
+  title: '<b><a href={bldg_url}>{name} ({abv})</a></b>',
+  content: `  <p>{bldg_type} Building</p>\
+              <p><b><a href = 'https://disability.wwu.edu'> Accessibility</a>: {acc_header}</b></p>\
               <p ${tabIndent}> {acc_elev}</p>\
               <p ${tabIndent}> {acc_pop}</p>\
               <p><b>Restrooms: {rr_header}</b></p>\
+              <p ${tabIndent}> <a href = 'https://lgbtq.wwu.edu/gender-neutral-restrooms/'> Gender Neutral Restrooms </a></p>\
               <p ${tabIndent}> {rr_pop}</p>\
               <p><b>Family Amenities: {fam_header}</b></p>\
+              <p ${tabIndent}> <a href = 'https://hr.wwu.edu/lactation-rooms'> Lactation Rooms </a></p>\
               <p ${tabIndent}> {fam_pop}</p>\
               <p><b>Computer Labs: {com_header}</b></p>\
               <p ${tabIndent}> {com_pop}</p>\
               <p ${tabIndent}><a href={com_url}>{com_urltxt}</a></p>\
-              <p><b>Sustainability Features: {sus_header}</b></p>\
+              <p><b><a href = 'https://www.wwu.edu/sustainable-campus'> Sustainability</a> Features: {sus_header}</b></p>\
               <p ${tabIndent}> {sus_pop1}</p>\
               <p ${tabIndent}> {sus_pop2}</p>\
               <p ${tabIndent}> {sus_pop3}</p>\
-              <p><b>Food: {food_header}</b></p>\
+              <p><b><a href = 'https://wwu.campusdish.com/LocationsAndMenus'>Food</a>: {food_header}</b></p>\
               <p ${tabIndent}> {food_pop}</p>\
               <p><a href={food_url}>{food_url}</a></p>\
               <p><img src="{image_url}"></p>\
@@ -176,14 +176,12 @@ const accStairs = new FeatureLayer({
   visible: true,
 });
 
-
 const accessibleDoors = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Doors/FeatureServer',
   title: 'Accessible Doors',
   popupTemplate: {
     title: '{type}',
-    content: '<p>{popup} + {type} </p>\
-              <p>{popup2}</p>\
+    content: '<p>{popup2}</p>\
               <p><a href="https://disability.wwu.edu/">Disability Access Center/a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
@@ -192,8 +190,7 @@ const accessibleElevators = new FeatureLayer({
   title: 'Accessible Elevators',
   popupTemplate: {
     title: '{popup} Elevator',
-    content: '<p>{popup} + {type} </p>\
-              <p>{popup2}</p>\
+    content: '<p>{popup2}</p>\
               <p><a href="https://disability.wwu.edu/">Disability Access Center/a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
@@ -208,9 +205,9 @@ const accessibleWalkways = new FeatureLayer({
               <p><a href="https://disability.wwu.edu/">Disability Access Center</a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
-const accessibleParking = new FeatureLayer({
+const accessibleParkingSettings = {
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
-  title: 'Accessible Parking',
+  title: 'Accessible Parking 2',
   popupTemplate: {
     title: '{type} Parking',
     content: '<p><b>{location}</b></p>\
@@ -222,12 +219,14 @@ const accessibleParking = new FeatureLayer({
               <p><a href="https://disability.wwu.edu/">“Disability Access Cente</a></p>\
               <p><a href="https://transportation.wwu.edu/disability-access">Accessible Parking Information</a></p>\
               <p><a href="https://transportation.wwu.edu/">Parking Information</a></p>'},
-  effect: 'drop-shadow(3px, 3px, 5px)'
-
-});
+  effect: 'drop-shadow(3px, 3px, 5px)',
+  listMode: 'hide',
+  visible: true,
+};
+const accessibleParking = new FeatureLayer(accessibleParkingSettings);
 const accessibleGroup = new GroupLayer({
   title: 'Accessibility',
-  layers: [accessibleParking, accessibleWalkways, accessibleElevators, accessibleDoors, accessibleBuildingsGroup, accStairs],
+  layers: [accessibleWalkways, accessibleElevators, accessibleDoors, accessibleBuildingsGroup, accStairs, accessibleParking],
   visible: false,
 });
 
@@ -284,7 +283,7 @@ const searchPoints = new FeatureLayer({
 
 /* Parking */
 
-// This defines the template for parking popups. It uses HTML syntax to format the popup.
+// NO POPUPS CURRENTLY: This defines the template for parking popups. It uses HTML syntax to format the popup.
 const parkingPopupTemplate = {
   title: 'Parking Lot {abv}',
   content: '<p>{popup1} </p>\
@@ -298,18 +297,21 @@ const summerZoneParkingLots = new FeatureLayer({
   title: 'Summer Zone Parking Lots',
   visible: false  ,
   popupTemplate: parkingPopupTemplate,
+  popupEnabled: false,
 });
 const visitorParkingLots = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer',
   title: 'Visitor Parking Lots',
-  visible: false,
+  visible: true,
   popupTemplate: parkingPopupTemplate,
+  popupEnabled: false,
 });
 const eveningWeekendParkingLots = new FeatureLayer({
   url:'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Evening_Weekend_Visitor_Parking_Lots/FeatureServer/3',
   title: 'Evening & Weekend Visitor Parking Lots',
   visible: false,
   popupTemplate: parkingPopupTemplate,
+  popupEnabled: false,
 });
 const parkingPointFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Point_Features/FeatureServer',
@@ -320,16 +322,23 @@ const parkingPointFeatures = new FeatureLayer({
     content: '<p>{location}</p>\
               <p><a href="https://transportation.wwu.edu">Parking Information</a></p>',},
   visible: true,
+  popupEnabled: false,
 });
 const parkingPermitAcademic = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
   title: 'Permit Parking Lots (Academic Year)',
-  visible: true,
+  visible: false,
   popupTemplate: parkingPopupTemplate,
+  popupEnabled: false,
 });
+
+const accessibleParkingDupe = new FeatureLayer(accessibleParkingSettings);
+
+
+
 const parkingGroup = new GroupLayer({
   title: 'Parking (expand for options)',
-  layers: [parkingPermitAcademic, summerZoneParkingLots, eveningWeekendParkingLots, visitorParkingLots, parkingPointFeatures, accessibleParking],
+  layers: [parkingPermitAcademic, summerZoneParkingLots, eveningWeekendParkingLots, visitorParkingLots, parkingPointFeatures, accessibleParkingDupe],
   visible: false,
 });
 
@@ -348,7 +357,7 @@ const constructionPoints = new FeatureLayer({
         dateFormat: 'day-short-month-year'
       }
     }]},
-  definitionExpression: `(StartDate < CURRENT_TIMESTAMP AND EndDate > CURRENT_TIMESTAMP) OR (StartDate < CURRENT_TIMESTAMP AND EndDate IS NULL)`
+  definitionExpression: `((StartDate < CURRENT_TIMESTAMP AND EndDate > CURRENT_TIMESTAMP) OR (StartDate < CURRENT_TIMESTAMP AND EndDate IS NULL))`
 
 });
 
@@ -1096,6 +1105,9 @@ function setLayerVisibility(activeLayer) {
 }
 
 // Add event listeners to each layer to control visibility
+
+
+// Set the visibility of the layer when the radio button is clicked
 parkingRadioArray.forEach(layer => {
   layer.watch("visible", () => {
     if (layer.visible) {
@@ -1104,18 +1116,7 @@ parkingRadioArray.forEach(layer => {
   });
 });
 
-// Change zoom slider to match current zoom level and vice versa
-// view.watch('zoom', () => {
-//   zoomSlider.values = [(map.basemap.title === "Streets") ? view.zoom : view.zoom - 1]; // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
-// });
-// zoomSlider.watch('values', () => {
-//   if (!(view.interacting)) { // Prevents zoom slider from interfering with user interaction
-//     view.zoom = ((map.basemap.title === "Streets") ? zoomSlider.values[0] : zoomSlider.values[0] + 1); // This is a hacky way to get the zoom slider to match the zoom level of the imagery basemap
-//   }
-//   //console.log(view.zoom);
-// });
-
-// Watches the measureExpand to start and stop the measure tool
+// Changes the active tool when measure expand is expanded or collapsed
 measureExpand.watch('expanded', () => {
   if (measureExpand.expanded) {
     measure.activeTool = 'distance';
@@ -1125,8 +1126,22 @@ measureExpand.watch('expanded', () => {
   }
 });
 
-// view.watch(basemapToggle.activeBasemap, () => {
-//   console.log(basemapToggle.activeBasemap);
-//   });
+// This listener is for the search widget to focus on the search bar when expanded
+// Has to use timeout to wait for the search widget to rendered before focusing on it
+// Will not work if browser is especially slow
+searchExpand.watch('expanded', () => {
+  if (searchExpand.expanded) {
+    setTimeout(() => {
+      search.focus();
+  }, 10)}
+});
 
 
+// Closes the search popup after a result is selected and 3 seconds have passed
+search.watch('selectedResult', () => {
+  setTimeout(() => {
+    view.popup.close();
+  }, 3000);
+});
+
+console.log(legend.layerInfos);
