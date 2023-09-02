@@ -11,7 +11,6 @@ import Locate from '@arcgis/core/widgets/Locate';
 import Search from '@arcgis/core/widgets/Search';
 import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Home from '@arcgis/core/widgets/Home';
-import Slider from '@arcgis/core/widgets/Slider';
 import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
 import Measurement from '@arcgis/core/widgets/Measurement';
 import Print from '@arcgis/core/widgets/Print';
@@ -61,7 +60,7 @@ const buildingInfoPopUpTemplate = {
               <p ${tabIndent}> {fam_pop}</p>\
               <p><b>Computer Labs: {com_header}</b></p>\
               <p ${tabIndent}> {com_pop}</p>\
-              <p><a href={com_url}>{com_urltxt}</p>\
+              <p ${tabIndent}><a href={com_url}>{com_urltxt}</a></p>\
               <p><b>Sustainability Features: {sus_header}</b></p>\
               <p ${tabIndent}> {sus_pop1}</p>\
               <p ${tabIndent}> {sus_pop2}</p>\
@@ -295,13 +294,13 @@ const parkingPopupTemplate = {
 
 };
 const summerZoneParkingLots = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Lots_Summer_Zones/FeatureServer',
   title: 'Summer Zone Parking Lots',
   visible: false  ,
   popupTemplate: parkingPopupTemplate,
 });
 const visitorParkingLots = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer/2',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Visitor_Parking_Lots/FeatureServer',
   title: 'Visitor Parking Lots',
   visible: false,
   popupTemplate: parkingPopupTemplate,
@@ -323,7 +322,7 @@ const parkingPointFeatures = new FeatureLayer({
   visible: true,
 });
 const parkingPermitAcademic = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer/1',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Permit_Parking_Lots_Academic_Year/FeatureServer',
   title: 'Permit Parking Lots (Academic Year)',
   visible: true,
   popupTemplate: parkingPopupTemplate,
@@ -639,9 +638,9 @@ const layersDict = {
 };
 
 
-/* A table for the layers that should always be on */
+/* A table for the layers that should always be on **not used** */
 
-const alwaysOnLayers = [basemapGroup, buildingInfoGroup, ];
+// const alwaysOnLayers = [basemapGroup, buildingInfoGroup, ];
 
 /* Layers to load  */
 const allLayers = [basemapGroup, constructionGroup, //basemap must be first
@@ -747,63 +746,6 @@ const view = new MapView({
 // Sets the location based on the hash and adds layers
 hashActions();
 
-///* Widgets!! *///
-
-/* Locate widget using a simple marker as the symbol (Prob change) */
-const locate = new Locate({
-  view: view,
-  graphic: new Graphic({
-    symbol: {type: 'simple-marker'}
-  }),
-  container: locateWidget
-});
-
-/* Layer Selector Widget */
-const selector = new LayerList({
-  view: view,
-});
-
-/* Legend Widget */
-
-const legend = new Legend({
-  view: view,
-}); 
-
-/* Search Widget */
-const search = new Search({
-  view: view,
-  locationEnabled: false,
-  includeDefaultSources: false,
-  container: 'searchWidget',
-  sources: [{
-    placeholder: 'Search for buildings, parking lots, and more...',
-    layer: searchPoints,
-    searchFields: ['Name', 'Abv', 
-      'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
-      'Keyword6', 'Keyword7', 'Keyword8',],
-    name: 'WWU Search Points',
-    zoomScale: 1000
-  }]
-});
-
-/* Home Button Widget */
-const home = new Home({
-  view: view,
-  viewpoint: {
-    targetGeometry: new Point({
-      x: center[0],
-      y: center[1],
-      spatialReference: {wkid: 4326}
-    }),
-    scale: 13000
-  }
-});
-
-/* Basemap Toggle Widget */
-const basemapToggle = new BasemapToggle({
-  view: view,
-  nextBasemap: 'satellite'
-});
 
 /* Bookmarks */
 const buildingBookmarks = new Bookmarks({
@@ -942,6 +884,66 @@ const parkingBookmarks = new Bookmarks({
     new Bookmark({name: "Parking Office (Old Main)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4852839, ymin:48.73705304, xmax:-122.4832074, ymax:48.7381904 }  }  }),
   ],
 });
+
+///* Widgets!! *///
+
+/* Locate widget using a simple marker as the symbol (Prob change) */
+const locate = new Locate({
+  view: view,
+  graphic: new Graphic({
+    symbol: {type: 'simple-marker'}
+  }),
+  container: locateWidget
+});
+
+/* Layer Selector Widget */
+const selector = new LayerList({
+  view: view,
+});
+
+/* Legend Widget */
+
+const legend = new Legend({
+  view: view,
+}); 
+
+/* Search Widget */
+const search = new Search({
+  view: view,
+  locationEnabled: false,
+  includeDefaultSources: false,
+  container: 'searchWidget',
+  sources: [{
+    placeholder: 'Search for buildings, parking lots, and more...',
+    layer: searchPoints,
+    searchFields: ['Name', 'Abv', 
+      'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
+      'Keyword6', 'Keyword7', 'Keyword8',],
+    name: 'WWU Search Points',
+    zoomScale: 1000
+  }]
+});
+
+/* Home Button Widget */
+const home = new Home({
+  view: view,
+  viewpoint: {
+    targetGeometry: new Point({
+      x: center[0],
+      y: center[1],
+      spatialReference: {wkid: 4326}
+    }),
+    scale: 13000
+  }
+});
+
+/* Basemap Toggle Widget */
+const basemapToggle = new BasemapToggle({
+  view: view,
+  nextBasemap: 'satellite',
+  label: 'Toggle Basemap',
+});
+
 
 /* Zoom Slider -- Not Currently Used*/
 // const zoomSlider = new Slider({
@@ -1128,18 +1130,3 @@ measureExpand.watch('expanded', () => {
 //   });
 
 
-
-//Future implement meausrement tool
-//view.ui.add(new Measurement({view: view, activeTool: 'distance'}), 'top-right');
-
-/* This part is for debug extras */
-// const pointerCoord = document.getElementById('info');
-
-// view.on('pointer-move', (evt) => {
-//   var pt = view.toMap({x: evt.x, y: evt.y});
-  
-//   pointerCoord.innerHTML = pt.latitude + ' ' + pt.longitude;
-// });
-
-// view.on('click', (evt) => {
-// });

@@ -1,11 +1,35 @@
 @import 'https://js.arcgis.com/4.25/@arcgis/core/assets/esri/themes/light/main.css';
 html,
+
 body {
   padding: 0;
   margin: 0;
   height: 100%;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+b {
+  font-weight: bold;
+}
 #headerbar {
   position: relative; 
   height: 40px;
@@ -22,24 +46,21 @@ body {
 }
 #logo {
   height: 40px;
-}
-
-#printWidget{
-position: relative;
+  cursor: pointer;
 }
 
 #headerinternals {
   height: 40px;
   align-items: center;
   display: flex; 
-  font-size: 20px;
+  font-size: 1rem;
   left: 12px;
   position: absolute;
   gap: 10px;
 } 
 
 #headertext {
-  font-size: 20px;
+  font-size: 1.2rem;
   color: #ffffff;
 }
 
@@ -56,14 +77,18 @@ position: relative;
   height: calc(100% - 10px);
 }
 
+.buttondialog {
+  height: 27px;
+}
+
 .esri-widget--button{
-  background-color: #cce1d9;
+  background-color: #abd0df;
   border: none;
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: #4b80c0;
+  background-color: #7ba0cd;
   color: white;
 }
 
@@ -113,12 +138,12 @@ position: relative;
   z-index: 3;
 }
 
-.esri-slider__tick-label{
+/* .esri-slider__tick-label{
   font-size: 12px;
   font-family: arial !important;
   font-weight: bold;
   user-select: none;
-}
+} */
 
 
 @media only screen and (max-width : 350px)  {
