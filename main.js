@@ -338,7 +338,7 @@ const parkingPermitAcademic = new FeatureLayer({
 
 const accessibleParkingDupe = new FeatureLayer(accessibleParkingSettings);
 
-
+const parkingArray = [parkingPermitAcademic, summerZoneParkingLots, eveningWeekendParkingLots, visitorParkingLots];
 
 const parkingGroup = new GroupLayer({
   title: 'Parking (expand for options)',
@@ -429,6 +429,8 @@ const disasterAssemblyAreas = new FeatureLayer({
               <p ${tabIndent}><a href=" https://emergency.wwu.edu/faq">Emergency FAQ</a></p>`,},
   visible: false,
 });
+
+const safetyArray = [emergencyPhones, snowRemoval, AED, disasterAssemblyAreas];
 const safetyGroup = new GroupLayer({
   title: 'Safety (expand for options)',
   layers: [disasterAssemblyAreas, AED, emergencyPhones, snowRemoval],
@@ -652,6 +654,13 @@ const layersDict = {
   'safety': [safetyGroup],
   'trees': [trees],
   'accessibility': [accessibleGroup],
+  'visitor': [parkingGroup],
+  'parking': [parkingGroup],
+  // These layers are handled differently because they are grouped and need to be toggled on/off
+  'summer': [summerZoneParkingLots],
+  'permit': [parkingPermitAcademic],
+  'snow': [snowRemoval],
+
 };
 
 
@@ -692,8 +701,29 @@ const hashActions = function (hash = windowHash) {
           const enabledLayersString = value.toLowerCase().split('/');
           enabledLayersString.forEach(group => {
             // Kinda hacky, but it works
+
             if (group === 'airphoto') {
               document.getElementsByClassName('esri-basemap-toggle')[0].click();
+            }
+            // Funky logic to handle parking layers
+            else if (['permit', 'summer'].includes(group)) {
+              parkingGroup.visible = true;
+              parkingArray.forEach(layer => {
+                layer.visible = false;
+              });
+              layersDict[group].forEach(layer => {
+                layer.visible = true;
+              });
+            }
+            // Funky logic to handle snow layer from url
+            else if (group === 'snow')  {
+              safetyGroup.visible = true;
+              safetyArray.forEach(layer => {
+                layer.visible = false;
+              });
+              layersDict[group].forEach(layer => {
+                layer.visible = true;
+              });
             }
             else {
             (layersDict[group] || []).forEach(layer => {
