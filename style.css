@@ -88,6 +88,14 @@ b {
   aspect-ratio: 1/1;
   
 }
+#urlparametersDialog {
+  display: flex;
+  justify-content: space-between;
+
+}
+.column{
+  flex-basis: 48%;
+}
 
 .modalbuttons {
   display: flex;
@@ -101,6 +109,7 @@ b {
   height: 27px;
   right: 10px;
   float: right;
+
 }
 
 .esri-widget--button{
