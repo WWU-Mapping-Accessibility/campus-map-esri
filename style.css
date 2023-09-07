@@ -207,6 +207,9 @@ b {
   #header{
     left: 11px;
   }
+  #urlparameters{
+    display: none;
+  }
 
 }
 
