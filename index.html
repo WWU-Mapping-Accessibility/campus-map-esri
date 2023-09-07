@@ -16,7 +16,7 @@
         <div id="printWidget"></div>
       </div>
     </div>
-    <div class = "internals" id="map"></div>
+    
     <dialog id="voiceinteractionDialog">
       <h1>Voice Interaction</h1>
       <p><table>
@@ -131,8 +131,8 @@
           <li><a href="https://www.wwu.edu/map/#layers=sustainability">Sustainability</a></li>
           <li><a href="https://www.wwu.edu/map/#layers=trees">Trees</a></li>
           <li><a href="https://www.wwu.edu/map/#layers=airphoto">AirPhoto (for the basemap)</a></li>
-      </ul>
-      <button onclick="urlparametersDialog.close()" class="button buttondialog">Close</button>
+        </ul>
+        <button onclick="urlparametersDialog.close()" id="urlclose" class="button buttondialog">Close</button>
       </div>
       
     </dialog>
@@ -172,6 +172,7 @@
         <button onclick="mapinfoDialog.close()" class="button buttondialog">Close</button>
       </div>  
     </dialog>
+    <div class = "internals" id="map"></div>
     <div id = "zoomSlider"></div>
     <div id = "legend"></div>
     <div id = "measureWidget"></div>

@@ -88,13 +88,31 @@ b {
   aspect-ratio: 1/1;
   
 }
-#urlparametersDialog {
+.dialog-container {
   display: flex;
   justify-content: space-between;
-
 }
-.column{
-  flex-basis: 48%;
+
+#urlclose{
+  position: absolute;
+  bottom: 10px;
+}
+
+.column {
+  width: 49%; /* Adjust the width as needed */
+  float: left;
+  margin-right: 1%; /* Adjust the margin between columns as needed */
+}
+
+.column:last-child {
+  margin-right: 0; /* Remove margin on the last column to avoid extra spacing */
+}
+
+/* Clear the float to prevent parent container from collapsing */
+.column::after {
+  content: '';
+  display: table;
+  clear: both;
 }
 
 .modalbuttons {
