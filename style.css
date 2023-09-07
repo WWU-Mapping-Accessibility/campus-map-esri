@@ -68,6 +68,11 @@ b {
   visibility: hidden;
 }
 
+#credits{
+  text-align: right;
+  font-size: 0.7rem;
+}
+
 .button {
   position: relative;
   transition-duration: 0.4s;

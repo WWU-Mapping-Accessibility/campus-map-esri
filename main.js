@@ -173,7 +173,7 @@ const accessibleBuildingsGroup = new GroupLayer({
 
 const accStairs = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Stairs/FeatureServer',
-  title: 'Accessible Stairs',
+  title: 'Stairs',
   legendEnabled: true,
   listMode: 'hide',
   popupEnabled: false,
@@ -186,7 +186,7 @@ const accessibleDoors = new FeatureLayer({
   popupTemplate: {
     title: '{type}',
     content: '<p>{popup2}</p>\
-              <p><a href="https://disability.wwu.edu/">Disability Access Center/a></p>',},
+              <p><a href="https://disability.wwu.edu/">Disability Access Center</a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
 const accessibleElevators = new FeatureLayer({
@@ -195,7 +195,7 @@ const accessibleElevators = new FeatureLayer({
   popupTemplate: {
     title: '{popup} Elevator',
     content: '<p>{popup2}</p>\
-              <p><a href="https://disability.wwu.edu/">Disability Access Center/a></p>',},
+              <p><a href="https://disability.wwu.edu/">Disability Access Center</a></p>',},
   effect: 'drop-shadow(3px, 3px, 5px)'
 });
 
@@ -211,7 +211,7 @@ const accessibleWalkways = new FeatureLayer({
 });
 const accessibleParkingSettings = {
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Accessible_Parking/FeatureServer/74',
-  title: 'Accessible Parking 2',
+  title: 'Accessible Parking',
   popupTemplate: {
     title: '{type} Parking',
     content: '<p><b>{location}</b></p>\
@@ -219,8 +219,8 @@ const accessibleParkingSettings = {
               <p>State Permit required all hours.</p>\
               <p>WWU Permit required M-F 8:00AM - 4:30PM</p>\
               <p>A valid state issued disability permit and a valid on-campus WWU purchased parking or permit are both required to park in a posted accessible parking space.</p>\
-              <p>After 4:30pm weekdays and all hours on weekends, only a valid state issued disability permit is required for parking in a posted accessible parking space.</a></p>0\
-              <p><a href="https://disability.wwu.edu/">“Disability Access Cente</a></p>\
+              <p>After 4:30pm weekdays and all hours on weekends, only a valid state issued disability permit is required for parking in a posted accessible parking space.</a></p>\
+              <p><a href="https://disability.wwu.edu/">Disability Access Center</a></p>\
               <p><a href="https://transportation.wwu.edu/disability-access">Accessible Parking Information</a></p>\
               <p><a href="https://transportation.wwu.edu/">Parking Information</a></p>'},
   effect: 'drop-shadow(3px, 3px, 5px)',
@@ -320,7 +320,7 @@ const eveningWeekendParkingLots = new FeatureLayer({
 const parkingPointFeatures = new FeatureLayer({
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/Parking_Point_Features/FeatureServer',
   title: 'Parking Misc.',
-  popupEnabled: true,
+  popupEnabled: false,
   popupTemplate: {
     title: '{type}',
     content: '<p>{location}</p>\
@@ -637,17 +637,21 @@ const basemapGroup = new GroupLayer({
 /* A dictionary that is used to tie URL layer names to internal variables */
 /* Add here to create custom URLs for each of the layer groups */
 const layersDict = {
-  'basemap': [basemapGroup],
-  'construction': [constructionGroup],
-  'search': [searchPoints],
-  'trees': [trees],
-  'sustainable': [sustainableBuildings],
-  'safety': [safetyGroup],
-  'parking': [parkingGroup],
-  'food': [food],
-  'family': [familyFeatures],
-  'accessibility': [accessibleGroup],
+  'art': [artGroup],
   'bike': [bikeGroup],
+  'bicycle': [bikeGroup],
+  'bus': [busGroup],
+  'computer': [computerLabBuildings],
+  'family': [familyFeatures],
+  'food': [food],
+  'gnrr': [genderNeutralRestrooms],
+  'parking': [parkingGroup],
+  'safety': [safetyGroup],
+  'sustainable': [sustainableBuildings],
+  'sustainability': [sustainableBuildings],
+  'safety': [safetyGroup],
+  'trees': [trees],
+  'accessibility': [accessibleGroup],
 };
 
 
@@ -674,7 +678,7 @@ const hashActions = function (hash = windowHash) {
   console.log(hashSplit)
   hashSplit.forEach(param => {
     const keyValue = param.split('=');
-    const key = keyValue[0].toUpperCase();
+    const key = keyValue[0] && keyValue[0].toUpperCase();
     const value = keyValue[1] && keyValue[1].toUpperCase(); // Ensure value is in uppercase
 
     switch (key) {
@@ -684,12 +688,17 @@ const hashActions = function (hash = windowHash) {
         setLocationFromHash(view, value);
         break;
       case 'LAYERS':
-        if (value) {
+        if (value){
           const enabledLayersString = value.toLowerCase().split('/');
           enabledLayersString.forEach(group => {
+            // Kinda hacky, but it works
+            if (group === 'airphoto') {
+              document.getElementsByClassName('esri-basemap-toggle')[0].click();
+            }
+            else {
             (layersDict[group] || []).forEach(layer => {
               layer.visible = true;
-            });
+            })};
           });
         }
         break;
@@ -845,7 +854,7 @@ const poiBookmarks = new Bookmarks({
   new Bookmark({name: "Harrington Field", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4902046, ymin:48.72781522, xmax:-122.4869602, ymax:48.72926035 }  }  }),
   new Bookmark({name: "Haskell Plaza", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4879043, ymin:48.73340443, xmax:-122.4846599, ymax:48.73484941 }  }  }),
   new Bookmark({name: "Lakewood", viewpoint: {targetGeometry: {type: "extent",xmin:-122.3440808, ymin:48.72770015, xmax:-122.337592, ymax:48.73059037 }  }  }),
-  new Bookmark({name: "Lincoln Creek (Park & Ride)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73322895, xmax:-122.46238, ymax:48.73661648 }  }  }),
+  new Bookmark({name: "Lincoln Creek Parking Lot", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73322895, xmax:-122.46238, ymax:48.73661648 }  }  }),
   new Bookmark({name: "Old Main", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4856985, ymin:48.7370491, xmax:-122.4824542, ymax:48.73882622 }  }  }),
   new Bookmark({name: "Olympic College (Poulsbo)", viewpoint: {targetGeometry: {type: "extent",xmin:-122.6699521, ymin:47.76003746, xmax:-122.6541103, ymax:47.76888154 }  }  }),
   new Bookmark({name: "Outback Farm", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4881683, ymin:48.72748826, xmax:-122.4849238, ymax:48.7289334 }  }  }),
@@ -871,7 +880,7 @@ const poiBookmarks = new Bookmarks({
 const parkingBookmarks = new Bookmarks({
   view: view,
   bookmarks: [
-    new Bookmark({name: "Lincoln Creek Park & Ride", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73322895, xmax:-122.46238, ymax:48.73661648 }  }  }),
+    new Bookmark({name: "Lincoln Creek Parking Lot", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4685641, ymin:48.73322895, xmax:-122.46238, ymax:48.73661648 }  }  }),
     new Bookmark({name: "Parking Lot 1-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4875838, ymin:48.72618268, xmax:-122.4844918, ymax:48.72762785 }  }  }),
     new Bookmark({name: "Parking Lot 3-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4826829, ymin:48.7397057, xmax:-122.4795909, ymax:48.74115049 }  }  }),
     new Bookmark({name: "Parking Lot 4-R", viewpoint: {targetGeometry: {type: "extent",xmin:-122.4857771, ymin:48.73974108, xmax:-122.482685, ymax:48.74118587 }  }  }),
