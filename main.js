@@ -657,6 +657,7 @@ const layersDict = {
   'visitor': [parkingGroup],
   'parking': [parkingGroup],
   // These layers are handled differently because they are grouped and need to be toggled on/off
+  'evening': [eveningWeekendParkingLots],
   'summer': [summerZoneParkingLots],
   'permit': [parkingPermitAcademic],
   'snow': [snowRemoval],
@@ -706,11 +707,8 @@ const hashActions = function (hash = windowHash) {
               document.getElementsByClassName('esri-basemap-toggle')[0].click();
             }
             // Funky logic to handle parking layers
-            else if (['permit', 'summer'].includes(group)) {
+            else if (['permit', 'summer', 'evening'].includes(group)) {
               parkingGroup.visible = true;
-              parkingArray.forEach(layer => {
-                layer.visible = false;
-              });
               layersDict[group].forEach(layer => {
                 layer.visible = true;
               });
