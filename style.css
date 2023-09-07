@@ -49,6 +49,7 @@ b {
   cursor: pointer;
 }
 
+
 #headerinternals {
   height: 40px;
   align-items: center;
@@ -85,10 +86,21 @@ b {
 #mapinfo {
   border-radius: 50%;
   aspect-ratio: 1/1;
+  
+}
+
+.modalbuttons {
+  display: flex;
+  align-items: left;
+  gap: 5px;
+  position: relative;
+  justify-content: flex-end;
 }
 
 .buttondialog {
   height: 27px;
+  right: 10px;
+  float: right;
 }
 
 .esri-widget--button{
