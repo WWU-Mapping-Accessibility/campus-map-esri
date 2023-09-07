@@ -19,13 +19,17 @@ import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils'
 import "./style.css";
 
 /* DEFAULTS & CONFIGS */
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
-const windowHash = window.location.hash.replace('#', '');
+
+// const windowHash = window.location.hash.replace('#', '');
+const windowHash = window.location.hash.replace('#','').concat('&', window.location.search.replace('?', ''));
+console.log(windowHash);
 function getCurrentDateString() {
   const now = new Date();
   let hours = now.getHours();
@@ -665,27 +669,38 @@ const customPlaces = {
 
 /* Processes the hash and runs the correct functions based on hash length */
 
-const hashActions = function(hash=windowHash) {
-
+const hashActions = function (hash = windowHash) {
   const hashSplit = hash.split('&');
-
+  console.log(hashSplit)
   hashSplit.forEach(param => {
-    // This part sets the location based on the hash
-    if (param.includes('wwu=')){
-      view.watch('ready', () => setLocationFromHash(view, param.replace('wwu=', '').toUpperCase()))
-    };
-    // This part sets the visible layers based on the hash
-    if (param.includes('layers=')){
-      const enabledLayersString = param.replace('layers=','').toLowerCase().split('/');
-      enabledLayersString.forEach(group => {(layersDict[group]).forEach(layer => {layer.visible = true})});
-    };
-  });
+    const keyValue = param.split('=');
+    const key = keyValue[0].toUpperCase();
+    const value = keyValue[1] && keyValue[1].toUpperCase(); // Ensure value is in uppercase
 
+    switch (key) {
+      case 'FIND':
+      case 'WWU':
+      case 'BUILDING':
+        setLocationFromHash(view, value);
+        break;
+      case 'LAYERS':
+        if (value) {
+          const enabledLayersString = value.toLowerCase().split('/');
+          enabledLayersString.forEach(group => {
+            (layersDict[group] || []).forEach(layer => {
+              layer.visible = true;
+            });
+          });
+        }
+        break;
+    }
+  });
 };
+
 
 /* Gets the location definined in the hash*/
 const getLocationFromHash = function(places, loc) {
-  
+  console.log('getting location from hash')
   const locUpper = loc.toUpperCase();
   if (loc in Object.assign({}, places, customPlaces)){
     return({
@@ -697,6 +712,7 @@ const getLocationFromHash = function(places, loc) {
 
 /* Queries the search info layer and places every location into the places dictionary*/
 const getPlaces = function(layer){
+  console.log('getting places')
   // Creates a new Promise that will resolve with dictionary
   return new Promise((resolve, reject) => {
     layer.queryFeatures().then(result => {
@@ -713,8 +729,9 @@ const getPlaces = function(layer){
 
 // Uses the getPlaces, getLocation functions to set the center based on the map
 const setLocationFromHash = function(view, loc){
-  if (window.location.hash !== ''){
+  if (window.location.hash !== '' || window.location.search !== ''){
     try{
+      console.log('setting location from hash')
       // This will execute async to the map loading, so it may take a sec to snap to the new location.
       // Query speed dependent
       getPlaces(searchPoints).then(result => 
@@ -752,9 +769,8 @@ const view = new MapView({
   },
 });
 
-// Sets the location based on the hash and adds layers
-hashActions();
-
+// Sets the location based on the hash and adds layers AFTER the map loads
+reactiveUtils.whenOnce(() => !view.updating).then(() => hashActions());
 
 /* Bookmarks */
 const buildingBookmarks = new Bookmarks({
@@ -1144,4 +1160,3 @@ search.watch('selectedResult', () => {
   }, 3000);
 });
 
-console.log(legend.layerInfos);

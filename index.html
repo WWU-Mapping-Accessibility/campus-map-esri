@@ -71,6 +71,22 @@
       
       <button onclick="voiceinteractionDialog.close()" class="button buttondialog">Close</button>
     </dialog>
+    <dialog id="urlparametersDialog">
+    
+      <h1>URL Parameters</h1>
+      <p>
+        The map URL can be used to control what layers are visible when navigating to the map.
+      </p>
+      <p>
+        This is in the form https://www.wwu.edu/map/#<b>find={location abreviation}</b>&<b>layers={layers separated by a /}</b>
+      </p>
+      <p>
+        Example: <a href = 'https://www.wwu.edu/map/#find=AH&layers=trees/safety'>https://www.wwu.edu/map/#find=CF&layers=trees/safety</a> will open the map with the <b>AH</b> building (Arntzen Hall) highlighted and the <b>Trees</b> and <b>Safety</b> layers turned on.
+      </p>
+
+      </p>
+      <button onclick="urlparametersDialog.close()" class="button buttondialog">Close</button>
+    </dialog>
     <dialog id="mapinfoDialog">
       <h1>About</h1>
       <p>
@@ -101,6 +117,7 @@
         Questions or feedback about the map - contact <a href="mailto:stefan@wwu.edu">Stefan Freelan</a>
       </p>
       <button onclick="voiceinteractionDialog.showModal()" id="voiceinteraction" class="button buttondialog"><b>Voice Interaction</b></button>
+      <button onclick="urlparametersDialog.showModal()" id="URL Parameters" class="button buttondialog"><b>URL Parameters</b></button>
       <button onclick="mapinfoDialog.close()" class="button buttondialog">Close</button>
     </dialog>
     <div class = "internals" id="map"></div>
