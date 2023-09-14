@@ -102,6 +102,7 @@ b {
   width: 49%; /* Adjust the width as needed */
   float: left;
   margin-right: 1%; /* Adjust the margin between columns as needed */
+  overflow-wrap: break-word;
 }
 
 .column:last-child {
@@ -117,9 +118,7 @@ b {
 
 .modalbuttons {
   display: flex;
-  align-items: left;
   gap: 5px;
-  position: relative;
   justify-content: flex-end;
 }
 
@@ -207,8 +206,12 @@ b {
   #header{
     left: 11px;
   }
-  #urlparameters{
-    display: none;
+  .column{
+    width: 100%;
+  }
+
+  #urlclose{
+    position: relative;
   }
 
 }
