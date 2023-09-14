@@ -978,7 +978,7 @@ const search = new Search({
   sources: [{
     placeholder: 'Search for buildings, parking lots, and more...',
     layer: searchPoints,
-    searchFields: ['Name', 'Abv', 
+    searchFields: ['Display',
       'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
       'Keyword6', 'Keyword7', 'Keyword8',],
     name: 'WWU Search Points',
