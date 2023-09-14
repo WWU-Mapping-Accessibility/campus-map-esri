@@ -282,7 +282,7 @@ const searchPoints = new FeatureLayer({
   visible: false,
   listMode: 'hide',
   popupTemplate: {
-    title: '{name} ({abv})',}
+    title: '{Display}',}
 });
 
 /* Parking */
@@ -974,6 +974,9 @@ const search = new Search({
   view: view,
   locationEnabled: false,
   includeDefaultSources: false,
+  popupTemplate:{
+    title: '{Display}',
+  },
   container: 'searchWidget',
   sources: [{
     placeholder: 'Search for buildings, parking lots, and more...',
