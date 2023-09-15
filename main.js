@@ -984,6 +984,8 @@ const search = new Search({
     searchFields: ['Display',
       'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
       'Keyword6', 'Keyword7', 'Keyword8',],
+      
+    displayField: 'Display',
     name: 'WWU Search Points',
     zoomScale: 1000
   }]
