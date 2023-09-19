@@ -97,7 +97,7 @@ const miscPoints = new FeatureLayer({
   title: 'Miscellaneous Points',
   url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/misc_points_popups/FeatureServer',
   title: 'Miscellaneous Points',
-  popupEnabled: true,
+  popupEnabled: false,
   popupTemplate: {
     title: '{name}',
     content: '<p>{display}</p>\
@@ -134,9 +134,9 @@ const labelLines =  new FeatureLayer({
   popupEnabled: false,
 });
 
-const parkingLabels = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts_labels/FeatureServer',
-  title: 'OC Label',
+const miscLabels = new FeatureLayer({
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/label_points/FeatureServer',
+  title: 'Point Labels',
   visible: true,
   popupEnabled: false,
   listMode: 'hide',
@@ -145,7 +145,7 @@ const parkingLabels = new FeatureLayer({
 
 const miscAlwaysOnGroup = new GroupLayer({
   title: 'Misc Always On',
-  layers: [labelLines, parkingLabels],
+  layers: [labelLines, miscLabels],
   visible: true,
   listMode: 'hide',
   legendEnabled: false,
@@ -278,7 +278,7 @@ const familyFeatures = new FeatureLayer({
 
 /* Search Layers */
 const searchPoints = new FeatureLayer({
-  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/arcgis/rest/services/search_pts/FeatureServer',
+  url: 'https://services.arcgis.com/qboYD3ru0louQq4F/ArcGIS/rest/services/search_points/FeatureServer/171',
   visible: false,
   listMode: 'hide',
   popupTemplate: {
@@ -338,7 +338,8 @@ const parkingPermitAcademic = new FeatureLayer({
 
 const accessibleParkingDupe = new FeatureLayer(accessibleParkingSettings);
 
-const parkingArray = [parkingPermitAcademic, summerZoneParkingLots, eveningWeekendParkingLots, visitorParkingLots];
+// Unused for now
+// const parkingArray = [parkingPermitAcademic, summerZoneParkingLots, eveningWeekendParkingLots, visitorParkingLots];
 
 const parkingGroup = new GroupLayer({
   title: 'Parking (expand for options)',
@@ -610,6 +611,7 @@ const sehomeNotAllowed = new FeatureLayer({
 
 
 
+
 const bikeGroup = new GroupLayer({
   title: 'Bicycle Info',
   layers: [bellinghamBikeRoutes, bikeDesignations, bikeRacks, thruBikeRoutes, sehomeNotAllowed, accStairsBikes],
@@ -673,7 +675,7 @@ const layersDict = {
 const allLayers = [basemapGroup, constructionGroup, //basemap must be first
   searchPoints, trees, sustainableBuildings, safetyGroup, parkingGroup,
   genderNeutralRestrooms, food, familyFeatures, computerLabBuildings, 
-  busGroup, bikeGroup, artGroup, accessibleGroup, buildingInfoGroup, miscAlwaysOnGroup];
+  busGroup, bikeGroup, artGroup, accessibleGroup, buildingInfoGroup, miscAlwaysOnGroup,];
 
 // Format: "ABV": [Lon, Lat]
 // These get added to the dictionary that the hash query can use to set location from the hash
@@ -978,17 +980,18 @@ const search = new Search({
     title: '{Display}',
   },
   container: 'searchWidget',
-  sources: [{
-    placeholder: 'Search for buildings, parking lots, and more...',
-    layer: searchPoints,
-    searchFields: ['Display',
-      'Keyword1','Keyword2', 'Keyword3', 'Keyword4', 'Keyword5',
-      'Keyword6', 'Keyword7', 'Keyword8',],
-      
-    displayField: 'Display',
-    name: 'WWU Search Points',
-    zoomScale: 1000
-  }]
+  sources: [
+    {
+      minSuggestCharacters: 2,
+      exactMatch: false,
+      placeholder: 'Search buildings, parking, etc.',
+      layer: searchPoints,
+      searchFields: ['Abv','Name'],
+      displayField: 'Display',
+      name: 'WWU Search Points',
+      zoomScale: 1000
+    },
+]
 });
 
 /* Home Button Widget */
