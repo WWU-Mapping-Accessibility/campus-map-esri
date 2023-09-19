@@ -22,6 +22,7 @@ import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils'
 import "./style.css";
 
+
 /* DEFAULTS & CONFIGS */
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
@@ -29,7 +30,6 @@ let center = [-122.48614277687422, 48.732800397930795];
 
 // const windowHash = window.location.hash.replace('#', '');
 const windowHash = window.location.hash.replace('#','').concat('&', window.location.search.replace('?', ''));
-console.log(windowHash);
 function getCurrentDateString() {
   const now = new Date();
   let hours = now.getHours();
@@ -687,7 +687,6 @@ const customPlaces = {
 
 const hashActions = function (hash = windowHash) {
   const hashSplit = hash.split('&');
-  console.log(hashSplit)
   hashSplit.forEach(param => {
     const keyValue = param.split('=');
     const key = keyValue[0] && keyValue[0].toUpperCase();
