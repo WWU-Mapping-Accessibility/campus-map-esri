@@ -693,6 +693,7 @@ const hashActions = function (hash = windowHash) {
     const value = keyValue[1] && keyValue[1].toUpperCase(); // Ensure value is in uppercase
 
     switch (key) {
+      // Each is just an alias for the building case
       case 'FIND':
       case 'WWU':
       case 'BUILDING':
@@ -982,10 +983,11 @@ const search = new Search({
   sources: [
     {
       minSuggestCharacters: 2,
-      exactMatch: false,
+      prefix: '%',
+      suffix: '%',
       placeholder: 'Search buildings, parking, etc.',
       layer: searchPoints,
-      searchFields: ['Abv','Name'],
+      searchFields: ['Abv','Name', 'Keywords'],
       displayField: 'Display',
       name: 'WWU Search Points',
       zoomScale: 1000
