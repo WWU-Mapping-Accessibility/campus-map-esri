@@ -13,8 +13,7 @@ import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import Home from '@arcgis/core/widgets/Home';
 import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
 import Measurement from '@arcgis/core/widgets/Measurement';
-import Print from '@arcgis/core/widgets/Print';
-//import Measurement from '@arcgis/core/widgets/Measurement';
+import Print from '@arcgis/core/widgets/Print'; 
 import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
@@ -27,9 +26,9 @@ import "./style.css";
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
-
-// const windowHash = window.location.hash.replace('#', '');
+// Sets window hash for later
 const windowHash = window.location.hash.replace('#','').concat('&', window.location.search.replace('?', ''));
+
 function getCurrentDateString() {
   const now = new Date();
   let hours = now.getHours();
@@ -1205,4 +1204,9 @@ search.watch('selectedResult', () => {
     view.popup.close();
   }, 3000);
 });
+
+window.onhashchange = () => {
+  let newHash = window.location.hash.replace('#','').concat('&', window.location.search.replace('?', ''));
+  hashActions(newHash);
+};
 
