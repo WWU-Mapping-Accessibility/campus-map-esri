@@ -26,8 +26,13 @@ import "./style.css";
 let zoom = 15;
 let center = [-122.48614277687422, 48.732800397930795];
 
-// Sets window hash for later
-const windowHash = window.location.hash.replace('#','').concat('&', window.location.search.replace('?', ''));
+// Hash processing function
+
+function hashProcesser(hash = window.location.hash, search = window.location.search){
+  return hash.replace('#','').concat('&', search.replace('?', ''));
+
+};
+
 
 function getCurrentDateString() {
   const now = new Date();
@@ -39,7 +44,7 @@ function getCurrentDateString() {
   minutes = minutes < 10 ? '0'+minutes : minutes;
   const strTime = hours + ':' + minutes + ' ' + ampm;
   return (now.getMonth()+1) + "/" + now.getDate() + "/" + now.getFullYear() + ", " + strTime;
-}
+};
 
 const currentDateString = getCurrentDateString();
 const tabIndent = 'style="margin-left: 40px"'
@@ -684,7 +689,7 @@ const customPlaces = {
 
 /* Processes the hash and runs the correct functions based on hash length */
 
-const hashActions = function (hash = windowHash) {
+const hashActions = function (hash = hashProcesser()) {
   const hashSplit = hash.split('&');
   hashSplit.forEach(param => {
     const keyValue = param.split('=');
@@ -1205,8 +1210,8 @@ search.watch('selectedResult', () => {
   }, 3000);
 });
 
-window.onhashchange = () => {
-  let newHash = window.location.hash.replace('#','').concat('&', window.location.search.replace('?', ''));
-  hashActions(newHash);
-};
 
+// Handles on the fly hash changes
+window.onhashchange = () => {
+  hashActions();
+};
