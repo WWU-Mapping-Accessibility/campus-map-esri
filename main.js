@@ -18,7 +18,7 @@ import Bookmarks from '@arcgis/core/widgets/Bookmarks'
 import Bookmark from "@arcgis/core/webmap/Bookmark.js";
 import LayerList from '@arcgis/core/widgets/LayerList';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
-import * as reactiveUtils from '@arcgis/core/core/reactiveUtils'
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import "./style.css";
 
 
@@ -96,6 +96,7 @@ const buildingInfo100k = new FeatureLayer({
   minScale: 13000,
   popupEnabled: false,
 });
+
 
 const miscPoints = new FeatureLayer({
   title: 'Miscellaneous Points',
