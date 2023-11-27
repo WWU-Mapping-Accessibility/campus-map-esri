@@ -13,10 +13,17 @@
         <img onclick="window.location.href='https://wwu.edu';" id="logo" src="WWU.svg" alt="WWU Logo">
         <h1 id="headertext"> WWU Campus Map</h1>
         <button onclick="mapinfoDialog.showModal()" id="mapinfo" class="button"><b>?</b></button>
-        <div id="printWidget"></div>
+        <button onclick="directionsDialog.showModal()" id="directionsinfo" class="button"><b>Directions</b></button>
       </div>
     </div>
-    
+    <dialog id="directionsDialog">
+      <h1>Accessibility Directions</h1>
+      <select id="directfrom" class="directionsSelect"></select>
+      <select id="directto" class="directionsSelect"></select>
+      <p id="directionstext">Directions will appear here</p>
+      <button onclick="directionsDialog.close()" class="button buttondialog">Close</button>
+      <script type="module" src="./directions.js"></script>
+    </dialog>
     <dialog id="voiceinteractionDialog">
       <h1>Voice Interaction</h1>
       <p><table>
