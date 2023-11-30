@@ -18,8 +18,16 @@
     </div>
     <dialog id="directionsDialog">
       <h1>Accessibility Directions</h1>
-      <select id="directfrom" class="directionsSelect"></select>
-      <select id="directto" class="directionsSelect"></select>
+      <div id="directionsSelectors">
+        <div class="selectorColumn">
+          <p><b>Select origin</b></p>
+          <select id="directfrom" class="directionsSelect"></select>
+        </div>
+        <div class="selectorColumn">
+          <p><b>Select Destination</b></p>
+          <select id="directto" class="directionsSelect"></select>
+        </div>
+      </div>
       <p id="directionstext">Directions will appear here</p>
       <button onclick="directionsDialog.close()" class="button buttondialog">Close</button>
       <script type="module" src="./directions.js"></script>

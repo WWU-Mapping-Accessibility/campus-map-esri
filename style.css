@@ -83,6 +83,21 @@ b {
   height: calc(100% - 10px);
 }
 
+.selectorColumn{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  width: 49%;
+  margin: 2px;
+}
+
+#directionsSelectors{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 #mapinfo {
   border-radius: 50%;
   aspect-ratio: 1/1;
