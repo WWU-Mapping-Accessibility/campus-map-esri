@@ -101,6 +101,7 @@ function setSecondSelector(firstSelected, map, destination){
         newOption.text = key;
         destination.appendChild(newOption);
     });
+    // Has to run once the initial value is set bc it does not trigger a change event
     setDirectionsText(destination.value, directText);
 }
 
