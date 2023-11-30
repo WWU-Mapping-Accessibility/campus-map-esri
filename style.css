@@ -98,6 +98,10 @@ b {
   align-items: center;
 }
 
+#directionsDialog{
+  max-width: 500px;
+}
+
 #mapinfo {
   border-radius: 50%;
   aspect-ratio: 1/1;

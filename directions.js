@@ -40,7 +40,6 @@ fetchCSV().then((csvData) => {
     console.log(parsedCSV);
 
     // What we need to do here is write some functions that
-
     // 1. Creates a set of origin destination pairs in a data structure
     // 2. Sets the options in the first dropdown to unique origins
     // 3. Creates an event listener that listens for a change in the origins dropdown
