@@ -1,77 +1,111 @@
+// Importing the PapaParse library for parsing CSV files
 import * as Papa from "papaparse";
 
-// Class template for origins
+// Retrieving HTML elements by their IDs
+const directFrom = document.getElementById('directfrom');
+const directTo = document.getElementById('directto');
+const directText = document.getElementById('directionstext');
 
+// Definition of the Origin class
 class Origin {
-    // Constructor expects a string 'origin' and a Map of 'destination':directions pairs
+    // Constructor takes an 'origin' string and a Map of destination-description pairs
     constructor(origin, destinationsMap){
         this.origin = origin;
         this.destinationsMap = destinationsMap;
     }
-};
 
-class Destination {
-    // Constructor expects a string 'destination' and a string 'directions'
-    constructor(destination, directions){
-        this.destination = destination;
-        this.directions = directions;
+    // Adds a destination and its description to the map
+    addDestination(destination, description) {
+        this.destinationsMap.set(destination, description);
+    }
+
+    // Returns an array of destination keys (names)
+    returnDestinations(){
+        return Array.from(this.destinationsMap.keys());
+    }
+
+    // Returns the description for a given destination key
+    returnDirections(key){
+        return this.destinationsMap.get(key);
     }
 };
 
-
-// Async function that will return the promise of a read CSV file put in the public directory
-// Fetch is used to look for and load the file
+// Asynchronously fetches and returns the content of a CSV file
 async function fetchCSV() {
     const response = await fetch("./directions.csv");
     const data = await response.text();
     return data;
 };
 
-// This will parse read CSV data into a JS object of arrays array
+// Parses the CSV data into a JavaScript object
 function readCSV(data) {
-    const records = Papa.parse(data, { header: true});
+    const records = Papa.parse(data, { header: true });
     return records;
 };
 
-
-// Everything is going to have to be put in this `then` block bc it has to run AFTER the CSV data is parsed
+// Main logic that operates after the CSV data is fetched and parsed
 fetchCSV().then((csvData) => {
-    const parsedCSV = readCSV(csvData);
-    console.log(parsedCSV);
+    const parsedCSV = readCSV(csvData).data;
+    let uniqueOrigins = uniqueArrayOrigins(parsedCSV).sort();
+    let originsStructured = new Map();
 
-    // What we need to do here is write some functions that
-    // 1. Creates a set of origin destination pairs in a data structure
-    // 2. Sets the options in the first dropdown to unique origins
-    // 3. Creates an event listener that listens for a change in the origins dropdown
-    //     then updates the set of options in the destinations dropdown
-    // 4. Creates another event listener that updates the displayed directions based on the above
+    // Populates the originsStructured map with Origin objects
+    uniqueOrigins.forEach((origin) => {
+        let indices = returnDestinations(origin, parsedCSV);
+        originsStructured.set(origin, createOriginObj(origin, indices, parsedCSV));
+        let newOption = document.createElement('option');
+        newOption.value = origin;
+        newOption.text = origin;
+        directFrom.appendChild(newOption);
+    });
 
-
+    // Event listeners for dropdown changes
+    directFrom.addEventListener('change', () => setSecondSelector(directFrom.value, originsStructured, directTo));
+    directTo.addEventListener('change', () => setDirectionsText(directTo.value, directText));
 });
 
+// Extracts unique origins from the CSV data
+function uniqueArrayOrigins(data) {
+    let originArray = data.map(item => item.FROM);
+    return [...new Set(originArray)];
+};
 
-// Everything below this is just for testing html changing
-var testDirectionsArray1 = ["point1", "point2", "point3"];
-var testDirectionsArray2 = ["point3", "point4", "point5"];
+// Returns indices of the data array where the origin matches the given origin
+function returnDestinations(origin, data){
+    let indexArray = [];
+    data.forEach((item, index) => {
+        if (item.FROM === origin){
+            indexArray.push(index);
+        }
+    });
+    return indexArray;
+};
 
-const directFrom = document.getElementById('directfrom');
+// Creates and returns an Origin object from the provided data
+function createOriginObj(origin, indices, data){
+    let originObj = new Origin(origin, new Map());
+    indices.forEach((i) => {
+        let indexData = data[i];
+        originObj.addDestination(indexData.TO, indexData.DESCRIPTION);
+    });
+    return originObj;
+};
 
-const directTo = document.getElementById('directto');
+// Sets the options in the second dropdown based on the selected origin
+function setSecondSelector(firstSelected, map, destination){
+    destination.innerHTML = "";
+    let originObject = map.get(firstSelected);
+    originObject.returnDestinations().forEach((key) => {
+        let newOption = document.createElement('option');
+        newOption.value = originObject.returnDirections(key);
+        newOption.text = key;
+        destination.appendChild(newOption);
+    });
+    // Has to run once the initial value is set bc it does not trigger a change event
+    setDirectionsText(destination.value, directText);
+};
 
-directFrom.innerHTML = '';
-
-testDirectionsArray1.forEach( opt => {
-    var newOption = document.createElement('option');
-    newOption.value = opt;
-    newOption.text = opt;
-    directFrom.appendChild(newOption);
-    }
-)
-
-testDirectionsArray2.forEach( opt => {
-    var newOption = document.createElement('option');
-    newOption.value = opt;
-    newOption.text = opt;
-    directTo.appendChild(newOption);
-    }
-)
+// Updates the text to display the selected destination's directions
+function setDirectionsText(text, directionsElement){
+    directionsElement.innerHTML = text;
+};
