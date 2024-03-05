@@ -21,16 +21,20 @@
       <div id="directionsSelectors">
         <div class="selectorColumn">
           <p><b>Select Origin</b></p>
-          <select id="directfrom" class="directionsSelect"></select>
+          <select id="directfrom" class="directionsSelect" aria-label="Origin Selector"></select>
+          <p><b>Select Sub Orgin</b></p>
+          <select id="directfromsub" class="directionsSelect" aria-label=" Sub Origin Selector"></select>
         </div>
         <div class="selectorColumn">
           <p><b>Select Destination</b></p>
-          <select id="directto" class="directionsSelect"></select>
+          <select id="directto" class="directionsSelect" aria-label="Destination Selector"></select>
+          <p><b>Select Sub Destination</b></p>
+          <select id="directtosub" class="directionsSelect" aria-label=" Sub Destination Selector"></select>
         </div>
       </div>
       <p id="directionstext">Directions will appear here</p>
       <button onclick="directionsDialog.close()" class="button buttondialog">Close</button>
-      <script type="module" src="./directions.js"></script>
+      <script type="module" src="./directions2.js"></script>
     </dialog>
     <dialog id="voiceinteractionDialog">
       <h1>Voice Interaction</h1>

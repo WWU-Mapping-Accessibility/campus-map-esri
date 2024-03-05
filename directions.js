@@ -3,7 +3,9 @@ import * as Papa from "papaparse";
 
 // Retrieving HTML elements by their IDs
 const directFrom = document.getElementById('directfrom');
+const directFromSub = document.getElementById('directfromsub');
 const directTo = document.getElementById('directto');
+const directToSub = document.getElementById('directtosub');
 const directText = document.getElementById('directionstext');
 
 // Definition of the Origin class
