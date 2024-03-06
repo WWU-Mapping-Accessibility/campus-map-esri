@@ -55,48 +55,83 @@ function readCSV(data) {
 };
 
 function setFromSelector(originKeys) {
+    directFromSub.innerHTML = '';
     originKeys.forEach((origin) => {
         let newOption = document.createElement('option');
         newOption.text = origin;
         newOption.value = origin;
         directFrom.appendChild(newOption);
-        }
-    );
-
+    });
+    if (originKeys.length === 1) {
+        directFrom.dispatchEvent(new Event('change'));
+    }
 };
 
-function setFromSubSelector(origin, directFromSub) {
-    Object.keys(origins.get(origin).structure).forEach((subOrigin) =>{
-        let newOption = document.createElement('option');
-        newOption.text = subOrigin;
-        newOption.value = subOrigin;
-        directFromSub.appendChild(newOption);
-        }
-    );
+// Function to update Sub-Origin Selector (directFromSub)
+function updateSubOrigins() {
+    let selectedOriginStructure = origins.get(directFrom.value)?.structure;
+    if (selectedOriginStructure) {
+        let subOrigins = Object.keys(selectedOriginStructure).sort();
+        directFromSub.innerHTML = '';
+        directTo.innerHTML = '';
+        directToSub.innerHTML = '';
+        directText.innerHTML = '';
+        subOrigins.forEach(subOrigin => {
+            let newOption = document.createElement('option');
+            newOption.text = subOrigin;
+            newOption.value = subOrigin;
+            directFromSub.appendChild(newOption);
+        });
 
-};
+        directFromSub.dispatchEvent(new Event('change'));
+    }
+}
 
+// Function to update Destination Selector (directTo)
+function updateDestinations() {
+    let selectedOriginStructure = origins.get(directFrom.value)?.structure[directFromSub.value];
+    if (selectedOriginStructure) {
+        let destinations = Object.keys(selectedOriginStructure).sort();
+        directTo.innerHTML = '';
+        directToSub.innerHTML = '';
+        directText.innerHTML = '';
+        destinations.forEach(destination => {
+            let newOption = document.createElement('option');
+            newOption.text = destination;
+            newOption.value = destination;
+            directTo.appendChild(newOption);
+        });
+        directTo.dispatchEvent(new Event('change'));
+    }
+}
 
-function setDestSelector(origin, subOrigin, directTo) {
-    Object.keys((origins.get(origin).structure)[subOrigin]).forEach((dest) =>{
-        let newOption = document.createElement('option');
-        newOption.text = dest;
-        newOption.value = dest;
-        directTo.appendChild(newOption);
-        }
-    );
+// Function to update Sub-Destination Selector (directToSub)
+function updateSubDestinations() {
+    let selectedDestinationStructure = origins.get(directFrom.value)?.structure[directFromSub.value][directTo.value];
+    if (selectedDestinationStructure) {
+        let subDestinations = Object.keys(selectedDestinationStructure).sort();
+        directToSub.innerHTML = '';
+        directText.innerHTML = '';
+        subDestinations.forEach(subDestination => {
+            let newOption = document.createElement('option');
+            newOption.text = subDestination;
+            newOption.value = subDestination;
+            directToSub.appendChild(newOption);
+        });
+        directToSub.dispatchEvent(new Event('change'));
+    }
+}
 
-};
-function setSubDestSelector(origin, subOrigin, dest, directToSub) {
-    Object.keys((origins.get(origin).structure)[subOrigin][dest]).forEach((destSub) =>{
-        let newOption = document.createElement('option');
-        newOption.text = destSub;
-        newOption.value = destSub;
-        directToSub.appendChild(newOption);
-        }
-    );
+// Event Handlers for dropdowns with calls to update functions
+directFrom.addEventListener('change', updateSubOrigins);
+directFromSub.addEventListener('change', updateDestinations);
+directTo.addEventListener('change', updateSubDestinations);
 
-};
+// Optional: Event handler for final selection, displaying the path description
+directToSub.addEventListener('change', function() {
+    let description = origins.get(directFrom.value)?.structure[directFromSub.value][directTo.value][this.value];
+    directText.textContent = description || "No description available.";
+});
 
 
 // Fetch CSV data, then process it
@@ -112,26 +147,15 @@ fetchCSV().then((csvData) => {
             if(origins.has(currentOrigin)){
                 var oldOrigin = origins.get(currentOrigin); // Retrieve the existing Origin object
                 // Add the new path and description to the existing Origin object
-                oldOrigin.addAll(data.FROMB, data.TOA, data.TOB, data.description);
+                oldOrigin.addAll(data.FROMB, data.TOA, data.TOB, data.DESCRIPTION);
             }
             else{
                 // If the origin does not exist, create a new Origin object and add it to the map
                 let newOrigin = new Origin(data.FROMA);
-                newOrigin.addAll(data.FROMB, data.TOA, data.TOB, data.description);
+                newOrigin.addAll(data.FROMB, data.TOA, data.TOB, data.DESCRIPTION);
                 origins.set(currentOrigin, newOrigin);
             }
         }
     );
     setFromSelector(Array.from(origins.keys()).sort());
-    setFromSubSelector(directFrom.value, directFromSub)
-    setDestSelector(directFrom.value, directFromSub.value, directTo)
-    setSubDestSelector(directFrom.value, directFromSub.value, directTo.value, directToSub)
-    directText.innerHTML = directFrom.value[directFromSub.value][directTo.value][directToSub.value]
 });
-
-// Event Handlers for dropdowns:
-directFrom.addEventListener('change', () => setFromSubSelector(directFrom.value, directFromSub));
-directFromSub.addEventListener('change', () => setDestSelector(directFrom.value, directFromSub.value, directTo));
-directTo.addEventListener('change', () => setSubDestSelector(directFrom.value, directFromSub.value, directTo.value, directToSub));
-directToSub.addEventListener('change', () => directText.innerHTML = directFrom.value[directFromSub.value][directTo.value][directToSub.value])
-
