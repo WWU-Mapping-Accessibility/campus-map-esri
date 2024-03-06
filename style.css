@@ -213,7 +213,7 @@ b {
 } */
 
 
-@media only screen and (max-width : 350px)  {
+@media only screen and (max-width : 392px)  {
   /* Hack to get rid of the text in the header and replace it*/ 
   #headertext { font-size: 0; }
   #headertext::after { content: "WWU Map";
@@ -231,6 +231,10 @@ b {
 
   #urlclose{
     position: relative;
+  }
+
+  #directionsDialog{
+    width: 100%
   }
 
 }
