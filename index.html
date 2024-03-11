@@ -16,23 +16,23 @@
         <button onclick="directionsDialog.showModal()" id="directionsinfo" class="button"><b>Directions</b></button>
       </div>
     </div>
-    <dialog id="directionsDialog">
+    <dialog id="directionsDialog" aria-label="Directions Popup">
       <h1>Accessibility Directions</h1>
       <div id="directionsSelectors">
         <div class="selectorColumn">
-          <p><b>Select Origin</b></p>
+          <h3>Select Origin</h3>
           <select id="directfrom" class="directionsSelect" aria-label="Origin Selector"></select>
-          <p><b>Select Sub Orgin</b></p>
+          <h3>Select Sub Orgin</h3>
           <select id="directfromsub" class="directionsSelect" aria-label=" Sub Origin Selector"></select>
         </div>
         <div class="selectorColumn">
-          <p><b>Select Destination</b></p>
+          <h3>Select Destination</h3>
           <select id="directto" class="directionsSelect" aria-label="Destination Selector"></select>
-          <p><b>Select Sub Destination</b></p>
+          <h3>Select Sub Destination</h3>
           <select id="directtosub" class="directionsSelect" aria-label=" Sub Destination Selector"></select>
         </div>
       </div>
-      <p id="directionstext">Directions will appear here</p>
+      <p id="directionstext" aria-label="Written Directions">Directions will appear here</p>
       <button onclick="directionsDialog.close()" class="button buttondialog">Close</button>
       <script type="module" src="./directions2.js"></script>
     </dialog>
