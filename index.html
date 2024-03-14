@@ -20,15 +20,15 @@
       <h1>Accessibility Directions</h1>
       <div id="directionsSelectors">
         <div class="selectorColumn">
-          <p><b>Select Origin</b></p>
-          <select id="directfrom" class="directionsSelect"></select>
+          <h3><b>Select Origin</b></h3>
+          <select id="directfrom" class="directionsSelect" aria-label="Origin Selector"></select>
         </div>
         <div class="selectorColumn">
-          <p><b>Select Destination</b></p>
-          <select id="directto" class="directionsSelect"></select>
+          <h3><b>Select Destination</b></h3>
+          <select id="directto" class="directionsSelect" aria-label="Destination Selector"></select>
         </div>
       </div>
-      <p id="directionstext">Directions will appear here</p>
+      <p id="directionstext" aria-label="Directions Text">Directions will appear here</p>
       <button onclick="directionsDialog.close()" class="button buttondialog">Close</button>
       <script type="module" src="./directions.js"></script>
     </dialog>
