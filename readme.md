@@ -30,3 +30,11 @@ Vite also has the ability to run a test server on your local machine which will 
     - Press q in the terminal to quit the server
 
 ## MISC ##
+
+## Attributions
+
+Created by Stuart Reckase with symbology by Stephan Freelan
+
+Data sourced from WWU
+
+Made with ESRI's JavaScript SDK
